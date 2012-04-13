@@ -1,0 +1,9 @@
+*.class
+target/
+.project
+.classpath
+.settings/
+CodeNarcReport.html
+*.iml
+*.ipr
+*.iws

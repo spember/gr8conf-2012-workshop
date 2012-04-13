@@ -1,0 +1,17 @@
+package co.cantina.twitterMonitor.services
+
+
+
+import grails.test.mixin.*
+import org.junit.*
+
+/**
+ * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ */
+@TestFor(KeywordService)
+class KeywordServiceTests {
+
+    void testSomething() {
+        fail "Implement me"
+    }
+}
