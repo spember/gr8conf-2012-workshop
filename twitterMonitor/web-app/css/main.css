@@ -703,6 +703,9 @@ a.skip {
     background-color: #444444;
     height:1em;
     margin-top:-0.75em;
+    transition: width 1s ease 0;
+    -webkit-transition: width 1s ease 0;
+    -moz-transition: width 1s ease 0;
 }
 
 .count {
