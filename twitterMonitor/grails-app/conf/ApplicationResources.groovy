@@ -12,6 +12,7 @@ modules = {
                 "monitor",
                 "core/utils",
                 "core/view_manager",
+                "core/interval_driver",
                 "models/keyword",
                 "collections/keywords",
                 "views/add_keyword_container",

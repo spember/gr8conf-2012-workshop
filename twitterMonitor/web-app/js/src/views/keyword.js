@@ -1,12 +1,11 @@
 TM.Views.Keyword = Backbone.View.extend({
 
-    initialize: function () {
-
+    initialize: function (options) {
+        this.model = new TM.Models.Keyword(options)
     },
 
     render: function () {
-        console.log("rendering " +this.model.get("text"));
-
+        var self = this;
         $(this.el).html(TM.Templates.keyword({
             text: this.model.get("text"),
             numSeen: this.model.get("numSeen")
@@ -28,6 +27,18 @@ TM.Views.Keyword = Backbone.View.extend({
         $(this.el).find(".bar").width(width +"%");
     },
 
+    // responsible for deleting the keyword on the server and destroying this view
+    remove: function () {
+        console.log("goodbye");
+        //research backbone delete, but for now...
+
+        $(this.el).die();
+        $(this.el).fadeOut("slow", function () {
+            $(this.el).remove();
+        });
+
+    },
+
     bindEvents: function () {
         var self = this;
 
@@ -35,6 +46,11 @@ TM.Views.Keyword = Backbone.View.extend({
         this.model.on("change:numSeen", function(){
             console.log("changed!");
             self.render();
+        });
+
+        this.$el.find(".keyword-remove").on("click", function () {
+           console.log("clicked!");
+            self.remove.call(self);
         });
 
     }

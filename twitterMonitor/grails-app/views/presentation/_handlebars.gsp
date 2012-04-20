@@ -28,8 +28,11 @@
 
 <script id="keyword" type="text/x-handlebars-template">
     <div class="keyword clearfix">
+
         <div class="icon left center-text">{{text}}</div>
-        <div class="count left center-text">#{{numSeen}}</div>
+        <div class="count left center-text">#{{numSeen}}
+            <a class="keyword-remove">X</a>
+        </div>
         <div class="graph left center-outer">
             <div class="bar center-inner"></div>
         </div>

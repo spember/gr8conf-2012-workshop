@@ -37,19 +37,17 @@ TM.Views.KeywordContainer = Backbone.View.extend({
 
     populateKeywords: function (collection, data) {
         var self = this;
-        //if (data.length > 0) {
-            this.$el.html("");
-            _.each(data, function (datum) {
-                self.addNewKeywordFromData.call(self,datum);
 
-            });
-        //} else {
-            //display empty message
-        if (TM.instance.keywords.length === 0){
+        this.$el.html("");
+        _.each(data, function (datum) {
+            self.addNewKeywordFromData.call(self,datum);
+        });
+
+        //display empty message
+        if (TM.instance.viewManager.views.keywordContainer.keywords.length === 0){
             this.showEmptyMessage()
         }
 
-        //}
     },
 
     showEmptyMessage: function () {
@@ -59,12 +57,9 @@ TM.Views.KeywordContainer = Backbone.View.extend({
     addNewKeywordFromData: function (data) {
         //create
         if(data.text !== "") {
-            var model = new TM.Models.Keyword(data),
-                view;
-            //save onto our instance stack
-            TM.instance.keywords.push(model);
+            var view;
             // create a new view for the keyword
-            view = new TM.Views.Keyword({model:model});
+            view = new TM.Views.Keyword(data);
             //render it initially
             this.$el.append($(view.render().el).html());
             //set the element on the new keyword

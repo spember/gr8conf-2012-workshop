@@ -685,6 +685,24 @@ a.skip {
 }
 .keyword .left {margin-left: 1em;}
 
+.keyword a.keyword-remove {
+    position:relative;
+    display:block;
+    color:#cc0000;
+    border:1px solid #777777;
+    border-radius: 15px;
+    cursor: pointer;
+    display:none;
+    -webkit-transition: visibility 0.5s ease 2s;
+}
+.keyword a.keyword-remove:hover {
+    border:1px solid #000000;
+}
+.keyword:hover a.keyword-remove {
+    display: block;
+}
+
+
 .icon {
     border: 2px solid #CCCCCC;
     padding: 0.75em;

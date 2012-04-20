@@ -22,8 +22,11 @@ $(function () {
     TM.instance.viewManager.register("addContainer", "AddKeywordContainer", $("#addContainer"));
     TM.instance.viewManager.register("messageContainer", "MessageContainer", $("#messageContainer"));
     TM.instance.viewManager.register("keywordContainer", "KeywordContainer", $("#keywordContainer"));
-
     TM.instance.viewManager.start();
+
+    TM.instance.intervalDriver = new TM.Core.IntervalDriver();
+    TM.instance.intervalDriver.start();
+
     console.log("Ready.");
 })
 
