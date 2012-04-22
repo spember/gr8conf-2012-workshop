@@ -16,7 +16,7 @@
 
 <script id="addContainer" type="text/x-handlebars-template">
     <div class="center-outer">
-        <input placeholder="Enter Keyword" class="center-inner left" ></input><a class="button center-text center-inner right">Add</a>
+        <input placeholder="Enter Keyword" class="center-inner left" size="17"></input><a class="button center-text center-inner right">Add</a>
     </div>
 </script>
 
@@ -30,7 +30,8 @@
     <div class="keyword clearfix">
 
         <div class="icon left center-text">{{text}}</div>
-        <div class="count left center-text">#{{numSeen}}
+        <div class="count left center-text">
+            #<span>{{numSeen}}</span>
             <a class="keyword-remove">X</a>
         </div>
         <div class="graph left center-outer">

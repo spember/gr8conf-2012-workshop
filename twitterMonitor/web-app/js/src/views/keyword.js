@@ -1,10 +1,12 @@
 TM.Views.Keyword = Backbone.View.extend({
 
     initialize: function (options) {
-        this.model = new TM.Models.Keyword(options)
+        //attach a reference on the model
+        this.model.attachedView = this;
     },
 
     render: function () {
+        console.log("rendering " +this.model.get("text"));
         var self = this;
         $(this.el).html(TM.Templates.keyword({
             text: this.model.get("text"),
@@ -22,35 +24,50 @@ TM.Views.Keyword = Backbone.View.extend({
     */
 
     updateGraphWidth: function () {
-
         var width = Math.round(this.model.get("numSeen"));
         $(this.el).find(".bar").width(width +"%");
     },
 
-    // responsible for deleting the keyword on the server and destroying this view
-    remove: function () {
-        console.log("goodbye");
-        //research backbone delete, but for now...
+    updateDisplayCount: function () {
+        var self = this;
+        self.$el.find("div.count>span").text(self.model.get("numSeen"));
+    },
 
-        $(this.el).die();
-        $(this.el).fadeOut("slow", function () {
-            $(this.el).remove();
+    // responsible for deleting the keyword on the server and destroying this view
+    destroy: function () {
+        var self = this;
+        //attempt to delete from the server, if successful we proceed with UI removal
+        self.model.destroy({url:self.model.deleteURL(), success: function () {
+            self.removeUI.call(self);
+        }});
+
+
+    },
+
+    // fancy removal
+    removeUI: function () {
+        var self = this;
+        self.$el.die(); //clear any bindings
+        self.$el.fadeOut("slow", function () {
+            //remove view from the dom
+            self.$el.remove();
+            TM.instance.viewManager.views.keywordContainer.removeKeyWordView(self);
+
         });
 
     },
 
     bindEvents: function () {
         var self = this;
-
         //listen for a change; potentially move this into the collection to trigger redraw for all of them
         this.model.on("change:numSeen", function(){
-            console.log("changed!");
-            self.render();
+            console.log("model change on numSeen");
+            self.updateGraphWidth.call(self);
+            self.updateDisplayCount.call(self);
         });
 
         this.$el.find(".keyword-remove").on("click", function () {
-           console.log("clicked!");
-            self.remove.call(self);
+            self.destroy.call(self);
         });
 
     }

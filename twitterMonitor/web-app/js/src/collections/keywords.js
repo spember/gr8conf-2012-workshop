@@ -12,6 +12,13 @@ TM.Collections.Keywords = Backbone.Collection.extend({
         this.on("change", function () {
             console.log("something in here changed");
             self.findMax();
+        });
+
+        this.on("destroy", function () {
+            if (self.models.length === 0) {
+                // alert the higher-ups that the collection is empty
+                self.trigger("empty");
+            }
         })
     },
 

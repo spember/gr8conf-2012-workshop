@@ -5,7 +5,7 @@ import grails.converters.JSON
 
 class KeywordController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -120,21 +120,31 @@ class KeywordController {
 
     def delete() {
         def keywordInstance = Keyword.get(params.id)
-        print "Deleting!"
-        if (!keywordInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-            redirect(action: "list")
-            return
-        }
+        if (request.xhr) {
+            try {
+                keywordInstance.delete(flush: true)
+                Map data = ["status":true]
+                render data as JSON
+            }
+            catch (DataIntegrityViolationException e) {
 
-        try {
-            keywordInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-            redirect(action: "list")
-        }
-        catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-            redirect(action: "show", id: params.id)
+            }
+        } else {
+            if (!keywordInstance) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
+                redirect(action: "list")
+                return
+            }
+
+            try {
+                keywordInstance.delete(flush: true)
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
+                redirect(action: "list")
+            }
+            catch (DataIntegrityViolationException e) {
+                flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
+                redirect(action: "show", id: params.id)
+            }
         }
     }
 }
