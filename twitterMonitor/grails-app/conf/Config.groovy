@@ -60,7 +60,7 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.hibernate.cache.queries = true
 
 //twitter results per page
-grails.twitter.rpp = 100
+grails.twitter.rpp = 200
 
 // set per-environment serverURL stem for creating absolute links
 environments {

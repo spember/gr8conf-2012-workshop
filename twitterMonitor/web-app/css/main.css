@@ -654,7 +654,7 @@ a.skip {
     color:#0B3600;
 }
 
-#messageContainer {
+#tweetContainer {
     float:right;
     height: 28em;
     width: 25%;
@@ -664,8 +664,13 @@ a.skip {
     box-shadow:0 0 2em #CCCCCC;
 }
 
-#messageContainer .empty {
+#tweetContainer .empty {
     width: 100%;
+}
+
+.tweet div.right {
+    width: 70%;
+    margin-top: 0.5em;
 }
 
 #keywordContainer {

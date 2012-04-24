@@ -1,7 +1,7 @@
-<script id="messageContainer" type="text/x-handlebars-template">
+<script id="tweetContainer" type="text/x-handlebars-template">
 
-    {{#if messages}}
-        {{#each messages}}
+    {{#if tweets}}
+        {{#each tweets}}
             <p>{{this}}</p>
         {{/each}}
     {{else}}
@@ -10,23 +10,23 @@
 
 </script>
 
-<script id="keywordContainer" type="text/x-handlebars-template">
+<script id="HBkeywordContainer" type="text/x-handlebars-template">
     <!-- Show spinner -->
 </script>
 
-<script id="addContainer" type="text/x-handlebars-template">
+<script id="HBaddContainer" type="text/x-handlebars-template">
     <div class="center-outer">
         <input placeholder="Enter Keyword" class="center-inner left" size="17"></input><a class="button center-text center-inner right">Add</a>
     </div>
 </script>
 
-<script id="keywordContainerEmpty" type="text/x-handlebars-template">
+<script id="HBkeywordContainerEmpty" type="text/x-handlebars-template">
     <div class="instructions">
         <p>There are no currently active keywords. Please enter one in the box above to get started!</p>
     </div>
 </script>
 
-<script id="keyword" type="text/x-handlebars-template">
+<script id="HBkeyword" type="text/x-handlebars-template">
     <div class="keyword clearfix">
 
         <div class="icon left center-text">{{text}}</div>
@@ -37,6 +37,13 @@
         <div class="graph left center-outer">
             <div class="bar center-inner"></div>
         </div>
+    </div>
+</script>
+
+<script id="HBtweet" type="text/x-handlebars-template">
+    <div class="tweet">
+        <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
+        {{text}}
     </div>
 </script>
 

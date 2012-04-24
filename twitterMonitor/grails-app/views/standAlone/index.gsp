@@ -10,7 +10,7 @@
     <div id="main">
         <div id="addContainer"></div>
         <div id="keywordContainer"><p>Blah!</p></div>
-        <div id="messageContainer" class="center-outer"></div>
+        <div id="tweetContainer" class="center-outer"></div>
     </div>
 
     <g:render template="/presentation/handlebars"/>

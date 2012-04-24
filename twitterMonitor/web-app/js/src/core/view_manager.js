@@ -6,7 +6,8 @@ TM.Core.ViewManager = function () {
     this.register = function(name, view, $el) {
         this.views[name] = new TM.Views[view]();
         if ($el) {
-            console.log("setting el to " +$el);
+            console.log("setting el to... ");
+            console.log($el);
             this.views[name].setElement($el);
 
         }

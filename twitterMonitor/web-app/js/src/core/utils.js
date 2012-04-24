@@ -7,11 +7,18 @@ TM.Core.Utils = {
     compileTemplates: function () {
         var templates = $("script[type='text/x-handlebars-template']"),
             count = templates.length,
-            $template;
+            $template,
+            templateId;
 
         while (count--) {
             $template = $(templates[count]);
-            TM.Templates[$template.attr("id")] = Handlebars.compile($template.html());
+            if ($template.attr("id").indexOf("HB") === 0) {
+                templateId = $template.attr("id").substring(2);
+            } else {
+                templateId = $template.attr("id");
+            }
+            //remove HB from the front
+            TM.Templates[templateId] = Handlebars.compile($template.html());
         }
 
     }

@@ -14,11 +14,13 @@ modules = {
                 "core/view_manager",
                 "core/interval_driver",
                 "models/keyword",
+                "models/message",
                 "collections/keywords",
                 "views/add_keyword_container",
                 "views/message_container",
                 "views/keyword_container",
-                "views/keyword"
+                "views/keyword",
+                "views/message"
 
         ]
 

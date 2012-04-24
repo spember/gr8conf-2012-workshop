@@ -16,6 +16,19 @@ class MessageController {
         render Message.list(params) as JSON
     }
 
+    def listBatch() {
+        if (request.xhr) {
+            List messages
+            if (params.id) {
+                messages = Message.findAllByIdGreaterThan(params.id, [max: 25, sort:"id", order:"asc"])
+            } else {
+                messages = Message.list([max: 25, sort:"id", order:"asc"])
+            }
+
+            render messages as JSON
+        }
+    }
+
     def create() {
         [messageInstance: new Message(params)]
     }
