@@ -662,16 +662,27 @@ a.skip {
     margin-right: 1em;
     margin-top: -5em;
     box-shadow:0 0 2em #CCCCCC;
+    overflow-y: hidden;
 }
 
-#tweetContainer .empty {
-    width: 100%;
+#tweetContainer .empty { width: 100%; }
+
+.tweet {
+    padding: 0.25em;
+    margin-bottom:0.5em;
 }
 
 .tweet div.right {
     width: 70%;
     margin-top: 0.5em;
+    font-weight: bold;
 }
+
+.tweet .text {
+    font-size: 0.8em;
+    color: #aaaaaa;
+}
+.tweet .text .mention, .tweet .text .hashtag { color: #000000; }
 
 #keywordContainer {
     float:left;

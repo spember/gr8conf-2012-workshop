@@ -10,17 +10,20 @@ modules = {
     monitor {
         List files = [
                 "monitor",
+
                 "core/utils",
                 "core/view_manager",
                 "core/interval_driver",
                 "models/keyword",
                 "models/tweet",
+                "helpers/tweet_text_decorator",
                 "collections/keywords",
                 "views/add_keyword_container",
                 "views/tweet_container",
                 "views/keyword_container",
                 "views/keyword",
-                "views/tweet"
+                "views/tweet",
+
 
         ]
 

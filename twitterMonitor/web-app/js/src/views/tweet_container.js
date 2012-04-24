@@ -1,7 +1,6 @@
 TM.Views.TweetContainer = Backbone.View.extend({
 
     initialize: function () {
-        TM.instance.tweets = [];
         //max tweets to display in the container at a given time
         this.MAX = 5;
     },
@@ -26,9 +25,14 @@ TM.Views.TweetContainer = Backbone.View.extend({
             }
         }, 90000000);
         self.on("ready", function () {
-            console.log("starting");
             var i,
                 max;
+
+            // clear out empty message
+            if (this.$el.find(".tweet").length === 0 && TM.instance.tweets.length > 0) {
+                this.$el.html("");
+            }
+
             if (self.MAX > TM.instance.tweets.length) {
                 max = TM.instance.tweets.length;
             } else {
@@ -46,6 +50,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
             view = new TM.Views.Tweet({model:model});
         this.$el.append(view.render());
         view.setElement(this.$el.find(".tweet").last());
+
 
     },
 

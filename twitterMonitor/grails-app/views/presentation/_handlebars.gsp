@@ -41,9 +41,9 @@
 </script>
 
 <script id="HBtweet" type="text/x-handlebars-template">
-    <div class="tweet">
+    <div class="tweet {{class}}">
         <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
-        {{text}}
+        <div class="text">{{{tweetTextDecorator text}}}</div>
     </div>
 </script>
 

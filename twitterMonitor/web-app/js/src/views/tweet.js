@@ -6,12 +6,14 @@ TM.Views.Tweet = Backbone.View.extend({
 
     render: function () {
         var self = this;
-        console.log(self.model);
+
         return TM.Templates.tweet({
+            class: self.model.id % 2 === 0 ? "even" : "odd",
             imageUrl: self.model.get("profileImageUrl"),
             text: self.model.get("text"),
             userName: self.model.get("userName")
         });
+
     }
 
 });
