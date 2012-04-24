@@ -19,11 +19,19 @@ class MessageController {
     def listBatch() {
         if (request.xhr) {
             List messages
-            if (params.id) {
-                messages = Message.findAllByIdGreaterThan(params.id, [max: 25, sort:"id", order:"asc"])
-            } else {
-                messages = Message.list([max: 25, sort:"id", order:"asc"])
+            long id
+            println "Batched with id = ${params.id}"
+            try {
+                id = Long.parseLong(params.id)
             }
+            catch (NumberFormatException nfe) {
+                print "Whoops"
+                id = -1l
+            }
+
+
+            messages = Message.findAllByIdGreaterThan(id, [max: 25, sort:"id", order:"asc"])
+
 
             render messages as JSON
         }

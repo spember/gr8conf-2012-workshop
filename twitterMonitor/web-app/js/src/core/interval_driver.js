@@ -14,8 +14,6 @@ TM.Core.IntervalDriver = function () {
                         if (!data.hasOwnProperty("id")) {
                             model.attachedView.removeUI.call(model.attachedView);
                             model.collection.remove(model, {silent:true});
-                        } else {
-                            console.log("id");
                         }
                     }
                 });

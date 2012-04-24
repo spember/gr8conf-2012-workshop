@@ -71,9 +71,9 @@ TM.Views.KeywordContainer = Backbone.View.extend({
             view.bindEvents();
             //and store;
             this.views.push(view);
-        } else {
-            console.log("view already exists for " +model.get("text"));
         }
+        // else, view already exists
+
 
     },
 

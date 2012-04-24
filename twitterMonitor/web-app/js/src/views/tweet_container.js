@@ -3,6 +3,8 @@ TM.Views.TweetContainer = Backbone.View.extend({
     initialize: function () {
         //max tweets to display in the container at a given time
         this.MAX = 5;
+        this.views = [];
+        this.lastTweetId = -1;
     },
 
     render: function () {
@@ -15,56 +17,73 @@ TM.Views.TweetContainer = Backbone.View.extend({
     bindEvents: function () {
         //change this to be on intevalDriver
         var self = this;
-        self.fetchTweets();
+
+        self.fetchTweets(true);
         self.tweetFade = setInterval(function () {
-            var tweets = self.$el.find(".tweet");
-            if (tweets.length > 0) {
-                tweets.first().fadeOut("slow", function () {
-                    $(this).remove();
-                })
+            var view;
+            if (self.views.length > 0) {
+                self.views[0].$el.fadeOut("slow", function () {
+                    view = self.views.shift();
+                    view.off();
+                    view.unbind();
+                    view.remove();
+
+                    if (self.views.length < self.MAX) {
+                        self.createTweetViews.call(self);
+                    }
+                });
             }
-        }, 90000000);
+        }, 1000);
+
         self.on("ready", function () {
-            var i,
-                max;
-
-            // clear out empty message
-            if (this.$el.find(".tweet").length === 0 && TM.instance.tweets.length > 0) {
-                this.$el.html("");
-            }
-
-            if (self.MAX > TM.instance.tweets.length) {
-                max = TM.instance.tweets.length;
-            } else {
-                max = self.MAX;
-            }
-
-            for (var i = 0; i < max; i++) {
-                self.createTweetView.call(self);
-            }
+            self.createTweetViews.call(self);
         });
+    },
+
+    // will attempt to pull tweets from the instance queue and build views from them
+    createTweetViews: function () {
+        var i,
+            max;
+
+        // clear out empty message
+        if (this.views.length === 0 && TM.instance.tweets.length > 0) {
+            this.$el.html("");
+        }
+
+        if (this.MAX > TM.instance.tweets.length) {
+            max = TM.instance.tweets.length;
+            //ahh!
+            this.fetchTweets(false);
+        } else {
+            max = this.MAX;
+        }
+
+        for (var i = 0; i < max; i++) {
+            this.createTweetView();
+        }
+
     },
 
     createTweetView: function () {
         var model = TM.instance.tweets.shift(),
             view = new TM.Views.Tweet({model:model});
+        this.lastTweetId = model.id;
         this.$el.append(view.render());
         view.setElement(this.$el.find(".tweet").last());
+        this.views.push(view);
 
 
     },
 
-    fetchTweets: function () {
-        var lastTweetId = -1,
-            tweets = TM.instance.tweets,
+    fetchTweets: function (sendTrigger) {
+        var tweets = TM.instance.tweets,
             self = this;
-        if(tweets.length > 0) {
-            lastTweetId = tweets[tweets.length-1].get("id");
-        }
+
+        console.log("fetching with last id = " +self.lastTweetId);
         $.ajax({
             url:"/twitterMonitor/message/listBatch",
             data: {
-                text: lastTweetId > 0 ? lastTweetId : null
+                id: self.lastTweetId > 0 ? self.lastTweetId : null
             },
             type:"GET",
             success: function (data) {
@@ -72,7 +91,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
                 for(var i = 0; i < max; i ++) {
                     TM.instance.tweets.push(new TM.Models.Tweet(data[i]));
                 }
-                if (max > 0) {
+                if (max > 0 && sendTrigger) {
                     self.trigger("ready");
                 }
             }
