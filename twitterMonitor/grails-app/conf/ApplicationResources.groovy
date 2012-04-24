@@ -14,13 +14,13 @@ modules = {
                 "core/view_manager",
                 "core/interval_driver",
                 "models/keyword",
-                "models/message",
+                "models/tweet",
                 "collections/keywords",
                 "views/add_keyword_container",
-                "views/message_container",
+                "views/tweet_container",
                 "views/keyword_container",
                 "views/keyword",
-                "views/message"
+                "views/tweet"
 
         ]
 
