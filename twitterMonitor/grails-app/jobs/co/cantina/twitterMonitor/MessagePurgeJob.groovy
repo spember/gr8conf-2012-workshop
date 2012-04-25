@@ -12,7 +12,7 @@ class MessagePurgeJob {
     }
 
     def execute() {
-        //messageService.removeOldMessages()
+        messageService.removeOldMessages()
 
     }
 

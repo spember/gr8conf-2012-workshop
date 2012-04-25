@@ -699,6 +699,10 @@ a.skip {
     color: #555555;
 }
 
+.instructions.message {
+    text-indent: 0em;
+}
+
 .keyword {
     width: 95%;
     margin-bottom:1em;

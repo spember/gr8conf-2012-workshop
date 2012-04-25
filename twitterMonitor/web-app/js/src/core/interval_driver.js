@@ -25,6 +25,13 @@ TM.Core.IntervalDriver = function () {
             TM.instance.viewManager.views.keywordContainer.reloadKeywords();
         }, 10000);
 
+        //periodically look for more tweets, but only if we're at zero
+        this.intervals.lookForTweets = setInterval(function () {
+            if (TM.instance.tweets.length === 0) {
+                TM.instance.viewManager.views.tweetContainer.trigger("start");
+            }
+        }, 7000);
+
     };
 
     // stop the polling
