@@ -10,6 +10,7 @@
 		<title><g:layoutTitle default="Grails"/></title>
 
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
+        <link rel="stylesheet" href="${resource(dir: 'css', file: 'main-responsive.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
 
         <r:require modules="core,monitor"/>

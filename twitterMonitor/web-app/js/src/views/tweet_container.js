@@ -117,27 +117,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
                 self.fetching = false;
             }
         });
-    },
-
-
-    cycleTweets: function () {
-
     }
-
-    /*
-        Poll every few seconds, if no tweets in queue, ask server for some
-
-        When fetching tweets,  store in queue. If no views are present, send a kickoff event
-
-        Kick off event starts cycling.
-        During cycling:
-            -min(tweet_size, MAXNUM) tweets are shifted from the queue and stuffed into a view
-            -view is attached to container, which displays max(0,MINNUM) tweets
-
-
-        Tweet container routinely removes the top-most tweet, if any tweets exist
-
-     */
 
 
 

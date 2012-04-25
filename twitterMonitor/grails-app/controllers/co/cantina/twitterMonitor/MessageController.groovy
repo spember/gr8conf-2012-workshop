@@ -20,16 +20,12 @@ class MessageController {
         if (request.xhr) {
             List messages
             long id
-            println "Batched with id = ${params.id}"
             try {
                 id = Long.parseLong(params.id)
             }
             catch (NumberFormatException nfe) {
-                print "Whoops"
                 id = -1l
             }
-
-
             messages = Message.findAllByIdGreaterThan(id, [max: 25, sort:"id", order:"asc"])
             render messages as JSON
         }

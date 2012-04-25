@@ -1,0 +1,47 @@
+@media (max-width: 979px) {
+    #tweetContainer {
+        float: none;
+        clear: both;
+        width: 95%;
+        height: 10em;
+        margin: 0 auto;
+    }
+
+    #addContainer {
+        width: 88%;
+        margin: 1em auto;
+    }
+
+    #addContainer a.button {right:30%;}
+
+    #keywordContainer {
+        width: 98%;
+    }
+    .keyword {
+        width:100%;
+    }
+
+    .tweet {
+        float: left;
+        width: 23%;
+        height: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    #addContainer>div {
+        height: 8em;
+    }
+    #addContainer .iPhoneCheckContainer {
+        float: none;
+        top: 1.5em;
+        left: 40%;
+    }
+
+    #addContainer a.button {
+        right: 15%;
+    }
+    #addContainer input {
+        width: 60%;
+    }
+}

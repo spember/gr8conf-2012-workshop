@@ -55,15 +55,27 @@ class TwitterSearchService {
         if (words) {
             Long minId = messageService.getOldestId()
             print ("Querying old words: " +words +" with id = " +minId)
-            processMessages(executeQuery(words.join(" OR ").encodeAsURL(), minId).results, words)
+            try {
+                processMessages(executeQuery(words.join(" OR ").encodeAsURL(), minId).results, words)
+            }
+            catch(IOException ioe) {
+                log.warn("Error querying the old words")
+                //release lock on error
+                locked = false
+            }
         }
     }
 
     def queryNewWords(words) {
         if (words) {
-            words.each {word->
-                print ("Querying new word: " +word)
-                processMessages(executeQuery(word.text.encodeAsURL(), null).results, [word])
+            try {
+                words.each {word->
+                    print ("Querying new word: " +word)
+                    processMessages(executeQuery(word.text.encodeAsURL(), null).results, [word])
+                }
+            }
+            catch (IOException ioe) {
+                locked = false
             }
         }
     }
