@@ -620,7 +620,7 @@ a.skip {
     width: 65%;
     margin: 1em;
 }
-#addContainer div {
+#addContainer>div {
     border: 1px solid black;
     border-radius: 15px;
     height: 4em;
@@ -630,7 +630,7 @@ a.skip {
 #addContainer input {
     margin: 1em 1em;
     height: 1.5em;
-    width: 60%;
+    width: 50%;
     border: 1px solid #CCCCCC;
     color: #48802C;
     font-size: 1em;
@@ -643,7 +643,7 @@ a.skip {
 #addContainer a.button {
     margin-top: -1.25em;
     border: 1px solid #CCC;
-    right: 9%;
+    right: 28%;
     padding: 0.5em;
     border-radius: 15px;
     background-color: #7EA93C;
@@ -652,6 +652,11 @@ a.skip {
 #addContainer a.button:hover {
     border:1px solid #000000;
     color:#0B3600;
+}
+
+#addContainer .iPhoneCheckContainer {
+    right: 2%;
+    margin-top: -0.75em;
 }
 
 #tweetContainer {

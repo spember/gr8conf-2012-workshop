@@ -4,6 +4,7 @@ TM.Core.IntervalDriver = function () {
     this.intervals = {};
 
     this.start = function () {
+        console.log("Kick it!");
         this.intervals.keywordIndividualUpdate = setInterval(function () {
             var keywords = TM.instance.viewManager.views.keywordContainer.keywords,
                 i = keywords.length;
@@ -25,5 +26,16 @@ TM.Core.IntervalDriver = function () {
         }, 10000);
 
     };
+
+    // stop the polling
+    this.stop = function () {
+        for ( name in this.intervals) {
+            if (typeof this.intervals[name] === "number") {
+                clearInterval(this.intervals[name]);
+                delete this.intervals[name];
+            }
+
+        }
+    }
 
 }

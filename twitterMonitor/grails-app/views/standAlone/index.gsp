@@ -5,8 +5,9 @@
     <title>Stand Alone Twitter Monitor</title>
 </head>
 <body>
-    <h3>Welcome to Twitter Monitor</h3>
+
     <div id="menuBar"></div>
+
     <div id="main">
         <div id="addContainer"></div>
         <div id="keywordContainer"><p>Blah!</p></div>

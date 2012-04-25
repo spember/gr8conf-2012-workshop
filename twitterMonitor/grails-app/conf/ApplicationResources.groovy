@@ -1,8 +1,13 @@
 modules = {
     core {
-        //breaking resources loading into a combination of resource plugin and head.js to showcase both options
-        for (name in ['jquery-1.7.2.min', 'underscore-min', 'backbone', 'handlebars']) {
-            resource url: [dir: 'js', file: name + '.js']
+        //load lib js
+        for (name in ['jquery-1.7.2.min', 'underscore-min', 'backbone', 'handlebars', 'iphone-style-checkboxes']) {
+            resource url: [dir: 'js/libs', file: name + '.js']
+        }
+
+        //load lib css
+        for (name in ['iphone_checkboxes/style']) {
+            resource url: [dir: 'css', file: name + '.css']
         }
 
     }

@@ -16,13 +16,14 @@
 
 <script id="HBaddContainer" type="text/x-handlebars-template">
     <div class="center-outer">
-        <input placeholder="Enter Keyword" class="center-inner left" size="17"></input><a class="button center-text center-inner right">Add</a>
+        <input placeholder="Enter Keyword" class="center-inner left" size="17" type="text"/><a class="button center-text center-inner right">Add</a>
+        <input type="checkbox"/>
     </div>
 </script>
 
 <script id="HBkeywordContainerEmpty" type="text/x-handlebars-template">
-    <div class="instructions">
-        <p>There are no currently active keywords. Please enter one in the box above to get started!</p>
+    <div class="instructions message">
+        There are no currently active keywords. Please enter one in the box above to get started!
     </div>
 </script>
 

@@ -31,8 +31,6 @@ class MessageController {
 
 
             messages = Message.findAllByIdGreaterThan(id, [max: 25, sort:"id", order:"asc"])
-
-
             render messages as JSON
         }
     }

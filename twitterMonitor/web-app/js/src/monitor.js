@@ -28,7 +28,7 @@ $(function () {
     TM.instance.viewManager.start();
 
     TM.instance.intervalDriver = new TM.Core.IntervalDriver();
-    TM.instance.intervalDriver.start();
+    //TM.instance.intervalDriver.start();
 
     console.log("Ready.");
 })
