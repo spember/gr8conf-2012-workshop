@@ -1,4 +1,7 @@
+// Responsible for maintaining the keyword collection and their views
 TM.Views.KeywordContainer = Backbone.View.extend({
+
+    // TODO: remove the this.views, if possible
 
     initialize: function () {
         this.keywords = new TM.Collections.Keywords();
@@ -8,7 +11,6 @@ TM.Views.KeywordContainer = Backbone.View.extend({
     render: function () {
 
         $(this.el).html(TM.Templates.keywordContainer({}));
-
         return this;
     },
 
@@ -28,6 +30,7 @@ TM.Views.KeywordContainer = Backbone.View.extend({
 
     },
 
+    // triggers the collection's fetch call, then triggers the rendering of views to the screen
     reloadKeywords: function (add) {
         var self = this;
         this.keywords.fetch({

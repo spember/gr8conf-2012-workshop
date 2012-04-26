@@ -5,6 +5,7 @@ TM.Helpers.Resources = {
     ]
 }
 
+// Looks for various patterns in a tweet, then wraps the pattern with strings denoted in Resources.textItems
 TM.Helpers.tweetTextDecorator = function (text) {
     var items = TM.Helpers.Resources.textItems,
         itemPos = items.length,

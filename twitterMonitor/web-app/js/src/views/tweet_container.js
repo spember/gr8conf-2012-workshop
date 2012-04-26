@@ -58,27 +58,27 @@ TM.Views.TweetContainer = Backbone.View.extend({
     // will attempt to pull tweets from the instance queue and build views from them
     createTweetViews: function () {
         var i,
-            max;
+            max,
+            tweets = TM.instance.tweets;
 
         // clear out empty message
-        if (this.views.length === 0 && TM.instance.tweets.length > 0) {
+        if (this.views.length === 0 && tweets.length > 0) {
             this.$el.html("");
         }
         //will usually be 1 if things are flowing correctly
         max = this.NUM_RENDER - this.views.length;
-        if (max > TM.instance.tweets.length) {
-            max = TM.instance.tweets.length;
+        if (max > tweets.length) {
+            max = tweets.length;
         }
 
         for (var i = 0; i < max; i++) {
-            this.createTweetView();
+            this.createTweetView(tweets);
         }
 
     },
 
-    createTweetView: function () {
-        var tweets = TM.instance.tweets,
-            model = tweets.shift(),
+    createTweetView: function (tweets) {
+        var model = tweets.shift(),
             view = new TM.Views.Tweet({model:model});
         //track the last seen id;
         this.lastTweetId = model.id;
