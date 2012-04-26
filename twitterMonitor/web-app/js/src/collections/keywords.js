@@ -7,7 +7,12 @@ TM.Collections.Keywords = Backbone.Collection.extend({
 
     initialize: function () {
         var self = this;
+        console.log("Default of " +this.defaultMax);
         this.maxNumSeen = this.defaultMax;
+
+        this.on("reset", function (){
+            self.findMax()
+        });
 
         this.on("change", function () {
             console.log("something in here changed");

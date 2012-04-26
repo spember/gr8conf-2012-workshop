@@ -24,7 +24,7 @@ TM.Views.Keyword = Backbone.View.extend({
     */
 
     updateGraphWidth: function () {
-        var width = Math.round(this.model.get("numSeen"));
+        var width = this.model.getBarPercentage();
         $(this.el).find(".bar").width(width +"%");
     },
 

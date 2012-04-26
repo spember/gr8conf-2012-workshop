@@ -7,8 +7,8 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
     render: function () {
         var self = this;
         $(this.el).html(TM.Templates.addContainer({})).find(":checkbox").iphoneStyle({
-            checkedLabel: 'KICK IT',
-            uncheckedLabel: 'STOP',
+            checkedLabel: 'STOP',
+            uncheckedLabel: 'KICK IT!',
             onChange: self.runToggle
         });
         $(this.el).find(".iPhoneCheckContainer").addClass("center-inner right");

@@ -12,7 +12,7 @@
         margin: 1em auto;
     }
 
-    #addContainer a.button {right:30%;}
+    #addContainer a.button {right:32%;}
 
     #keywordContainer {
         width: 98%;
@@ -23,7 +23,7 @@
 
     .tweet {
         float: left;
-        width: 23%;
+        width: 31%;
         height: 100%;
     }
 }

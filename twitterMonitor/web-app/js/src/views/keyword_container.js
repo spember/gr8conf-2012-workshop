@@ -16,10 +16,10 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         var self = this;
         // start of page functionality
         // first, lets see if any keywords actual exist
-        this.reloadKeywords();
+        this.reloadKeywords(false);
 
         TM.instance.viewManager.views.addContainer.on("saved", function () {
-            self.reloadKeywords.call(self);
+            self.reloadKeywords.call(self, true);
         });
 
         this.keywords.on("empty", function () {
@@ -28,10 +28,10 @@ TM.Views.KeywordContainer = Backbone.View.extend({
 
     },
 
-    reloadKeywords: function () {
+    reloadKeywords: function (add) {
         var self = this;
         this.keywords.fetch({
-            add: true,
+            add: add,
             success: function (collection, data) {
                 self.populateKeywords.call(self, collection, data);
             }

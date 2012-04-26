@@ -22,7 +22,7 @@ TM.Core.IntervalDriver = function () {
         }, 5000);
 
         this.intervals.keywordsUpdate = setInterval(function () {
-            TM.instance.viewManager.views.keywordContainer.reloadKeywords();
+            TM.instance.viewManager.views.keywordContainer.reloadKeywords(true);
         }, 10000);
 
         //periodically look for more tweets, but only if we're at zero

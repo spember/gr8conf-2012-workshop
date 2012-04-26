@@ -1,13 +1,5 @@
 <script id="tweetContainer" type="text/x-handlebars-template">
 
-    {{#if tweets}}
-        {{#each tweets}}
-            <p>{{this}}</p>
-        {{/each}}
-    {{else}}
-        <div class="empty center-inner center-text">Empty!</div>
-    {{/if}}
-
 </script>
 
 <script id="HBkeywordContainer" type="text/x-handlebars-template">
@@ -44,7 +36,7 @@
 <script id="HBtweet" type="text/x-handlebars-template">
     <div class="tweet {{class}}">
         <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
-        <div class="text">{{{tweetTextDecorator text}}}</div>
+        <div class="text clearfix">{{{tweetTextDecorator text}}}</div>
     </div>
 </script>
 
