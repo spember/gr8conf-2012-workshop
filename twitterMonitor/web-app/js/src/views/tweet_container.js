@@ -96,7 +96,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
         var tweets = TM.instance.tweets,
             self = this;
         self.fetching = true;
-        console.log("fetching with last id = " +self.lastTweetId);
+
         $.ajax({
             url:"/twitterMonitor/message/listBatch",
             data: {

@@ -6,7 +6,6 @@ TM.Views.Keyword = Backbone.View.extend({
     },
 
     render: function () {
-        console.log("rendering " +this.model.get("text"));
         var self = this;
         $(this.el).html(TM.Templates.keyword({
             text: this.model.get("text"),
@@ -24,8 +23,7 @@ TM.Views.Keyword = Backbone.View.extend({
     */
 
     updateGraphWidth: function () {
-        var width = this.model.getBarPercentage();
-        $(this.el).find(".bar").width(width +"%");
+        $(this.el).find(".bar").width(this.model.getBarPercentage() +"%");
     },
 
     updateDisplayCount: function () {
@@ -47,10 +45,10 @@ TM.Views.Keyword = Backbone.View.extend({
     // fancy removal
     removeUI: function () {
         var self = this;
-        self.$el.die(); //clear any bindings
+        self.$el.unbind(); //clear any bindings
         self.$el.fadeOut("slow", function () {
             //remove view from the dom
-            self.$el.remove();
+            self.remove();
             TM.instance.viewManager.views.keywordContainer.removeKeyWordView(self);
 
         });
@@ -61,7 +59,6 @@ TM.Views.Keyword = Backbone.View.extend({
         var self = this;
         //listen for a change; potentially move this into the collection to trigger redraw for all of them
         this.model.on("change:numSeen", function(){
-            console.log("model change on numSeen");
             self.updateGraphWidth.call(self);
             self.updateDisplayCount.call(self);
         });

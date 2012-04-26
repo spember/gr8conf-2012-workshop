@@ -14,13 +14,10 @@ TM.Models.Keyword = Backbone.Model.extend({
     },
 
     initialize: function(options) {
-        console.log("Collection Find max is " +this.collection.maxNumSeen);
     },
 
     getBarPercentage: function () {
-        console.log(this.collection);
         var maxSeen = this.collection.maxNumSeen ? this.collection.maxNumSeen : this.collection.defaultMax;
-        console.log (this.maxSeen);
         return Math.round( (this.get("numSeen") / maxSeen) * 100 );
     }
 

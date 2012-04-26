@@ -21,11 +21,10 @@
 
 <script id="HBkeyword" type="text/x-handlebars-template">
     <div class="keyword clearfix">
-
+        <a class="keyword-remove center-text">X</a>
         <div class="icon left center-text">{{text}}</div>
         <div class="count left center-text">
             #<span>{{numSeen}}</span>
-            <a class="keyword-remove">X</a>
         </div>
         <div class="graph left center-outer">
             <div class="bar center-inner"></div>

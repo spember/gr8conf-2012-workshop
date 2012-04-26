@@ -7,7 +7,6 @@ TM.Collections.Keywords = Backbone.Collection.extend({
 
     initialize: function () {
         var self = this;
-        console.log("Default of " +this.defaultMax);
         this.maxNumSeen = this.defaultMax;
 
         this.on("reset", function (){
@@ -15,7 +14,6 @@ TM.Collections.Keywords = Backbone.Collection.extend({
         });
 
         this.on("change", function () {
-            console.log("something in here changed");
             self.findMax();
         });
 
@@ -39,7 +37,6 @@ TM.Collections.Keywords = Backbone.Collection.extend({
             }
         }
         this.maxNumSeen = max > this.defaultMax ? max : this.defaultMax;
-        console.log("Choose max of " +this.maxNumSeen);
     }
 
 
