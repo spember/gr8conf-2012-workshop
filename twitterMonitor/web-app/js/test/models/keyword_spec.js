@@ -3,11 +3,13 @@ describe('TM.Models.Keyword', function () {
     describe("A Keyword", function () {
         var keyword = new TM.Models.Keyword(),
             collectionSpy;
+
         keyword.set({
             id: 1,
-            text: "gr8conf",
+            text: "#gr8conf",
             numSeen: 60
         });
+
         //fake impl for spying
         keyword.collection = {
             getMaxNumSeen: function () {
@@ -15,10 +17,8 @@ describe('TM.Models.Keyword', function () {
             }
         }
 
-
-
         it('should have the correct text', function () {
-            expect(keyword.get("text")).toEqual("gr8conf");
+            expect(keyword.get("text")).toEqual("#gr8conf");
         });
 
         it('should have the correct urlRoot and deleteUrl', function () {
@@ -27,7 +27,6 @@ describe('TM.Models.Keyword', function () {
         });
 
         it('calculates the bar width correctly', function () {
-
             var retVal = 100;
             // register the Spy (like a Mock), and mock the function call
             collectionSpy = jasmine.createSpy('collectionSpy');
