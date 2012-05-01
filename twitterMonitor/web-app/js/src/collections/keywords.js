@@ -37,7 +37,12 @@ TM.Collections.Keywords = Backbone.Collection.extend({
             }
         }
         this.maxNumSeen = max > this.defaultMax ? max : this.defaultMax;
+    },
+
+    getMaxNumSeen: function () {
+        return this.maxNumSeen ? this.maxNumSeen : this.defaultMax;
     }
+
 
 
 });

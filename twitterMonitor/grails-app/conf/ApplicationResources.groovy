@@ -50,11 +50,13 @@ modules = {
         resource url: [dir: 'css', file: 'jasmine/jasmine.css']
 
         List specs = [
-                "models/keyword_spec"
+                "models/keyword",
+                "helpers/tweet_text",
+                "collections/keywords"
 
         ]
         for (name in specs) {
-            resource url: [dir: 'js/test', file: name + '.js']
+            resource url: [dir: 'js/test', file: name + '_spec.js']
         }
     }
 }
