@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="${resource(dir: 'css', file: 'main-responsive.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
 
-        <r:require modules="core,monitor"/>
+        <r:require modules="core, monitor, monitorSrc"/>
         <r:layoutResources />
         <g:layoutHead/>
 

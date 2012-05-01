@@ -13,9 +13,13 @@ modules = {
     }
 
     monitor {
-        List files = [
-                "monitor",
+        resource url: [dir: 'js/src', file: 'monitor.js']
+    }
 
+    monitorSrc {
+
+        List files = [
+                "core/base",
                 "core/utils",
                 "core/view_manager",
                 "core/interval_driver",
@@ -36,5 +40,21 @@ modules = {
             resource url: [dir:'js/src', file: name + ".js"]
         }
 
+    }
+
+    jasmine {
+        dependsOn "monitorSrc"
+        resource url: [dir: 'js/libs', file: 'jquery-1.7.2.min.js'], disposition: "head"
+        resource url: [dir: 'js/libs', file: 'jasmine.js']
+        resource url: [dir: 'js/libs', file: 'jasmine-html.js']
+        resource url: [dir: 'css', file: 'jasmine/jasmine.css']
+
+        List specs = [
+                "models/keyword_spec"
+
+        ]
+        for (name in specs) {
+            resource url: [dir: 'js/test', file: name + '.js']
+        }
     }
 }
