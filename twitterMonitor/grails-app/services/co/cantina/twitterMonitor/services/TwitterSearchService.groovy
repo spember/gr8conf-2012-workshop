@@ -15,7 +15,7 @@ class TwitterSearchService {
     // main entry point
     def monitor() {
         if(locked) {
-            print "Job is still executing, waiting for next execution cycle"
+            log.info "Job is still executing, waiting for next execution cycle"
 
         } else {
             //List keywords = Keyword.list()
@@ -32,7 +32,7 @@ class TwitterSearchService {
 
                 locked = false
             } else {
-                print "No keywords present, skipping query"
+                log.info "No keywords present, skipping query"
             }
 
         }
@@ -53,12 +53,12 @@ class TwitterSearchService {
     def queryOldWords(words) {
         if (words) {
             Long minId = messageService.getOldestId()
-            print ("Querying old words: " +words +" with id = " +minId)
+            log.debug ("Querying old words: " +words +" with id = " +minId)
             try {
                 processMessages(executeQuery(words.join(" OR ").encodeAsURL(), minId).results, words)
             }
             catch(IOException ioe) {
-                log.warn("Error querying the old words")
+                log.warn "Error querying the old words: ${words}"
                 //release lock on error
                 locked = false
             }
@@ -69,7 +69,7 @@ class TwitterSearchService {
         if (words) {
             try {
                 words.each {word->
-                    print ("Querying new word: " +word)
+                    log.debug ("Querying new word: " +word)
                     processMessages(executeQuery(word.text.encodeAsURL(), null).results, [word])
                 }
             }

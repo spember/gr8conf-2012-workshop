@@ -10,16 +10,15 @@ class KeywordService {
         if (!message.processed && !message.hasErrors()) {
             if (!keywords) {
                 //if no keywords provided, use the whole list
-                print "Generating list of keywords for updating!"
+                log.trace "Generating list of keywords for updating!"
                 keywords = Keyword.list()
             }
             keywords.each { keyword->
                 if( message.text.find(keyword.text)) {
-                    print "Found ${keyword.text} in ${message.text}"
+                    log.trace "Found ${keyword.text} in ${message.text}"
                     keyword.numSeen++
                     if ( !keyword.save() ) {
                         log.warn("Error saving keyword ${keyword}")
-                        print "error saving keyword ${keyword}"
                     }
                 }
             }

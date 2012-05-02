@@ -14,7 +14,6 @@ class MessageService {
         message.twitterId = params["id"]
         message.userName = params["from_user_name"]
         message.save()
-
         message
     }
 
@@ -26,13 +25,11 @@ class MessageService {
             fiveMinutesAgo = new Date() - 5.minutes
         }
         List potentialPurges = Message.findAllByDateCreatedLessThan(fiveMinutesAgo)
-        print "${fiveMinutesAgo} is 5 minutes before ${new Date()}"
-        print "Deleting ${potentialPurges.size()} messages: ${potentialPurges}"
+        log.info "Deleting ${potentialPurges.size()} messages: ${potentialPurges}"
         potentialPurges.each {message->
             if (message.delete()) {
-                println "Deleted message"
+                log.info "Deleted message"
             }
-
         }
     }
 
