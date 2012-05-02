@@ -687,7 +687,8 @@ a.skip {
     font-size: 0.8em;
     color: #aaaaaa;
 }
-.tweet .text .mention, .tweet .text .hashtag { color: #000000; }
+.tweet .text .mention { color: #2C5B00; }
+.tweet .text .hashtag { color: #4878D6; }
 
 #keywordContainer {
     float:left;

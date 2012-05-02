@@ -25,7 +25,7 @@ class MessageService {
             fiveMinutesAgo = new Date() - 5.minutes
         }
         List potentialPurges = Message.findAllByDateCreatedLessThan(fiveMinutesAgo)
-        log.info "Deleting ${potentialPurges.size()} messages: ${potentialPurges}"
+        log.info "Deleting ${potentialPurges.size()} messages"
         potentialPurges.each {message->
             if (message.delete()) {
                 log.info "Deleted message"
