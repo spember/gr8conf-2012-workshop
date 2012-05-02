@@ -2,7 +2,7 @@ package co.cantina.twitterMonitor
 
 class Message {
     //twitter parameters
-    Long twitterId
+    Long id
     String text
     String userName
     String profileImageUrl
@@ -14,8 +14,11 @@ class Message {
         text maxSize: 165
         userName maxSize: 50
         profileImageUrl maxSize: 200
-        twitterId maxSize: 18, unique: true
+        //twitterId maxSize: 18, unique: true
+    }
 
+    static mapping = {
+        id generator: "assigned"
     }
 
     public String toString() {

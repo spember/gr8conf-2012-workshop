@@ -42,7 +42,7 @@ class TwitterSearchService {
     def executeQuery(query, sinceId) {
         String queryUrl = "http://search.twitter.com/search.json?rpp=${grailsApplication.config.grails.twitter.rpp}&include_entities=false&q=${query}".toString()
         if (sinceId) {
-           queryUrl += "&since_id=" + sinceId
+            queryUrl += "&since_id=" + sinceId
         }
         JSON.parse(new URL(queryUrl).text)
     }
@@ -84,10 +84,14 @@ class TwitterSearchService {
         int max = messages.length()
 
         //iterate over the messages, attempting to save them.
+        log.info("Found ${messages.size()} new messages")
         messages.each {
             // messages with non-unique twitter ids will not be saved, and
             def message = messageService.saveFromJSON(it)
-            keywordService.updateCounts(message, keywords)
+            if (message) {
+                keywordService.updateCounts(message, keywords)
+            }
+
         }
 
         // successfully saved messages are then scanned for keywords, with the appropriate keyword incremented

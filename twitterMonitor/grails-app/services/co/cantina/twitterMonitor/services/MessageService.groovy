@@ -7,13 +7,18 @@ class MessageService {
 
     def saveFromJSON (params) {
         Message message = new Message()
-        //avoid blindly binding data from the passed in params. Not entirely necessary here, but demonstrates a good practice
-        message.properties["text"] = params
-        //map our properties in from json
-        message.profileImageUrl = params["profile_image_url"]
-        message.twitterId = params["id"]
-        message.userName = params["from_user_name"]
-        message.save()
+        if (!Message.exists(params["id"])) {
+
+            //avoid blindly binding data from the passed in params. Not entirely necessary here, but demonstrates a good practice
+            message.properties["text"] = params
+            //map our properties in from json
+            message.profileImageUrl = params["profile_image_url"]
+            message.id = params["id"]
+            message.userName = params["from_user_name"]
+            message.dateCreated = new Date()
+            message.save()
+
+        }
         message
     }
 
@@ -35,8 +40,8 @@ class MessageService {
 
 
     Long getOldestId () {
-        Message message = Message.list([max: 1, sort:"twitterId", order: "asc"])[0]
-        message?.twitterId ?: 0
+        Message message = Message.list([max: 1, sort:"id", order: "desc"])[0]
+        message?.id ?: 0
     }
 
 }
