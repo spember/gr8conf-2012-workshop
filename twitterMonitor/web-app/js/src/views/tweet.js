@@ -7,6 +7,7 @@ TM.Views.Tweet = Backbone.View.extend({
     render: function () {
         var ctx = this.mapModelToContext();
         return TM.Templates.tweet(ctx);
+        //TODO: update either this or message to render directly and return this
 
     },
 

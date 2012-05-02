@@ -13,7 +13,7 @@ class Message {
     static constraints = {
         text maxSize: 165
         userName maxSize: 50
-        profileImageUrl maxSize: 100
+        profileImageUrl maxSize: 200
         twitterId maxSize: 18, unique: true
 
     }

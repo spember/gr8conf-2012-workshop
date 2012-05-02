@@ -2,10 +2,11 @@ package co.cantina.twitterMonitor
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.converters.JSON
+import grails.web.JSONBuilder
 
 class KeywordController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [save: "POST", delete: "DELETE"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -24,17 +25,12 @@ class KeywordController {
                 }
             }
 
-            //render Keyword.list() as JSON
-
         } else {
             [keywordInstanceList: Keyword.list(params), keywordInstanceTotal: Keyword.count()]
         }
 
     }
 
-    def create() {
-        [keywordInstance: new Keyword(params)]
-    }
 
     def save() {
         def keywordInstance = new Keyword(params)
@@ -77,49 +73,9 @@ class KeywordController {
         }
     }
 
-    def edit() {
-        def keywordInstance = Keyword.get(params.id)
-        if (!keywordInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [keywordInstance: keywordInstance]
-    }
-
-    def update() {
-        def keywordInstance = Keyword.get(params.id)
-        if (!keywordInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        if (params.version) {
-            def version = params.version.toLong()
-            if (keywordInstance.version > version) {
-                keywordInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'keyword.label', default: 'Keyword')] as Object[],
-                          "Another user has updated this Keyword while you were editing")
-                render(view: "edit", model: [keywordInstance: keywordInstance])
-                return
-            }
-        }
-
-        keywordInstance.properties = params
-
-        if (!keywordInstance.save(flush: true)) {
-            render(view: "edit", model: [keywordInstance: keywordInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'keyword.label', default: 'Keyword'), keywordInstance.id])
-        redirect(action: "show", id: keywordInstance.id)
-    }
-
     def delete() {
         def keywordInstance = Keyword.get(params.id)
+        // if the request is made via ajax, we process the delete sperately
         if (request.xhr) {
             try {
                 keywordInstance.delete(flush: true)

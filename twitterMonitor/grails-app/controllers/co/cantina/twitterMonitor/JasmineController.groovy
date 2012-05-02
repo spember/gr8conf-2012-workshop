@@ -4,7 +4,5 @@ class JasmineController {
 
     static allowedMethods = [index: "GET"]
 
-    def index() {
-        []
-    }
+    def index() {}
 }

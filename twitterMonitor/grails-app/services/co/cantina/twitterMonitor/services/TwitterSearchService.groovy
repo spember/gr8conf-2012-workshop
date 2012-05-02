@@ -43,7 +43,6 @@ class TwitterSearchService {
         String queryUrl = "http://search.twitter.com/search.json?rpp=${grailsApplication.config.grails.twitter.rpp}&include_entities=false&q=${query}".toString()
         if (sinceId) {
            queryUrl += "&since_id=" + sinceId
-            print queryUrl
         }
         JSON.parse(new URL(queryUrl).text)
     }
@@ -75,7 +74,7 @@ class TwitterSearchService {
                 }
             }
             catch (IOException ioe) {
-                locked = false
+
             }
         }
     }
