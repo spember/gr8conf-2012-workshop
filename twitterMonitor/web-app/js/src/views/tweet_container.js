@@ -138,7 +138,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
             view = new TM.Views.Tweet({model:model});
         //track the last seen id;
         this.lastTweetId = model.id;
-        this.$el.append(view.render());
+        this.$el.append(view.render().el);
         view.setElement(this.$el.find(".tweet").last());
         this.views.push(view);
         // finally check how many tweets are in the queue. If at threshold, get more
