@@ -671,6 +671,7 @@ a.skip {
 }
 
 #tweetContainer .empty { width: 100%; }
+#tweetContainer.verboten { display:none; }
 
 .tweet {
     padding: 0.25em;
