@@ -1,10 +1,15 @@
+// Here, we use Intervals to control actions that are to repeat and that we wish to control with the 'on/off' toggle switch
+//
+// If this were a larger application, one should use timers that call themselves again when finished, or requestAnimationFrame
+// instead, due to variations in how browsers can time these events. However, much of that concern is when dealing with animation, which
+// we are not doing here.
 TM.Core.IntervalDriver = function () {
     _.extend(this, Backbone.Events);
 
     this.intervals = {};
 
     this.start = function () {
-        console.log("Kick it!");
+
         TM.instance.kickingIt = true;
         this.intervals.keywordIndividualUpdate = setInterval(function () {
             var keywords = TM.instance.viewManager.views.keywordContainer.keywords,

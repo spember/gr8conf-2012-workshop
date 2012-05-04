@@ -31,6 +31,8 @@ class KeywordService {
         if (found) {
             log.trace "${message.id} - Found ${keyword.text} in ${message.text}"
             keyword.numSeen++
+            // also, update the last tweet seen for this tweet
+            keyword.mostRecentTweet = message.id
             if ( !keyword.save() ) {
                 log.warn("Error saving keyword ${keyword}")
             }

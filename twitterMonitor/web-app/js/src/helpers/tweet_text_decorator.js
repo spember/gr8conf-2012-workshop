@@ -1,4 +1,6 @@
 TM.Helpers.Resources = {
+    // each textitem is of the form:
+    // [pattern, text to insert before, text to insert after]
     textItems: [
         [/@\w+/gi, "<span class='mention'>", "</span>"],
         [/#\w+/gi, "<span class='hashtag'>", "</span>"]

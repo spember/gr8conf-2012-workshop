@@ -6,10 +6,10 @@ class Keyword {
 
     //number of parsed messages containing this keyword
     int numSeen = 0
+    Long mostRecentTweet = -1
 
     Date dateCreated
     Date lastUpdated
-
 
     static constraints = {
         numSeen min: 0

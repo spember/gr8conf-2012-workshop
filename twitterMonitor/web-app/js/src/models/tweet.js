@@ -1,5 +1,5 @@
 TM.Models.Tweet = Backbone.Model.extend({
 
-    urlRoot: "/twitterMonitor/message"
+    //urlRoot: "/twitterMonitor/message"
 
 });
