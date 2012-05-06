@@ -62,6 +62,9 @@ grails.hibernate.cache.queries = true
 //twitter results per page
 grails.twitter.rpp = 200
 
+//politeness time to sleep between pinging twitter, in millis
+grails.twitter.sleepTime = 2000
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     development {

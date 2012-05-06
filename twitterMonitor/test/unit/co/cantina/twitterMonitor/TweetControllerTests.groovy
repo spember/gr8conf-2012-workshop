@@ -1,13 +1,10 @@
 package co.cantina.twitterMonitor
 
-
-
-import org.junit.*
 import grails.test.mixin.*
 
-@TestFor(MessageController)
-@Mock(Message)
-class MessageControllerTests {
+@TestFor(TweetController)
+@Mock(Tweet)
+class TweetControllerTests {
 
 
     def populateValidParams(params) {
@@ -48,7 +45,7 @@ class MessageControllerTests {
 
         assert response.redirectedUrl == '/message/show/1'
         assert controller.flash.message != null
-        assert Message.count() == 1
+        assert Tweet.count() == 1
     }
 
     void testShow() {
@@ -59,7 +56,7 @@ class MessageControllerTests {
 
 
         populateValidParams(params)
-        def message = new Message(params)
+        def message = new Tweet(params)
 
         assert message.save() != null
 
@@ -78,7 +75,7 @@ class MessageControllerTests {
 
 
         populateValidParams(params)
-        def message = new Message(params)
+        def message = new Tweet(params)
 
         assert message.save() != null
 
@@ -99,7 +96,7 @@ class MessageControllerTests {
 
 
         populateValidParams(params)
-        def message = new Message(params)
+        def message = new Tweet(params)
 
         assert message.save() != null
 
@@ -143,17 +140,17 @@ class MessageControllerTests {
         response.reset()
 
         populateValidParams(params)
-        def message = new Message(params)
+        def message = new Tweet(params)
 
         assert message.save() != null
-        assert Message.count() == 1
+        assert Tweet.count() == 1
 
         params.id = message.id
 
         controller.delete()
 
-        assert Message.count() == 0
-        assert Message.get(message.id) == null
+        assert Tweet.count() == 0
+        assert Tweet.get(message.id) == null
         assert response.redirectedUrl == '/message/list'
     }
 }

@@ -1,6 +1,6 @@
 package co.cantina.twitterMonitor
 
-class Message {
+class Tweet {
     //twitter parameters
     Long id
     String text

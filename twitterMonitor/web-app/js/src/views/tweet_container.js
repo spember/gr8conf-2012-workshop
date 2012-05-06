@@ -164,7 +164,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
             self.fetching = true;
 
             $.ajax({
-                url:"/twitterMonitor/message/listBatch",
+                url:"/twitterMonitor/tweet/listBatch",
                 data: {
                     id: self.lastTweetId > 0 ? self.lastTweetId : null
                 },

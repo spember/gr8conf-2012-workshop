@@ -1,13 +1,12 @@
 package co.cantina.twitterMonitor.services
 
-import co.cantina.twitterMonitor.Message
+import co.cantina.twitterMonitor.Tweet
 import co.cantina.twitterMonitor.Keyword
-import org.springframework.beans.factory.annotation.Required
 
 class KeywordService {
 
     // Given a message, increments a keyword count
-    def updateCounts(Message message, List<Keyword> keywords) {
+    def updateCounts(Tweet message, List<Keyword> keywords) {
 
         if (message.text && !message.processed && !message.hasErrors()) {
             if (!keywords) {
@@ -26,13 +25,17 @@ class KeywordService {
         }
     }
 
-    def matchKeywordToMessage(Keyword keyword, Message message) {
+    def matchKeywordToMessage(Keyword keyword, Tweet message) {
         boolean found = message.text.toLowerCase().find(keyword.text.toLowerCase())
         if (found) {
             log.trace "${message.id} - Found ${keyword.text} in ${message.text}"
             keyword.numSeen++
             // also, update the last tweet seen for this tweet
-            keyword.mostRecentTweet = message.id
+            if(keyword.mostRecentTweet < message.id) {
+                log.info("Updating tweeet id to ${message.id} from ${keyword.mostRecentTweet}")
+                keyword.mostRecentTweet = message.id
+            }
+
             if ( !keyword.save() ) {
                 log.warn("Error saving keyword ${keyword}")
             }
