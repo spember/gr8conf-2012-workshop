@@ -17,8 +17,14 @@ TM.Models.Keyword = Backbone.Model.extend({
     },
 
     getBarPercentage: function () {
-        var maxSeen = this.collection.getMaxNumSeen();
-        return Math.round( (this.get("numSeen") / maxSeen) * 100 );
+        var maxSeen = this.collection.getMaxNumSeen(),
+            max = (this.get("numSeen") / maxSeen) * 100;
+        console.log("Max seen of "+maxSeen);
+        // ensure a max of 100
+        if (max > 100) {
+            max = 100;
+        }
+        return Math.round( max );
     }
 
 

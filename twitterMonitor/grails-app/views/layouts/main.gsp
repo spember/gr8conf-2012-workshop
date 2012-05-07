@@ -19,9 +19,15 @@
 
 	</head>
 	<body>
-		<div id="grailsLogo" role="banner"><a href="http://grails.org"><img src="${resource(dir: 'images', file: 'grails_logo.png')}" alt="Grails"/></a></div>
+		<div id="appLogo" role="banner">
+            <div>
+                <img class="left" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
+                <h2>Twitter Monitor</h2>
+                <img id="grailsLogo" class="right" src="${resource(dir: 'images', file: 'gr8conf-logo.png')}" alt="Gr8Conf"/>
+
+            </div>
+		</div>
 		<g:layoutBody/>
-		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
         <r:layoutResources />
 	</body>
 </html>

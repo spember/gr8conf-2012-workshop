@@ -1,4 +1,8 @@
 @media (max-width: 979px) {
+    html {
+        font-size: 12px;
+    }
+
     #tweetContainer {
         float: none;
         clear: both;
@@ -26,9 +30,22 @@
         width: 31%;
         height: 100%;
     }
+
+    #grailsLogo {
+        display: none;
+    }
+
+    #appLogo h2 {
+        width: 70%;
+        margin-left: 0%;
+    }
 }
 
 @media (max-width: 700px) {
+    html {
+        font-size: 10px;
+    }
+
     #addContainer>div {
         height: 8em;
     }
@@ -44,4 +61,12 @@
     #addContainer input {
         width: 60%;
     }
+
+    #appLogo {
+        height: 100%;
+    }
+    #appLogo h2 {
+        float: none;
+    }
+
 }

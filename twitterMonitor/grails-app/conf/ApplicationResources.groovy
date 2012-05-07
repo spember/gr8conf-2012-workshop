@@ -1,4 +1,14 @@
 modules = {
+
+    scrolldeck {
+
+        dependsOn "core"
+
+        for (name in ["jquery.easing.1.3", "jquery.scrolldeck", "jquery.scrollorama", "jquery.scrollTo-1.4.2-min"]) {
+            resource url: [dir: 'js/libs', file: name + '.js']
+        }
+    }
+
     core {
         //load lib js
         for (name in ['jquery-1.7.2.min', 'underscore-min', 'backbone', 'handlebars', 'iphone-style-checkboxes']) {
