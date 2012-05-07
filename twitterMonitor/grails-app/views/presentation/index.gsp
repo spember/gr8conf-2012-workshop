@@ -5,7 +5,7 @@
     <title>GR8Conf | Workshop: Building Responsive HTML 5 Apps with Grails</title>
 </head>
 <body>
-    <div class="header">
+    <div id="appHeader">
         <div class="nav">
             <a class="nav-button" href="#overview">Overview</a>
             <a class="nav-button" href="#html5">HTML 5</a>
@@ -27,6 +27,7 @@
         <h2 class="title">Collection of New Markup & APIs</h2>
         <img  src="${resource(dir: 'images/slides', file: 'html5_chart.png')}" alt="HTML 5 Capabilities Chart"/>
         <h3 class="error animate-in" data-animation="space-in">Not Final!</h3>
+        <a class="animate-in" data-animation="fly-in-right" href="http://cantina.co/wp-content/uploads/2012/03/HTML5GuideFin312.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's HTML 5 Guide"/></a>
     </div>
 
     <div id="html5_3" class="slide">
@@ -54,6 +55,19 @@
         <div class="row animate-build" data-build="2">
             <img src="${resource(dir: 'images/slides', file: 'broadband.png')}" alt="Broadband"/>
             <p class="right">High Bandwidth, Rich UX!</p>
+        </div>
+    </div>
+
+    <div id="futureProof_3" class="slide">
+        <div class="row">
+            <img src="${resource(dir: 'images/slides', file: 'multiple_devices.jpg')}" alt="Multiple Devices"/>
+            <div class="right">
+                <ul>
+                    <li>Multiple speeds</li>
+                    <li>Multiple devices</li>
+                    <li>Multiple headaches</li>
+                </ul>
+            </div>
         </div>
     </div>
 

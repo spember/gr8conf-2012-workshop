@@ -11,7 +11,7 @@ input, select, textarea {
 /* BASE LAYOUT */
 
 html {
-    background-color: #EBF7F8;
+    /*background-color: #EBF7F8;*/
     font-size: 14px;
 }
 
@@ -29,8 +29,7 @@ body {
     color: #333333;
     margin: 0 auto;
     /*max-width: 70em;*/
-    border:3px solid #8ED4E7;
-    border-top: none;
+
 }
 
 
@@ -117,8 +116,8 @@ a:hover, a:active {
 
 
 #main {
-    min-height: 30em;
-    font-size: 1.25em
+    height: 100%;
+    font-size: 1.5rem;
 }
 
 #addContainer {
@@ -296,7 +295,7 @@ a:hover, a:active {
     color: #ffffff;
 }
 
-.header {
+#appHeader {
     width: 100%;
     position: fixed;
     top: 0;
@@ -309,18 +308,18 @@ a:hover, a:active {
 }
 
 
-.header .nav {
+#appHeader .nav {
     margin: 0 auto;
     width: 75%;
 }
-.header .nav a {
+#appHeader .nav a {
     font-size: 1.2rem;
     padding: 0.5em;
     font-weight: bold;
 }
-.header .nav a, .header .nav a:visited { color:#ffffff; }
+#appHeader .nav a, #appHeader .nav a:visited { color:#ffffff; }
 
-.header .nav a:hover, .header .nav a.current { color: #777777; }
+#appHeader .nav a:hover, #appHeader .nav a.current { color: #777777; }
 
 .slide {
     margin: 0 auto;
@@ -358,10 +357,15 @@ p {
     padding: 0.25em;
 }
 
+ul {
+    font-size:2rem;
+}
+
 .row {
     width: 95%;
     margin: 0 auto;
 }
+
 
 /***************
     Slides
@@ -381,5 +385,9 @@ p {
     position: absolute;
     right:25%;
     top: 50%;
+}
+
+#html5_2 a {
+    margin-left: 22%;
 }
 
