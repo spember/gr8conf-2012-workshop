@@ -19,7 +19,7 @@
 
 	</head>
 	<body>
-		<div id="appLogo" role="banner">
+		<div id="appLogo" role="banner" class="app-header">
             <div>
                 <img class="left" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
                 <h2>Twitter Monitor</h2>

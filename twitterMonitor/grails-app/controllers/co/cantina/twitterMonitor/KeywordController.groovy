@@ -20,7 +20,7 @@ class KeywordController {
             render(contentType: "application/json") {
                 array {
                     for (k in results) {
-                        keyword text: k.text, numSeen: k.numSeen, id: k.id
+                        keyword(text: k.text, numSeen: k.numSeen, id: k.id)
                     }
                 }
             }
