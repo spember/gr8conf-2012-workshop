@@ -60,6 +60,9 @@
     }
     #addContainer input {
         width: 60%;
+        font-size:3rem;
+        height:3rem;
+        margin-top:-1.5rem;
     }
 
     #appLogo {
@@ -67,6 +70,11 @@
     }
     #appLogo h2 {
         float: none;
+    }
+
+    .errors,
+    .message {
+        font-size: 2rem;
     }
 
 }

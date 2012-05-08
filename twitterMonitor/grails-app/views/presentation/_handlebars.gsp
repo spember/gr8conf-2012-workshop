@@ -14,9 +14,9 @@
 </script>
 
 <script id="HBkeywordContainerEmpty" type="text/x-handlebars-template">
-    <div class="instructions message">
+    <p class="instructions message">
         There are no currently active keywords. Please enter one in the box above to get started!
-    </div>
+    </p>
 </script>
 
 <script id="HBkeyword" type="text/x-handlebars-template">
