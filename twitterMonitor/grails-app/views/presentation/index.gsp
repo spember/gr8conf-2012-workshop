@@ -145,8 +145,31 @@
     <div id="apiDesign" class="slide">
         <h1>API Design</h1>
         <p class="sub">Or, Just Use REST and Skip this Section</p>
-
     </div>
+
+    <div class="slide">
+        <h2 class="center-text">A Good API Should Be:</h2>
+        <ul>
+            <li class="animate-build" data-build="1">Efficient</li>
+            <li class="animate-build" data-build="2">Intuitive</li>
+            <li class="animate-build" data-build="3">Backwards Compatible</li>
+            <li class="animate-build" data-build="4">Able To Support Multiple Formats</li>
+            <li class="animate-build" data-build="5">Aware of Intended Consumer</li>
+        </ul>
+    </div>
+
+    <div id="apiDesign_3" class="slide">
+        <h2 class="center-text animate-in" >So Why <span class="cantina-orange">Grails?</span></h2>
+        <p class="center-text sub">A Few Examples:</p>
+        <div class="top-row clearfix">
+            <img class="rounded animate-build left" data-build="1" src="${resource(dir: 'images/slides', file: 'grails_withFormat.png')}" alt="Grails - With Format"/>
+            <img class="rounded animate-build left" data-build="2" src="${resource(dir: 'images/slides', file: 'grails_json_builder.png')}" alt="Grails - JSON Builder"/>
+        </div>
+        <div class="bottom-row clearfix">
+            <img class="rounded animate-build left" data-build="3" src="${resource(dir: 'images/slides', file: 'grails_allowed_methods.png')}" alt="Grails - Allowed Methods Constraint"/>
+        </div>
+    </div>
+
     <div id="jsHelp" class="slide">
 
     </div>
