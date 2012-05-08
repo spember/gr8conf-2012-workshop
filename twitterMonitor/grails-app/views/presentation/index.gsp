@@ -73,10 +73,15 @@
     </div>
 
     <div id="futureProof_4" class="slide">
-        <h2>Responsive Design</h2>
+        <h2 class="center-text">Responsive Design</h2>
         <p>Adapt to <br/><strong class="animate-in" data-animation="space-in">Capabilities</strong><br/>Not Devices</p>
+        <p class="right animate-build" data-build="1">Provide a <br/><strong>Consistant</strong><br/>Experience</p>
     </div>
 
+
+    <div id="futureProof_5" class="slide">
+        <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'ResponsiveDesignGlobe.png')}" alt="Responsive Design"/>
+    </div>
 
     <div id="twitterMonitor" class="slide">
 
