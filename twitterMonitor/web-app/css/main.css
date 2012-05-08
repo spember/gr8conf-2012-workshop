@@ -70,6 +70,9 @@ a:hover, a:active {
 .cantina-orange {
     color: #FF5200;
 }
+.positive {
+    color: #48802C;
+}
 
 .errors ul,
 .message {
@@ -318,11 +321,11 @@ a:hover, a:active {
 #appHeader .nav {
     position: absolute;
     top: 50%;
-    margin-top: -0.875rem;
+    margin-top: -0.625rem;
     margin-left: 2em;
 }
 #appHeader .nav a {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     padding: 0.5em;
     font-weight: bold;
 }

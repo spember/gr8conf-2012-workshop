@@ -10,7 +10,9 @@
             <a class="nav-button" href="#overview">Overview</a>
             <a class="nav-button" href="#html5">HTML 5</a>
             <a class="nav-button" href="#futureProof">Future Proof</a>
-            <a class="nav-button" href="#mvcmv">MvCMV</a>
+            <a class="nav-button" href="#mvcmv">Pros / Cons</a>
+            <a class="nav-button" href="#apiDesign">API</a>
+            <a class="nav-button" href="#jsHelp">Javascript</a>
             <a class="nav-button" href="#twitterMonitor">Sample App</a>
         </div>
         <img class="logo right" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
@@ -113,7 +115,46 @@
         <p class="sub">Of MvCMV</p>
     </div>
 
+    <div id="mvcmv_2" class="slide">
+        <h2 class="center-text positive">Pros</h2>
+        <ul>
+            <li class="animate-build" data-build="1">Offload CPU Cycles</li>
+            <li class="animate-build" data-build="2">Save Bandwidth</li>
+            <li class="animate-build" data-build="3">(May) Enhance Usability</li>
+            <li class="animate-build" data-build="4">Interchangeable Interfaces</li>
+            <li class="animate-build" data-build="5">2+ Codebases</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2 class="cantina-orange">Service Oriented Architecture</h2>
+        <p class="sub">(API-zation of the web)</p>
+        <p class="center-text">Perhaps the biggest Advantage</p>
+        <p class="center-text animate-build" data-build="1">One set of API calls for all Client Interfaces</p>
+        <p class="center-text animate-build" data-build="2">Ability to scale back-end and front-end independently</p>
+    </div>
+
+    <div id="mvcmv_3" class="slide">
+        <h2 class="center-text error">Cons</h2>
+            <p class="animate-build right-text" data-build="1">2+ Codebases - </p>
+            <p class="animate-build right-text" data-build="2">Increased Testing Requirements - </p>
+            <p class="animate-build right-text" data-build="3">Vast Amounts of Javascript (if your team is not ready) - </p>
+            <p class="animate-build right-text error" data-build="4">Security Model Change Required - </p>
+    </div>
+
+    <div id="apiDesign" class="slide">
+        <h1>API Design</h1>
+        <p class="sub">Or, Just Use REST and Skip this Section</p>
+
+    </div>
+    <div id="jsHelp" class="slide">
+
+    </div>
     <div id="twitterMonitor" class="slide">
+
+    </div>
+
+    <div id="credits" class="slide">
 
     </div>
 
