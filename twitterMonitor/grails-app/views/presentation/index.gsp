@@ -14,6 +14,7 @@
             <a class="nav-button" href="#apiDesign">API</a>
             <a class="nav-button" href="#jsHelp">Javascript</a>
             <a class="nav-button" href="#twitterMonitor">Sample App</a>
+            <a class="nav-button" href="#credits">Credits</a>
         </div>
         <img class="logo right" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
     </div>
@@ -167,24 +168,63 @@
         </div>
         <div class="bottom-row clearfix">
             <img class="rounded animate-build left" data-build="3" src="${resource(dir: 'images/slides', file: 'grails_allowed_methods.png')}" alt="Grails - Allowed Methods Constraint"/>
+
         </div>
     </div>
 
-    <div id="jsHelp" class="slide">
-
+    <div id="apiDesign_4" class="slide">
+        <img class="rounded animate-build left" data-build="1" src="${resource(dir: 'images/slides', file: 'grails_url_mappings_rest.png')}" alt="Grails - URL Mappings"/>
+        <img class="rounded animate-build left" data-build="2" src="${resource(dir: 'images/slides', file: 'grails_request_xhr.png')}" alt="Grails - Request XHR"/>
     </div>
+
+    <div id="jsHelp" class="slide">
+        <h1><span class="cantina-orange">Javascript</span></h1>
+        <p class="sub">It's Dangerous to go Alone. Take This!</p>
+    </div>
+
+    <div class="slide">
+        <p class="center-text">Creating large-scale Javascript apps can be <br/><span class="cantina-orange animate-in">difficult</span>,<br/>
+        especially if your team is new to this idea</p>
+    </div>
+
+    <div id="jsHelp_3" class="slide">
+        <h3 class="center-text">Luckily, There are Myriad <span class="cantina-orange">Frameworks</span> To Help</h3>
+        <img class="push-left" src="${resource(dir: 'images/slides', file: 'javascript_frameworks.png')}" alt="Countless Javascript Frameworks"/>
+    </div>
+
+    <div class="slide">
+        <h3 class="center-text">Today we'll be using these:</h3>
+        <div class="top-row img-row clearfix">
+            <img class="rounded animate-build left" data-build="1" src="${resource(dir: 'images/slides', file: 'backbone_js_logo.png')}" alt="Backbone.js logo"/>
+            <img class="rounded animate-build right" data-build="3" src="${resource(dir: 'images/slides', file: 'handlebars_logo.png')}" alt="Handlebars Logo"/>
+        </div>
+        <div class="bottom-row img-row clearfix">
+            <img class="rounded animate-build left" data-build="2" src="${resource(dir: 'images/slides', file: 'underscore_js_logo.png')}" alt="Underscore.js logo"/>
+            <img class="rounded animate-build right" data-build="4" src="${resource(dir: 'images/slides', file: 'jasmine_logo.png')}" alt="Jasmine logo"/>
+        </div>
+    </div>
+
+    <div class="slide">
+        <p class="animate-in center-text" data-animation="fly-in-left">Plus <span class="cantina-orange">jQuery</span></p>
+        <br/><br/>
+        <p class="animate-in center-text" data-animation="fly-in-right">To build this:</p>
+    </div>
+
     <div id="twitterMonitor" class="slide">
+        <g:render template="placeholders"/>
+
 
     </div>
 
     <div id="credits" class="slide">
-
+        <h2>Credits:</h2>
+        <p class="sub">@svpember</p>
     </div>
 
 
 
 
 
-
+    <g:render template="handlebars"/>
 </body>
 </html>

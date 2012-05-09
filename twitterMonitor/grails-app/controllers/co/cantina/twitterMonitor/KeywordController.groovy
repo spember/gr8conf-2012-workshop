@@ -13,12 +13,10 @@ class KeywordController {
     }
 
     def list() {
-        print "In list"
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         if (request.xhr) {
 
             List keywords = Keyword.list(params)
-
             render(contentType: "application/json") {
                 array {
                     for (k in keywords) {
@@ -35,21 +33,21 @@ class KeywordController {
 
 
     def save() {
-        print "In save"
         def keywordInstance = new Keyword(params)
+        def saved = keywordInstance.save(flush: true)
 
+        // differ the responses based on request type
         if (request.xhr) {
             Map result = [status: false]
-            if (keywordInstance.save(flush: true)) {
+            if (saved) {
                 result.status = true
             }
             render result as JSON
         } else {
-            if (!keywordInstance.save(flush: true)) {
+            if (!saved) {
                 render(view: "create", model: [keywordInstance: keywordInstance])
                 return
             }
-
             flash.message = message(code: 'default.created.message', args: [message(code: 'keyword.label', default: 'Keyword'), keywordInstance.id])
             redirect(action: "show", id: keywordInstance.id)
         }
@@ -103,13 +101,5 @@ class KeywordController {
                 redirect(action: "show", id: params.id)
             }
         }
-    }
-
-    def testGet() {
-        render "Get test!"
-    }
-
-    def testPOST() {
-        render "POST test!"
     }
 }
