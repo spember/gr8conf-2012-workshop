@@ -21,11 +21,6 @@ describe('TM.Models.Keyword', function () {
             expect(keyword.get("text")).toEqual("#gr8conf");
         });
 
-        it('should have the correct urlRoot and deleteUrl', function () {
-            expect(keyword.urlRoot).toEqual("/twitterMonitor/keyword");
-            expect(keyword.deleteURL()).toEqual("/twitterMonitor/keyword/delete/1");
-        });
-
         it('calculates the bar width correctly', function () {
             var retVal = 100;
             // register the Spy (like a Mock), and mock the function call
