@@ -24,7 +24,7 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
 
         this.$el.find("a").on("click", function() {
             $.ajax({
-                url:"/twitterMonitor/keyword/save",
+                url:"/twitterMonitor/keyword",
                 data: {
                   text: field.val()
                 },

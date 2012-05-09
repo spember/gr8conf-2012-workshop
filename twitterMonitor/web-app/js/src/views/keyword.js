@@ -33,9 +33,10 @@ TM.Views.Keyword = Backbone.View.extend({
 
     // responsible for deleting the keyword on the server and destroying this view
     destroy: function () {
+        console.log("destroying ui");
         var self = this;
         //attempt to delete from the server, if successful we proceed with UI removal
-        self.model.destroy({url:self.model.deleteURL(), success: function () {
+        self.model.destroy({success: function () {
             self.removeUI.call(self);
         }});
 
@@ -45,6 +46,7 @@ TM.Views.Keyword = Backbone.View.extend({
     // fancy removal
     removeUI: function () {
         var self = this;
+        console.log("removing the ui!");
         self.$el.unbind(); //clear any bindings
         self.$el.fadeOut("slow", function () {
             //remove view from the dom

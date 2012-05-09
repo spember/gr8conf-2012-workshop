@@ -1,5 +1,5 @@
 TM.Collections.Keywords = Backbone.Collection.extend({
-    url: "/twitterMonitor/keyword/list",
+    url: "/twitterMonitor/keyword",
 
     model: TM.Models.Keyword,
     defaultMax: 100,

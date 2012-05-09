@@ -6,13 +6,14 @@ import grails.web.JSONBuilder
 
 class KeywordController {
 
-    static allowedMethods = [save: "POST", delete: "DELETE"]
+    static allowedMethods = [list:"GET", show: "GET", save: "POST", delete: "DELETE"]
 
     def index() {
         redirect(action: "list", params: params)
     }
 
     def list() {
+        print "In list"
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         if (request.xhr) {
 
@@ -34,16 +35,15 @@ class KeywordController {
 
 
     def save() {
+        print "In save"
         def keywordInstance = new Keyword(params)
 
         if (request.xhr) {
             Map result = [status: false]
-            if (!keywordInstance.save(flush: true)) {
-                render result as JSON
-            } else {
+            if (keywordInstance.save(flush: true)) {
                 result.status = true
-                render result as JSON
             }
+            render result as JSON
         } else {
             if (!keywordInstance.save(flush: true)) {
                 render(view: "create", model: [keywordInstance: keywordInstance])
@@ -103,5 +103,13 @@ class KeywordController {
                 redirect(action: "show", id: params.id)
             }
         }
+    }
+
+    def testGet() {
+        render "Get test!"
+    }
+
+    def testPOST() {
+        render "POST test!"
     }
 }

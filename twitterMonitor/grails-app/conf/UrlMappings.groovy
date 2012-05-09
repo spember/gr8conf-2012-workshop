@@ -6,6 +6,19 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+        "/keyword/$id"(controller: "keyword") {
+            action = [
+                    GET: "show",
+                    DELETE: "delete"
+            ]
+        }
+        "/keyword"(controller: "keyword" ) {
+            action = [
+                    GET: "list",
+                    POST: "save"
+            ]
+        }
+
 
 		"/"(controller: "presentation", action: "index")
 
