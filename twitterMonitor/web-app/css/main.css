@@ -410,7 +410,9 @@ img.rounded {
 #html5 p {font-weight: bold; margin-top: 2em;}
 
 #html5_2 a {
-    margin-left: 22%;
+    position: absolute;
+    top: 57%;
+    right: 28%;
 }
 
 #futureProof_3 img.rounded {
