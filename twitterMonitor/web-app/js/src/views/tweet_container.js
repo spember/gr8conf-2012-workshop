@@ -16,7 +16,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
         //Time for a tweet to display before fading
         this.tweetLiveTime = 1600;
         //Threshold, in px,  above which to display the tweets
-        this.displayThreshold = 680;
+        this.displayThreshold = 700;
 
         this.hideTweetClass = "verboten";
     },

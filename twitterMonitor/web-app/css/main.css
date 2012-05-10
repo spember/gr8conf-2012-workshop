@@ -217,11 +217,11 @@ a:hover, a:active {
 }
 
 .keyword {
-    width: 95%;
+    width: 100%;
     margin-bottom:1em;
     height: 3em;
 }
-.keyword .left {margin-left: 1em;}
+.keyword .left {margin-left: 0.5em;}
 
 .keyword a.keyword-remove {
     position: absolute;
@@ -259,7 +259,7 @@ a:hover, a:active {
 }
 
 .graph {
-    width: 50%;
+    width: 55%;
     height:3em;
 }
 .graph .bar {

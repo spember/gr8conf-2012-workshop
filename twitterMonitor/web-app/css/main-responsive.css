@@ -3,6 +3,7 @@
         font-size: 12px;
     }
 
+
     #tweetContainer {
         float: none;
         clear: both;
@@ -25,6 +26,10 @@
         width:100%;
     }
 
+    .graph {
+        width: 65%;
+    }
+
     .tweet {
         float: left;
         width: 31%;
@@ -41,7 +46,7 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
     html {
         font-size: 10px;
     }
