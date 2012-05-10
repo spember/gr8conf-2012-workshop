@@ -28,7 +28,7 @@ TM.Views.Keyword = Backbone.View.extend({
 
     updateDisplayCount: function () {
         var self = this;
-        self.$el.find("div.count>span").text(self.model.get("numSeen"));
+        self.$el.find("span.num-seen").text(self.model.get("numSeen"));
     },
 
     // responsible for deleting the keyword on the server and destroying this view

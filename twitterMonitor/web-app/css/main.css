@@ -224,6 +224,7 @@ a:hover, a:active {
 .keyword .left {margin-left: 0.5em;}
 
 .keyword a.keyword-remove {
+    z-index: 5;
     position: absolute;
     display: block;
     color: #cc0000;
@@ -232,7 +233,7 @@ a:hover, a:active {
     cursor: pointer;
     display:none;
     width:2em;
-    left: 20%;
+    left: 8em;
     background-color: #ffffff;
 
     -webkit-transition: visibility 0.5s ease 2s;
@@ -259,22 +260,32 @@ a:hover, a:active {
 }
 
 .graph {
-    width: 55%;
+    width: 62%;
     height:3em;
 }
 .graph .bar {
     border:2px solid #000000;
     background-color: #444444;
-    height:1em;
-    margin-top:-0.75em;
+    height:1.5em;
+    margin-top:-01em;
+    z-index: 1;
+    color: white;
+    overflow: hidden;
     transition: width 1s ease 0;
     -webkit-transition: width 1s ease 0;
     -moz-transition: width 1s ease 0;
 }
 
-.count {
-    width:2em;
-    margin-top: 0.75em;
+.count-lower {
+    margin-top: 0.85em;
+    margin-left: 9.1em;
+}
+.count-upper {
+    margin-left: 9em;
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+
 }
 
 

@@ -23,11 +23,12 @@
     <div class="keyword clearfix">
         <a class="keyword-remove center-text">X</a>
         <div class="icon left center-text">{{text}}</div>
-        <div class="count left center-text">
-            #<span>{{numSeen}}</span>
-        </div>
         <div class="graph left center-outer">
-            <div class="bar center-inner"></div>
+            <div class="count-lower">#<span class="num-seen">{{numSeen}}</span>
+            </div>
+            <div class="bar center-inner">
+                <div class="count-upper">#<span class="num-seen">{{numSeen}}</span></div>
+            </div>
         </div>
     </div>
 </script>
