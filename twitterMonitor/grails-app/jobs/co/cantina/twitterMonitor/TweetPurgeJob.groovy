@@ -12,7 +12,7 @@ class TweetPurgeJob {
     }
 
     def execute() {
-        //tweetService.removeOldMessages()
+        tweetService.removeOldMessages()
 
     }
 

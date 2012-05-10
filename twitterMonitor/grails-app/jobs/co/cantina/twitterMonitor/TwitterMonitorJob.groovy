@@ -13,6 +13,6 @@ class TwitterMonitorJob {
     }
 
     def execute() {
-        //twitterSearchService.monitor()
+        twitterSearchService.monitor()
     }
 }
