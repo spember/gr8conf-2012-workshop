@@ -5,7 +5,7 @@ This project contains materials related to a workshop I'm running / have run at 
 
 The contents of this mostly fall within the sample Grails app, called 'twitterMonitor', which has a handful of purposes:
 
-1.	To serve up the sample application that participants will re-create, called 'twitterMontir' 
+1.	To serve up the sample application that participants will re-create, called 'twitterMonitor' 
 2.	To host the presentation, written in full html + javascript 
 
 The other main file is an Instructions document detailing the steps the participants should follow to successfully build the application
