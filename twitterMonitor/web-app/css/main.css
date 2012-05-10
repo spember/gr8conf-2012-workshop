@@ -256,11 +256,11 @@ a:hover, a:active {
     border-radius: 1em;
     background-color: #EEEEEE;
     box-shadow:0 0 1em #CCCCCC;
-    width:8em;
+    width: 21%;
 }
 
 .graph {
-    width: 62%;
+    width: 65%;
     height:3em;
 }
 .graph .bar {
