@@ -1,5 +1,6 @@
 *.class
 README.html
+Instructions.html
 target/
 .project
 .classpath
