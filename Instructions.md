@@ -15,17 +15,40 @@ First off, when creating a new Backbone object, one 'extends' a from a base type
 	var keyword = new Backbone.Model.extend({options});
 
 
-The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish.
+The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a contsructor method called 'initialize' which is empty by default.
 
 
 Below are listed some important features and methods from each object type
 
-### Models
+### [Models](http://backbonejs.org/#Model)
 
 Models typically act as a direct mapping from an object on your server to one in your UI. Each Backbone model knows how to access it's mapped Model (by default via a pure REST implementation) and allows a range of functionality, including performing client-side validation of objects.
 
 #### fetch({options})
 The fetch method pulls information from the server and updates the model with any new data. If data has been changed, a 'changed' event is fired from this object. The options parameter allows for 'success' and 'error' callback methods.
+
+
+### [Views](http://backbonejs.org/#View)
+
+Just like you'd imagine, Views are responsible for rendering and code surrounding the DOM nodes they've created. When creating a new view, one typically attaches the model, then calls render() followed by bindEvents() (or use a [declarative events](http://backbonejs.org/#View-delegateEvents) object). One nice feature is that Backbone encourages the use of JS Templates.
+
+#### render()
+Responsible for rendering some set of nodes, typically based on a model. If done nicely, a typical render method may look something like this:
+
+	render: function () {
+        
+        this.$el.html($(TM.Templates.tweet({
+        	text: this.model.get("text")
+        	})));
+        return this;
+    },
+
+Note the use of 'return this'. A view is *not*, by convention, responsible for inserting itself in the DOM; that task generally falls to whatever created the view. Also, the this.$el object, which is a cached jQuery/Zepto selector for the view's root node.
+
+
+
+
+
 
 
 Templating - [Handlebars][handlebars]
