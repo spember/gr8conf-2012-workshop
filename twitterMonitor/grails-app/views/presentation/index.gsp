@@ -177,6 +177,17 @@
         <img class="rounded animate-build left" data-build="2" src="${resource(dir: 'images/slides', file: 'grails_request_xhr.png')}" alt="Grails - Request XHR"/>
     </div>
 
+    <div class="slide">
+        <script src="https://gist.github.com/2476214.js?file=succinct.groovy"></script>
+    </div>
+
+    <div class="slide">
+        <h3>Versioning with withFormat</h3>
+        <br/>
+        <script src="https://gist.github.com/2476214.js?file=versioning_with_format.groovy"></script>
+    </div>
+
+
     <div id="jsHelp" class="slide">
         <h1><span class="cantina-orange">Javascript</span></h1>
         <p class="sub">It's Dangerous to go Alone. Take This!</p>

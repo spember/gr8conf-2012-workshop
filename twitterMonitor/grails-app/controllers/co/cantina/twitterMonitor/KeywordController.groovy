@@ -17,7 +17,7 @@ class KeywordController {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         if (request.xhr) {
 
-            List keywords = Keyword.list(params)
+            //List keywords = Keyword.list(params)
             render(contentType: "application/json") {
                 array {
                     for (k in keywords) {
