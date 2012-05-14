@@ -1,10 +1,9 @@
 // Responsible for maintaining the keyword collection and their views
 TM.Views.KeywordContainer = Backbone.View.extend({
 
-    // TODO: remove the this.views, if possible
-
     initialize: function () {
         this.keywords = new TM.Collections.Keywords();
+        this.keywords.bindEvents();
         this.views = [];
     },
 

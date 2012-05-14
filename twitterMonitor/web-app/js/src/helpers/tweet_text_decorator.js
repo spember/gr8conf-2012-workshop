@@ -30,4 +30,5 @@ TM.Helpers.tweetTextDecorator = function (text) {
     return text;
 };
 
+//When registering the Helper, the first parameter is the name that Handlebars uses to reference your function in the templates
 Handlebars.registerHelper('tweetTextDecorator', TM.Helpers.tweetTextDecorator);

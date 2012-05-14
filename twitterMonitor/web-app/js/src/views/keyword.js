@@ -15,13 +15,21 @@ TM.Views.Keyword = Backbone.View.extend({
         return this;
     },
 
-    //parse custom objects from a response string... but we should be sending only what we need, anyway
-    /*
-    parse: function (response) {
+    bindEvents: function () {
+        var self = this;
+        //listen for a change; potentially move this into the collection to trigger redraw for all of them
+        this.model.on("change:numSeen", function(){
+            self.updateGraphWidth.call(self);
+            self.updateDisplayCount.call(self);
+        });
+
+        this.$el.find(".keyword-remove").on("click", function () {
+            self.destroy.call(self);
+        });
 
     },
-    */
 
+    // update the bar graph width based on the model's
     updateGraphWidth: function () {
         $(this.el).find(".bar").width(this.model.getBarPercentage() +"%");
     },
@@ -53,21 +61,9 @@ TM.Views.Keyword = Backbone.View.extend({
 
         });
 
-    },
-
-    bindEvents: function () {
-        var self = this;
-        //listen for a change; potentially move this into the collection to trigger redraw for all of them
-        this.model.on("change:numSeen", function(){
-            self.updateGraphWidth.call(self);
-            self.updateDisplayCount.call(self);
-        });
-
-        this.$el.find(".keyword-remove").on("click", function () {
-            self.destroy.call(self);
-        });
-
     }
+
+
 
 
 });

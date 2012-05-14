@@ -1,16 +1,17 @@
+/*
+    Controls the view and actions surrounding the 'add keyword' functionality
+ */
 TM.Views.AddKeywordContainer = Backbone.View.extend({
-
-    initialize: function () {
-
-    },
 
     render: function () {
         var self = this;
+        // render the template, and instantiate the iPhone style control to start and stop the interval driver
         $(this.el).html(TM.Templates.addContainer({})).find(":checkbox").iphoneStyle({
             checkedLabel: 'STOP',
             uncheckedLabel: 'KICK IT!',
             onChange: self.runToggle
         });
+
         $(this.el).find(".iPhoneCheckContainer").addClass("center-inner right");
 
     },
@@ -37,7 +38,7 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
         });
     },
 
-
+    // starts and stops the intervalDriver
     runToggle: function (el, value) {
         if (value) {
             TM.instance.intervalDriver.start();
