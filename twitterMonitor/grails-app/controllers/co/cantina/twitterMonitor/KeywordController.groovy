@@ -3,6 +3,7 @@ package co.cantina.twitterMonitor
 import org.springframework.dao.DataIntegrityViolationException
 import grails.converters.JSON
 import grails.web.JSONBuilder
+import javax.servlet.http.HttpServletResponse
 
 class KeywordController {
 
@@ -26,7 +27,7 @@ class KeywordController {
             }
 
         } else {
-            [keywordInstanceList: Keyword.list(params), keywordInstanceTotal: Keyword.count()]
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
         }
 
     }
@@ -44,12 +45,7 @@ class KeywordController {
             }
             render result as JSON
         } else {
-            if (!saved) {
-                render(view: "create", model: [keywordInstance: keywordInstance])
-                return
-            }
-            flash.message = message(code: 'default.created.message', args: [message(code: 'keyword.label', default: 'Keyword'), keywordInstance.id])
-            redirect(action: "show", id: keywordInstance.id)
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
         }
     }
 
@@ -62,19 +58,13 @@ class KeywordController {
             }
             render result as JSON
         } else {
-            if (!keywordInstance) {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-                redirect(action: "list")
-                return
-            }
-
-            [keywordInstance: keywordInstance]
+           response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
         }
     }
 
     def delete() {
         def keywordInstance = Keyword.get(params.id)
-        // if the request is made via ajax, we process the delete sperately
+        // if the request is made via ajax, we process the delete separately
         if (request.xhr) {
             try {
                 keywordInstance.delete(flush: true)
@@ -82,24 +72,10 @@ class KeywordController {
                 render data as JSON
             }
             catch (DataIntegrityViolationException e) {
-
+                log.error "Could not delete Keyword ${params.id}: ${e.getMessage()}"
             }
         } else {
-            if (!keywordInstance) {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-                redirect(action: "list")
-                return
-            }
-
-            try {
-                keywordInstance.delete(flush: true)
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-                redirect(action: "list")
-            }
-            catch (DataIntegrityViolationException e) {
-                flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'keyword.label', default: 'Keyword'), params.id])
-                redirect(action: "show", id: params.id)
-            }
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
         }
     }
 }

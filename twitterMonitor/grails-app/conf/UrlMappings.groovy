@@ -23,6 +23,7 @@
                 "/"(controller: "presentation", action: "index")
 
                 "500"(view:'/error')
+                "405"(view:'/denied')
             }
         }
 
