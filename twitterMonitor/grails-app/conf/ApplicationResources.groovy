@@ -61,6 +61,7 @@ modules = {
 
         List specs = [
                 "models/keyword",
+                "views/tweet",
                 "helpers/tweet_text",
                 "collections/keywords"
 

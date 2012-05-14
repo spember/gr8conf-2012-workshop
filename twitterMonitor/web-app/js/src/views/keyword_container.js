@@ -64,7 +64,8 @@ TM.Views.KeywordContainer = Backbone.View.extend({
 
     createView: function(model) {
         //first, ensure the view hasn't already been created
-        if(!this.getViewByModel(model)){
+
+        if (!model.attachedView) {
             var view = new TM.Views.Keyword({model:model});
             //render it initially
             this.$el.append($(view.render().el));
@@ -72,7 +73,7 @@ TM.Views.KeywordContainer = Backbone.View.extend({
             view.setElement(this.$el.children().last());
             //and bind!
             view.bindEvents();
-            //and store;
+            //and store. We'll need to access the view object's reference later for destruction
             this.views.push(view);
         }
         // else, view already exists
@@ -97,17 +98,6 @@ TM.Views.KeywordContainer = Backbone.View.extend({
             self.views.splice(pos, 1);
         }
 
-    },
-
-    getViewByModel: function (model) {
-        var self = this,
-            i = self.views.length;
-
-        while (i--) {
-            if (self.views[i].model.id === model.id) {
-                return self.views[i];
-            }
-        }
     }
 
 });

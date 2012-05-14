@@ -10,7 +10,6 @@ $(function () {
 
     TM.instance.intervalDriver = new TM.Core.IntervalDriver();
 
-    console.log("Ready.");
 })
 
 

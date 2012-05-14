@@ -1,7 +1,7 @@
 TM.Views.Keyword = Backbone.View.extend({
 
     initialize: function (options) {
-        //attach a reference on the model
+        //attach a reference on the model so that interval driver knows to delete this view without having to search for it
         this.model.attachedView = this;
     },
 
@@ -33,7 +33,6 @@ TM.Views.Keyword = Backbone.View.extend({
 
     // responsible for deleting the keyword on the server and destroying this view
     destroy: function () {
-        console.log("destroying ui");
         var self = this;
         //attempt to delete from the server, if successful we proceed with UI removal
         self.model.destroy({success: function () {
@@ -46,7 +45,6 @@ TM.Views.Keyword = Backbone.View.extend({
     // fancy removal
     removeUI: function () {
         var self = this;
-        console.log("removing the ui!");
         self.$el.unbind(); //clear any bindings
         self.$el.fadeOut("slow", function () {
             //remove view from the dom
