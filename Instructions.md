@@ -1,4 +1,25 @@
-Gr8Conf 2012 Workshop Instructions
+<style>
+	code {
+		border: 2px solid #EAEAEA;
+		background-color: #F8F8F8;
+		border-radius: 5px;
+		width: 80%;
+		margin: 0 auto;
+		padding: 1.5em;
+		display: block;
+	}
+
+	a {
+		color: #4183C4;		
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+</style>
+
+Gr8Conf 2012 Workshop Guide
 ========
 
 The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.
@@ -45,22 +66,64 @@ Responsible for rendering some set of nodes, typically based on a model. If done
 
 Note the use of 'return this'. A view is *not*, by convention, responsible for inserting itself in the DOM; that task generally falls to whatever created the view. Also, the this.$el object, which is a cached jQuery/Zepto selector for the view's root node.
 
+### [Collections](http://backbonejs.org/#Collection)
 
-
-
+Collections provide a range of convenience methods for managing ordered sets of Models. One of the most features is the ability to hook into a 'list' type action on the server to auto-instantiate a set of Models.
 
 
 
 Templating - [Handlebars][handlebars]
 --------------
 
-Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates.
+Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context, an object containing data mapped to your named placeholders, and returns a string which one can inject into your page as a DOM element. 
+
+Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your JS. 
 
 
 Testing - [Jasmine][jasmine]
 ----------
 
-Jasmine is bdd.
+Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as 'specs'.
+
+
+About this App
+======
+
+The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords. The number of occurences are tallied & displayed to the user, as well as a feed of the messages themselves.
+
+While all code is bundled within one application, it is helpful to think of this as two separate applications, the client-side portion and the server-side piece. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each side
+
+### Server
+
+The twitterMonitor server will receive data from the front-end, either a string representing a keyword to add or a number representing the id of a keyword to delete. It will also send data about the keywords and saved tweets to any client in JSON format. 
+
+The server also periodically executes to Quartz jobs: one which deletes tweets older than a specific threshold, and another which searches Twitter for new tweets containing the keywords. When a keyword is first searched, twitterMonitor will grab the previous n tweets (where n is a config option), but subsequent searches will return new tweets in between the last seen tweet. Keywords with matches will have a counter increased, and matching tweets are saved, then subsets of data are sent to the client.
+
+
+### Client
+
+The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a 'control' area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).
+
+
+
+Instructions
+=====
+
+The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes: 
+
+1.	Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
+2.	I apologize ahead of time for any bugs that may have crept in.
+3.	Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. 
+
+
+### Getting Started
+
+
+
+
+
+
+
 
 
 
