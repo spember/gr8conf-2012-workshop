@@ -259,7 +259,7 @@ But now we need a function that will discover the maxNumSeen for us. Luckily, we
 
 That's nice, but when should we search the models for the maximum? Whenever we call getMaxNumSeen? We could... but that's no fun. Let's instead hook into the Collection's event system! Whenever a member Model is added, removed, or updated, the Collection fires events that we can listen for. Where should we listen for these events? There's an argument to be made to add the bindings during the initialize function, however, Backbone Views have a convention where we separate the rendering of an item and the binding of its events. Let's extend that notion to our Collection.
 
-* Add something similar to the extend options object:
+* Add something similar to the following into the to the extend options object:
 
         bindEvents: function (){
             var self = this;

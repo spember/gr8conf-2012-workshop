@@ -26,7 +26,23 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         this.keywords.on("empty", function () {
             self.showEmptyMessage();
         });
+        // listen for a change event from the collection; update each view... this way, the relative size of the bar graph
+        // will update correctly... say, if one keyword is running away with all the hits, the others will adjust their
+        // sizes to reflect
+        this.keywords.on("change", function () {
+            self.updateViews.call(self);
+        });
 
+    },
+
+    // update each view in the list with the new value and bar graph width
+    updateViews: function () {
+        var index = this.views.length,
+            view;
+        while (index--) {
+            view = this.views[index];
+            view.updateDisplayValues.call(view);
+        }
     },
 
     // triggers the collection's fetch call, then triggers the rendering of views to the screen

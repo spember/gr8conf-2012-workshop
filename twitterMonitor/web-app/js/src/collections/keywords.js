@@ -27,6 +27,7 @@ TM.Collections.Keywords = Backbone.Collection.extend({
             self.findMax();
         });
 
+
         this.on("destroy", function () {
             if (self.models.length === 0) {
                 // alert the higher-ups that the collection is empty
