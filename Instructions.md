@@ -105,6 +105,10 @@ The server also periodically executes two Quartz jobs: one which deletes tweets 
 The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a 'control' area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).
 
 
+### File Locations
+
+Nearly every file we add or edit today will be within web-app/js/src/. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in grails-app/conf so that the Resources plugin will bundle it for you. 
+
 
 Instructions
 =====
@@ -112,11 +116,45 @@ Instructions
 The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes: 
 
 1.	Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
-2.	I apologize ahead of time for any bugs that may have crept in.
-3.	Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. 
+2.	This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
+3.	I apologize ahead of time for any bugs that may have crept in.
+4.	Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
 
 
 ### Getting Started
+
+I'll assume that you 1) have the full twitterMonitor project (e.g. downladed the repo from github) and 2) you have grails version 2.0.3 installed. Great. Now:
+
+1.	See if there's anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!
+2.	Start the application with 'grails run-app'
+
+At this point, navigate to [http://localhost:8080/twitterMonitor](http://localhost:8080/twitterMonitor); you should see a blue banner with the words 'Twitter Monitor' and a blank white screen.
+
+Let's get started!
+
+#### 1. Models
+
+
+We will need to create two models: Keyword and Tweet.
+
+*	Locate and open the the file <strong>web-app/js/src/models/tweet.js</strong> 
+*	Create the model and add it to our TwitterMonitor JS namespace by typing:  
+	
+	TM.Models.Tweet = Backbone.Model.extend({});
+
+Congratulations, you've created your first Backbone Model! We could certainly make this more complicated by adding verifications, defaults, etc, but it's not necessary for this demonstration. We've successfully extended the default BackboneModel into our own Tweet Model, and namespaced it into TM.Models (see <strong>web-app/src/js/core/base.js</strong> for a further breakdown on the namespacing).
+
+*	Locate and open <strong>web-app/js/src/models/keyword.js</strong>
+*	Add the following: 
+
+	TM.Models.Keyword = Backbone.Model.extend({
+	    url: function () {
+	        return "/twitterMonitor/keyword/"+this.get("id");
+	    }
+	});
+
+We've just created our second Model, this time extendeding it's base functionality by defining a <strong>url</strong> function. Backbone will use an Object's <strong>url</strong> function or object (you can use either) to determine the location to fetch data from; it should map to our keyword endpoint on the server.
+
 
 
 

@@ -2,6 +2,9 @@
     Client-side representation of the Keyword
  */
 TM.Models.Keyword = Backbone.Model.extend({
+    defaults: {
+        "numSeen": 0
+    },
 
     url: function () {
         return "/twitterMonitor/keyword/"+this.get("id");
@@ -18,9 +21,4 @@ TM.Models.Keyword = Backbone.Model.extend({
         return Math.round( max );
     }
 
-
-
-
-
-
-})
+});
