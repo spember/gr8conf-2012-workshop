@@ -12,6 +12,8 @@ TM.Core.Utils = {
 
         while (count--) {
             $template = $(templates[count]);
+            // We namespace our templates with the prefix 'HB' to avoid id conflicts , thus we need to strip it off
+            // when actually using the templates for usability in the JS
             if ($template.attr("id").indexOf("HB") === 0) {
                 templateId = $template.attr("id").substring(2);
             } else {

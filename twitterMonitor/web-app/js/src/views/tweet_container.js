@@ -1,9 +1,7 @@
 TM.Views.TweetContainer = Backbone.View.extend({
 
     initialize: function () {
-        //max tweets to display in the container at a given time
-        this.NUM_SHOW = 6;
-        //max tweets to render (and NUM_RENDER - NUM_SHOW be hidden) at a time
+        //max tweets to render at a time, although several (the css overflow) will be hidden
         this.NUM_RENDER = 10;
         //number that once crossed triggers the service to look for more tweets
         this.LOW_THRESHOLD = 10;

@@ -11,7 +11,7 @@ TM.Collections.Keywords = Backbone.Collection.extend({
     //
     // Thus, we default to 100
     defaultMax: 100,
-    maxNumSeen: 0 ,
+    maxNumSeen: 0,
 
     initialize: function () {
         this.maxNumSeen = this.defaultMax;
@@ -20,7 +20,7 @@ TM.Collections.Keywords = Backbone.Collection.extend({
     bindEvents: function (){
         var self = this;
         this.on("reset", function (){
-            self.findMax()
+            self.findMax();
         });
 
         this.on("change", function () {
