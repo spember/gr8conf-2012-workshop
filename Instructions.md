@@ -1,22 +1,22 @@
 <style>
-	code {
-		border: 2px solid #EAEAEA;
-		background-color: #F8F8F8;
-		border-radius: 5px;
-		width: 80%;
-		margin: 0 auto;
-		padding: 1.5em;
-		display: block;
-	}
+    code {
+        border: 2px solid #EAEAEA;
+        background-color: #F8F8F8;
+        border-radius: 5px;
+        width: 80%;
+        margin: 0 auto;
+        padding: 1.5em;
+        display: block;
+    }
 
-	a {
-		color: #4183C4;		
-		text-decoration: none;
-	}
+    a {
+        color: #4183C4;     
+        text-decoration: none;
+    }
 
-	a:hover {
-		text-decoration: underline;
-	}
+    a:hover {
+        text-decoration: underline;
+    }
 </style>
 
 Gr8Conf 2012 Workshop Guide
@@ -33,7 +33,7 @@ I encourage you to read through the Backbone [documentation][backbone] (or at le
 
 First off, when creating a new Backbone object, one 'extends' a from a base type, like so: 
 
-	var keyword = new Backbone.Model.extend({options});
+    var keyword = new Backbone.Model.extend({options});
 
 
 The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a contsructor method called 'initialize' which is empty by default.
@@ -56,11 +56,11 @@ Just like you'd imagine, Views are responsible for rendering and code surroundin
 #### render()
 Responsible for rendering some set of nodes, typically based on a model. If done nicely, a typical render method may look something like this:
 
-	render: function () {
+    render: function () {
         
         this.$el.html($(TM.Templates.tweet({
-        	text: this.model.get("text")
-        	})));
+            text: this.model.get("text")
+            })));
         return this;
     },
 
@@ -115,18 +115,19 @@ Instructions
 
 The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes: 
 
-1.	Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
-2.	This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
-3.	I apologize ahead of time for any bugs that may have crept in.
-4.	Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
+1.  Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
+2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
+3.  I apologize ahead of time for any bugs that may have crept in.
+5.  Refer to the [Backbone.js][backbone] or [Jasmine][jasmine] docs often for further clarification.
+4.  Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
 
 
 ### Getting Started
 
 I'll assume that you 1) have the full twitterMonitor project (e.g. downladed the repo from github) and 2) you have grails version 2.0.3 installed. Great. Now:
 
-1.	See if there's anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!
-2.	Start the application with 'grails run-app'
+1.  See if there's anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!
+2.  Start the application with 'grails run-app'
 
 At this point, navigate to [http://localhost:8080/twitterMonitor](http://localhost:8080/twitterMonitor); you should see a blue banner with the words 'Twitter Monitor' and a blank white screen.
 
@@ -137,23 +138,149 @@ Let's get started!
 
 We will need to create two models: Keyword and Tweet.
 
-*	Locate and open the the file <strong>web-app/js/src/models/tweet.js</strong> 
-*	Create the model and add it to our TwitterMonitor JS namespace by typing:  
-	
-	TM.Models.Tweet = Backbone.Model.extend({});
+*   Locate and open the the file <strong>web-app/js/src/models/tweet.js</strong> 
+*   Create the model and add it to our TwitterMonitor JS namespace by typing:  
+
+
+        TM.Models.Tweet = Backbone.Model.extend({});
+
 
 Congratulations, you've created your first Backbone Model! We could certainly make this more complicated by adding verifications, defaults, etc, but it's not necessary for this demonstration. We've successfully extended the default BackboneModel into our own Tweet Model, and namespaced it into TM.Models (see <strong>web-app/src/js/core/base.js</strong> for a further breakdown on the namespacing).
 
-*	Locate and open <strong>web-app/js/src/models/keyword.js</strong>
-*	Add the following: 
+*   Locate and open <strong>web-app/js/src/models/keyword.js</strong>
+*   Add the following: 
 
-	TM.Models.Keyword = Backbone.Model.extend({
-	    url: function () {
-	        return "/twitterMonitor/keyword/"+this.get("id");
-	    }
-	});
+        TM.Models.Keyword = Backbone.Model.extend({ 
+            url: function () { 
+                return "/twitterMonitor/keyword/" + this.get("id"); 
+            } 
+        }); 
 
-We've just created our second Model, this time extendeding it's base functionality by defining a <strong>url</strong> function. Backbone will use an Object's <strong>url</strong> function or object (you can use either) to determine the location to fetch data from; it should map to our keyword endpoint on the server.
+We've just created our second Model, this time extendeding it's base functionality by defining a <strong>url</strong> function. Backbone will use an Object's <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model's data; it should map to our keyword's endpoint on the server. 
+We're not quite finished with the model yet; let's add a function to help calculate the relative size of the keywords hit count. The function should return a ratio of its 'numSeen' variable to that of the other keywords. We can take advantage of this by using the model's <strong>collection</strong> parameter.
+
+*   Enter the following (or something similar) into the Model's extend object: 
+    
+        getBarPercentage: function () {
+            var maxSeen = this.collection.getMaxNumSeen(),
+                percentage = (this.get("numSeen") / maxSeen) * 100;
+            // ensure a max percentage of 100
+            if (percentage > 100) {
+                percentage = 100;
+            }
+            return Math.round( percentage );
+        }
+
+
+In the code, 'this' refers to the model itself (you may note that throughout I often cache 'this' into a local variable named 'self' in the cases where 'this' will be of an improper scope). The 'collection' parameter is a reference to a collection object that the model is a member of; we'll create the 'getMaxNumSeen' function later on, when we create the Collection. 
+
+*   Let's set a default value for 'numSeen'. Add the following to the Model's extend object:  
+
+        defaults: {
+            "numSeen": 0
+        } 
+
+
+Make sure to separate each of our objects/functions within the extend object with commas! In the end, you should have something like this: 
+
+        TM.Models.Keyword = Backbone.Model.extend({
+            defaults: {
+                "numSeen": 0
+            },
+
+            url: function () {
+                return "/twitterMonitor/keyword/" + this.get("id");
+            },
+
+            // Returns the relative percentage of the bar graph's width compared with the other models in the collection
+            getBarPercentage: function () {
+                // A model that becomes part of a collection gets assigned a reference
+                var maxSeen = this.collection.getMaxNumSeen(),
+                    percentage = (this.get("numSeen") / maxSeen) * 100;
+                // ensure a max percentage of 100
+                if (percentage > 100) {
+                    percentage = 100;
+                }
+                return Math.round( percentage );
+            }
+
+        });
+
+#### 2. Collections
+
+Seeing as how we reference the Collection in the previous section, let's work on that next. Collections are a great way for managing groups of Models; they provide Array-esque methods for adding/removing, events for when items are altered, and (my favorite) access our keyword/list end point to automatically instantiate our set of keywords.
+
+*   Open up <strong>web-app/src/js/collections/keywords.js</strong> and enter the following:
+
+        TM.Collections.Keywords = Backbone.Collection.extend({
+            url: "/twitterMonitor/keyword", // maps to the 'list' action on our server 
+
+            model: TM.Models.Keyword,
+
+            // in addition, this collection also keeps track of the current maximum 'numSeen' of the models in its care
+            // this maximum is used to help set the width of the bar graphs on each keywords' view. The width of the bar graph
+            // is relational to the keywords' current count versus the others (i.e. the bar graph will have a max width of 100%)
+            //
+            // Thus, we default to 100
+            defaultMax: 100,
+            maxNumSeen: 0,
+
+            initialize: function () {
+                this.maxNumSeen = this.defaultMax;
+            }
+        });
+
+We do not use the 'defaults' object here to help highlight the constructor function 'initialize'. This collection, beyond simply holding and syncing the Keywords, should also be aware of the maximum 'numSeen' value in its keywords, so that each keyword can know its proper relative width that its View will display. The Collection's maxNumSeen value should return either maxNumSeen or the defaultMax (100), whichever is greater.
+
+*   Add the following to your extend options object:
+
+        // returns maxNumSeen or defaultMax, of maxNumSeen has not been set yet
+        getMaxNumSeen: function () {
+            return this.maxNumSeen ? this.maxNumSeen : this.defaultMax;
+        }
+
+But now we need a function that will discover the maxNumSeen for us. Luckily, we can make use of the Collection's 'pluck' function.
+
+*   Add the following function: 
+
+        findMax: function () {
+            // the 'pluck' function extracts a value from each model in this collection, and places those values in an Array
+            var counts = this.pluck("numSeen"),
+                i = counts.length,
+                max = 0;
+
+            while (i--) {
+                if (counts[i] > max) {
+                    max = counts[i];
+                }
+            }
+            this.maxNumSeen = max > this.defaultMax ? max : this.defaultMax;
+        }
+
+That's nice, but when should we search the models for the maximum? Whenever we call getMaxNumSeen? We could... but that's no fun. Let's instead hook into the Collection's event system! Whenever a member Model is added, removed, or updated, the Collection fires events that we can listen for. Where should we listen for these events? There's an argument to be made to add the bindings during the initialize function, however, Backbone Views have a convention where we separate the rendering of an item and the binding of its events. Let's extend that notion to our Collection.
+
+* Add something similar to the extend options object:
+
+        bindEvents: function (){
+            var self = this;
+            // "reset" is fired when the collection is created or reloaded
+            this.on("reset", function (){
+                self.findMax();
+            });
+            // "change is fired when a value in the collection is altered or a new item is added"
+            this.on("change", function () {
+                self.findMax();
+            });
+            // "destroy" is fired when a model is removed
+            this.on("destroy", function () {
+                if (self.models.length === 0) {
+                    // alert the higher-ups that the collection is empty
+                    self.trigger("empty");
+                }
+            })
+        }
+
+
 
 
 
