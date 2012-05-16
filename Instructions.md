@@ -29,7 +29,7 @@ Structure - [Backbone.js][backbone] (and [Underscore.js][underscore])
 
 Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
 
-I encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but I highlight here a few important bits to keep in mind.
+We encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind.
 
 First off, when creating a new Backbone object, one 'extends' a from a base type, like so: 
 
@@ -117,9 +117,9 @@ The following guide will walk you through the steps needed to build the twitterM
 
 1.  Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
 2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
-3.  I apologize ahead of time for any bugs that may have crept in.
+3.  Apologies ahead of time for any bugs that may have crept in.
 5.  Refer to the [Backbone.js][backbone] or [Jasmine][jasmine] docs often for further clarification.
-4.  Be Creative! It is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
+4.  Be Creative! This document is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
 
 
 ### Getting Started
@@ -172,7 +172,7 @@ We're not quite finished with the model yet; let's add a function to help calcul
         }
 
 
-In the code, 'this' refers to the model itself (you may note that throughout I often cache 'this' into a local variable named 'self' in the cases where 'this' will be of an improper scope). The 'collection' parameter is a reference to a collection object that the model is a member of; we'll create the 'getMaxNumSeen' function later on, when we create the Collection. 
+In the code, 'this' refers to the model itself (you may note that throughout we often cache 'this' into a local variable named 'self' in the cases where 'this' will be of an improper scope). The 'collection' parameter is a reference to a collection object that the model is a member of; we'll create the 'getMaxNumSeen' function later on, when we create the Collection. 
 
 *   Let's set a default value for 'numSeen'. Add the following to the Model's extend object:  
 
@@ -257,9 +257,9 @@ But now we need a function that will discover the maxNumSeen for us. Luckily, we
             this.maxNumSeen = max > this.defaultMax ? max : this.defaultMax;
         }
 
-That's nice, but when should we search the models for the maximum? Whenever we call getMaxNumSeen? We could... but that's no fun. Let's instead hook into the Collection's event system! Whenever a member Model is added, removed, or updated, the Collection fires events that we can listen for. Where should we listen for these events? There's an argument to be made to add the bindings during the initialize function, however, Backbone Views have a convention where we separate the rendering of an item and the binding of its events. Let's extend that notion to our Collection.
+That's nice, but when should we search the models for the maximum? Whenever we call getMaxNumSeen? We could... but that's no fun. Let's instead hook into the Collection's event system! Whenever a member Model is added, removed, or updated, the Collection fires events that we can listen for. Where should we listen for these events? There is certainly an argument to be made that we should add the bindings during the initialize function. However, Backbone Views have a convention where the rendering of an item and the binding of its events are kept as separate steps. Let's extend that notion to our Collection.
 
-* Add something similar to the following into the to the extend options object:
+* Add the following function to the extend options object:
 
         bindEvents: function (){
             var self = this;
@@ -279,6 +279,70 @@ That's nice, but when should we search the models for the maximum? Whenever we c
                 }
             })
         }
+
+In the end, your collection should look something like:
+
+        TM.Collections.Keywords = Backbone.Collection.extend({
+            url: "/twitterMonitor/keyword",
+
+            model: TM.Models.Keyword,
+            // in addition, this collection also keeps track of the current maximum 'numSeen' of the models in its care
+            // this maximum is used to help set the width of the bar graphs on each keywords' view. The width of the bar graph
+            // is relational to the keywords' current count versus the others (i.e. the bar graph will have a max width of 100%)
+            //
+            // Thus, we default to 100
+            defaultMax: 100,
+            maxNumSeen: 0,
+
+            initialize: function () {
+                this.maxNumSeen = this.defaultMax;
+            },
+
+            bindEvents: function (){
+                var self = this;
+                this.on("reset", function (){
+                    self.findMax();
+                });
+
+                this.on("change", function () {
+                    self.findMax();
+                });
+
+                this.on("destroy", function () {
+                    if (self.models.length === 0) {
+                        // alert the higher-ups that the collection is empty
+                        self.trigger("empty");
+                    }
+                })
+            },
+
+            // looks through the collection for the maximum numSeen value
+            findMax: function () {
+                // the 'pluck' function extracts a value from each model in this collection, and places those values in an Array
+                var counts = this.pluck("numSeen"),
+                    i = counts.length,
+                    max = 0;
+
+                while (i--) {
+                    if (counts[i] > max) {
+                        max = counts[i];
+                    }
+                }
+                this.maxNumSeen = max > this.defaultMax ? max : this.defaultMax;
+            },
+
+            // returns maxNumSeen or defaultMax, of maxNumSeen has not been set yet
+            getMaxNumSeen: function () {
+                return this.maxNumSeen ? this.maxNumSeen : this.defaultMax;
+            }
+        });
+
+
+We intentionally do not create a Collection for the Tweet model, in order to demonstrate their convenience when we work with Tweets later on. We leave to you the task of working in a Tweet Collection.
+
+#### 3. Templates
+
+Before we move on to the Views, let's take a look at Handlebars Templating. We've created much of the templating already, which you can find stored currently as a partial located at <strong>grails-app/views/standAlone/_handlebars.gsp</strong>. This partial is rendered on a page that will display our app and adds a series of script blocks (with the type 'text/x-handlebars-template'). Each of these blocks are our individual templates; our client-side code will use these templates as the building blocks of the UI.
 
 
 

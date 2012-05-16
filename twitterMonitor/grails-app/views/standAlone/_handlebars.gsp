@@ -1,9 +1,9 @@
-<script id="tweetContainer" type="text/x-handlebars-template">
+<script id="HBtweetContainer" type="text/x-handlebars-template">
 
 </script>
 
 <script id="HBkeywordContainer" type="text/x-handlebars-template">
-    <!-- Show spinner -->
+
 </script>
 
 <script id="HBaddContainer" type="text/x-handlebars-template">

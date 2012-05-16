@@ -223,7 +223,7 @@
 
     <div id="twitterMonitor" class="slide">
         <div id="main">
-            <g:render template="placeholders"/>
+            <g:render template="/standAlone/placeholders"/>
         </div>
 
 
@@ -238,6 +238,6 @@
 
 
 
-    <g:render template="handlebars"/>
+    <g:render template="/standAlone/handlebars"/>
 </body>
 </html>

@@ -9,9 +9,9 @@
     <div id="menuBar"></div>
 
     <div id="main">
-        <g:render template="/presentation/placeholders"/>
+        <g:render template="/standAlone/placeholders"/>
     </div>
 
-    <g:render template="/presentation/handlebars"/>
+    <g:render template="/standAlone/handlebars"/>
 </body>
 </html>
