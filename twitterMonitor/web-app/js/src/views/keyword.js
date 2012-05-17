@@ -24,6 +24,7 @@ TM.Views.Keyword = Backbone.View.extend({
 
     },
 
+    // convenience method to handle these two functions as a single callback
     updateDisplayValues: function () {
         this.updateGraphWidth();
         this.updateDisplayCount();
@@ -46,8 +47,6 @@ TM.Views.Keyword = Backbone.View.extend({
         self.model.destroy({success: function () {
             self.removeUI.call(self);
         }});
-
-
     },
 
     // fancy removal
@@ -57,13 +56,6 @@ TM.Views.Keyword = Backbone.View.extend({
         self.$el.fadeOut("slow", function () {
             //remove view from the dom
             self.remove();
-            TM.instance.viewManager.views.keywordContainer.removeKeyWordView(self);
-
         });
-
     }
-
-
-
-
 });

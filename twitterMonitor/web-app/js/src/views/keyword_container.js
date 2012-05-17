@@ -33,6 +33,12 @@ TM.Views.KeywordContainer = Backbone.View.extend({
             self.updateViews.call(self);
         });
 
+        this.keywords.on("destroy", function (keyword) {
+
+            self.removeKeyWordView(keyword.attachedView);
+
+        })
+
     },
 
     // update each view in the list with the new value and bar graph width

@@ -118,7 +118,7 @@ The following guide will walk you through the steps needed to build the twitterM
 1.  Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
 2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
 3.  Apologies ahead of time for any bugs that may have crept in.
-5.  Refer to the [Backbone.js][backbone] or [Jasmine][jasmine] docs often for further clarification.
+5.  Refer to the [Backbone.js][backbone], [Handlebars][handlebars], or [Jasmine][jasmine] docs often for further clarification.
 4.  Be Creative! This document is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
 
 
@@ -342,10 +342,188 @@ We intentionally do not create a Collection for the Tweet model, in order to dem
 
 #### 3. Templates
 
-Before we move on to the Views, let's take a look at Handlebars Templating. We've created much of the templating already, which you can find stored currently as a partial located at <strong>grails-app/views/standAlone/_handlebars.gsp</strong>. This partial is rendered on a page that will display our app and adds a series of script blocks (with the type 'text/x-handlebars-template'). Each of these blocks are our individual templates; our client-side code will use these templates as the building blocks of the UI.
+Before we move on to the Views, let's take a look at Handlebars Templating. We've created much of the templating already, which you can find stored currently as a partial located at <strong>grails-app/views/standAlone/_handlebars.gsp</strong>. This partial is rendered on a page that will display our app and adds a series of script blocks (with the type 'text/x-handlebars-template'). Each of these blocks are our individual templates; our client-side code will use these templates as the building blocks of the UI. The client-side code will store each of these templates by their id attribute as a function in the namespaced object 'TM.Templates'. 
+
+If you're curious how this works, examine the 'compileTemplates' function located in 'web-app/js/src/core/utils.js'. In order to use a Handlebars template, you must 'compile' it. To avoid doing this step whenever we need to use template, this function 'pre-compiles' each of the templates on our page by looking for script blocks with the 'text/x-handlebars-template' type.
 
 
+Let's move onto Views in order to see how these Templates are used in practice
 
+#### 4. Views
+
+We have two types of Views in twitterMonitor: 1) those that are directly responsible for rendering and managing a Model, and 2) those that are responsible for rendering and managing sections of the page. In that sense, Backbone Views are analagous to Controllers (with the Handlebars Templates being our 'views'), although we do include logic in our Backbone Views that manipulates the DOM directly. In a larger project, it may be wise to pull this functionality out into separate objects.
+
+Let's first tackle the Keyword view:
+
+*   Open <strong>web-app/js/src/views/keyword.js</strong>
+*   Add the following:
+
+        TM.Views.Keyword = Backbone.View.extend({
+
+            initialize: function (options) {
+                //attach a reference on the model so that interval driver knows to delete this view without having to search for it
+                this.model.attachedView = this;
+            },
+
+            render: function () {
+                var self = this;
+                $(this.el).html(TM.Templates.keyword({
+                    text: this.model.get("text"),
+                    numSeen: this.model.get("numSeen")
+                }));
+                this.updateGraphWidth(); //we'll add this next
+                return this;
+            },
+
+            bindEvents: function () {
+                var self = this;
+                // add a click handler to remove the keyword
+                this.$el.find(".keyword-remove").on("click", function () {
+                    self.destroy.call(self);
+                });
+
+            }
+        });
+
+When a View is created, a model is passed to it (as we'll see later), which is then attached and referenced as 'this.model'. A view contains a reference to it's DOM node in the form of 'this.el' and 'this.$el' (jQuery/Zepto cached version of this.el), which we use here in the 'render' function. Note the use of the template, and the fact we pass in an object of values from the model (compare the names of the object with the values in its Template). Finally, note the fact that render returns the view itself. By convention, a View does not insert itself in the DOM, it's up to the object that creates the View to determine when to do the insertion.
+
+One convention is to bind a 'change' event on the view's model and re-render when a change occurs. That would work just fine here, but we're added some fun css animations for when the bar graph should change. To accomplish, let's add functions to update the bar graph width and the counter display.
+
+*   Add the following to the extend object: 
+    
+        // convenience method to handle these two functions as a single callback
+        updateDisplayValues: function () {
+            this.updateGraphWidth();
+            this.updateDisplayCount();
+        },
+
+        // update the bar graph width based on the model's
+        updateGraphWidth: function () {
+            this.$el.find(".bar").width(this.model.getBarPercentage() +"%");
+        },
+
+        updateDisplayCount: function () {
+            var self = this;
+            self.$el.find("span.num-seen").text(self.model.get("numSeen"));
+        }
+
+The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after wev'e alerted the server to our change. This can be accomplished by overriding the default destroy fuction.
+
+*   Add the following to the extend object:
+
+        // responsible for deleting the keyword on the server and destroying this view
+        destroy: function () {
+            var self = this;
+            //attempt to delete from the server, if successful we proceed with UI removal
+            self.model.destroy({success: function () {
+                self.removeUI.call(self);
+            }});
+        },
+
+        // fancy removal
+        removeUI: function () {
+            var self = this;
+            self.$el.unbind(); //clear any bindings
+            self.$el.fadeOut("slow", function () {
+                //remove view from the dom
+                self.remove();
+            });
+        }
+
+The keyword Model's destroy function will, by default, make a DELETE call to /twitterMonitor/keyword/<id>. It accepts a 'success' callback that is fired if the delete was successful on the server's end. 
+
+Removing a View in Backbone is accomplished in a few steps: 1) unbind all event listeners and 2) call the view's remove() function.
+
+At this point, our Keyword View should look like: 
+
+    TM.Views.Keyword = Backbone.View.extend({
+
+        initialize: function (options) {
+            //attach a reference on the model so that interval driver knows to delete this view without having to search for it
+            this.model.attachedView = this;
+        },
+
+        render: function () {
+            var self = this;
+            $(this.el).html(TM.Templates.keyword({
+                text: this.model.get("text"),
+                numSeen: this.model.get("numSeen")
+            }));
+            this.updateGraphWidth();
+            return this;
+        },
+
+        bindEvents: function () {
+            var self = this;
+
+            this.$el.find(".keyword-remove").on("click", function () {
+                self.destroy.call(self);
+            });
+
+        },
+
+        // convenience method to handle these two functions as a single callback
+        updateDisplayValues: function () {
+            this.updateGraphWidth();
+            this.updateDisplayCount();
+        },
+
+        // update the bar graph width based on the model's
+        updateGraphWidth: function () {
+            this.$el.find(".bar").width(this.model.getBarPercentage() +"%");
+        },
+
+        updateDisplayCount: function () {
+            var self = this;
+            self.$el.find("span.num-seen").text(self.model.get("numSeen"));
+        },
+
+        // responsible for deleting the keyword on the server and destroying this view
+        destroy: function () {
+            var self = this;
+            //attempt to delete from the server, if successful we proceed with UI removal
+            self.model.destroy({success: function () {
+                self.removeUI.call(self);
+            }});
+        },
+
+        // fancy removal
+        removeUI: function () {
+            var self = this;
+            self.$el.unbind(); //clear any bindings
+            self.$el.fadeOut("slow", function () {
+                //remove view from the dom
+                self.remove();
+            });
+        }
+    });
+
+
+Next, let's create the individual Tweet View. 
+
+*   Open <strong>web-app/js/src/views/tweet.js</strong> 
+
+*   Add the following: 
+
+        TM.Views.Tweet = Backbone.View.extend({
+
+            render: function () {
+                var ctx = this.mapModelToContext();
+                this.el = $(TM.Templates.tweet(ctx));
+                return this
+            },
+
+            // because generating the context for rendering has some small variability,
+            // we pull out the generation to a separate function for easier testing
+            mapModelToContext: function () {
+                return {
+                    class: this.model.id % 2 === 0 ? "even" : "odd",
+                    imageUrl: this.model.get("profileImageUrl"),
+                    text: this.model.get("text"),
+                    userName: this.model.get("userName")
+                };
+            }
+        });
 
 
 

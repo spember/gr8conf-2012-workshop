@@ -1,9 +1,5 @@
 TM.Views.Tweet = Backbone.View.extend({
 
-    initialize: function (options) {
-
-    },
-
     render: function () {
         var ctx = this.mapModelToContext();
         this.el = $(TM.Templates.tweet(ctx));
@@ -20,5 +16,4 @@ TM.Views.Tweet = Backbone.View.extend({
             userName: this.model.get("userName")
         };
     }
-
 });
