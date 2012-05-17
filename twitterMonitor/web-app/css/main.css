@@ -342,7 +342,7 @@ a:hover, a:active {
 }
 #appHeader .nav a, #appHeader .nav a:visited { color:#ffffff; }
 
-#appHeader .nav a:hover, #appHeader .nav a.current { color: #777777; }
+#appHeader .nav a:hover, #appHeader .nav a.current { color: #FF5200; }
 
 .slide {
     margin: 0 auto;

@@ -152,10 +152,11 @@
         <h2 class="center-text">A Good API Should Be:</h2>
         <ul>
             <li class="animate-build" data-build="1">Efficient</li>
-            <li class="animate-build" data-build="2">Intuitive</li>
-            <li class="animate-build" data-build="3">Backwards Compatible</li>
+            <li class="animate-build" data-build="2">Swift</li>
+            <li class="animate-build" data-build="3">Intuitive (But Still Have Excellent Documentation)</li>
             <li class="animate-build" data-build="4">Able To Support Multiple Formats</li>
-            <li class="animate-build" data-build="5">Aware of Intended Consumer</li>
+            <li class="animate-build" data-build="5">Backwards Compatible</li>
+            <li class="animate-build" data-build="6">Aware of Intended Consumer</li>
         </ul>
     </div>
 
@@ -178,13 +179,32 @@
     </div>
 
     <div class="slide">
+        <h3>Don't Send Everything!</h3>
+        <br/>
         <script src="https://gist.github.com/2476214.js?file=succinct.groovy"></script>
     </div>
 
     <div class="slide">
-        <h3>Versioning with withFormat</h3>
+        <h3>Versioning With withFormat</h3>
         <br/>
         <script src="https://gist.github.com/2476214.js?file=versioning_with_format.groovy"></script>
+    </div>
+
+    <div class="slide">
+        <h2>But all of your examples deal with writing the thing!</h2>
+    </div>
+
+    <div class="slide">
+        <h3 class="animate-in center-text" data-animation="fly-in-left">True, but we'd be here all night</h3>
+        <h3 class="animate-in center-text" data-animation="fly-in-right">if we talked about things like:</h3>
+        <br/>
+        <br/>
+        <ul>
+            <li class="animate-build" data-build="1"><p>Spring Security (and the rest of the plugins, too)</p></li>
+            <li class="animate-build" data-build="2"><p>Write complicated bits in Java for speed</p></li>
+            <li class="animate-build" data-build="3"><p>The JVM and all the power therein</p></li>
+            <li class="animate-build" data-build="4"><p>Uses of alternative data stores with Grails 2.0</p></li>
+        </ul>
     </div>
 
 
