@@ -1,3 +1,6 @@
+<html>
+<head></head>
+
 <style>
     code {
         border: 2px solid #EAEAEA;
@@ -19,6 +22,8 @@
     }
 </style>
 
+<body>
+
 Gr8Conf 2012 Workshop Guide
 ========
 
@@ -27,7 +32,7 @@ The purpose of this document is to provide a brief description of each Javascrip
 Structure - [Backbone.js][backbone] (and [Underscore.js][underscore])
 ------------
 
-Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
+Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
 
 We encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind.
 
@@ -64,20 +69,20 @@ Responsible for rendering some set of nodes, typically based on a model. If done
         return this;
     },
 
-Note the use of 'return this'. A view is *not*, by convention, responsible for inserting itself in the DOM; that task generally falls to whatever created the view. Also, the this.$el object, which is a cached jQuery/Zepto selector for the view's root node.
+Note the 'this.$el' object, which is a cached jQuery/Zepto selector for the view's root node, and the use of 'return this'. A view is *not*, by convention, responsible for inserting itself in the DOM; that task generally falls to whatever created the view.
 
 ### [Collections](http://backbonejs.org/#Collection)
 
-Collections provide a range of convenience methods for managing ordered sets of Models. One of the most features is the ability to hook into a 'list' type action on the server to auto-instantiate a set of Models.
+Collections provide a range of convenience methods for managing ordered sets of Models. One of the most interesting features is the ability to hook into a 'list' type action on the server to auto-instantiate a set of Models.
 
 
 
 Templating - [Handlebars][handlebars]
 --------------
 
-Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context, an object containing data mapped to your named placeholders, and returns a string which one can inject into your page as a DOM element. 
+Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element. 
 
-Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your JS. 
+Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your Javascript. 
 
 
 Testing - [Jasmine][jasmine]
@@ -89,9 +94,9 @@ Jasmine is a BDD testing framework for Javascript. The library creates a highly 
 About this App
 ======
 
-The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords. The number of occurences are tallied & displayed to the user, as well as a feed of the messages themselves.
+The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets. 
 
-While all code is bundled within one application, it is helpful to think of this as two separate applications, the client-side portion and the server-side piece. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each side
+While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.
 
 ### Server
 
@@ -107,7 +112,7 @@ The twitterMonitor client, once complete, will display information about keyword
 
 ### File Locations
 
-Nearly every file we add or edit today will be within web-app/js/src/. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in grails-app/conf so that the Resources plugin will bundle it for you. 
+Nearly every file we add or edit today will be within <strong>web-app/js/src/</strong>. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in <strong>grails-app/conf</strong> so that the Resources plugin will bundle it for you. 
 
 
 Instructions
@@ -115,9 +120,9 @@ Instructions
 
 The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes: 
 
-1.  Try to JS objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places
-2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands
-3.  Apologies ahead of time for any bugs that may have crept in.
+1.  Try to keep Javascript objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places.
+2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands.
+3.  Our apologies ahead of time for any bugs that may have crept in.
 5.  Refer to the [Backbone.js][backbone], [Handlebars][handlebars], or [Jasmine][jasmine] docs often for further clarification.
 4.  Be Creative! This document is just a guide; there's much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.
 
@@ -145,7 +150,7 @@ We will need to create two models: Keyword and Tweet.
         TM.Models.Tweet = Backbone.Model.extend({});
 
 
-Congratulations, you've created your first Backbone Model! We could certainly make this more complicated by adding verifications, defaults, etc, but it's not necessary for this demonstration. We've successfully extended the default BackboneModel into our own Tweet Model, and namespaced it into TM.Models (see <strong>web-app/src/js/core/base.js</strong> for a further breakdown on the namespacing).
+Congratulations, you've created your first Backbone Model! We could certainly make this more complicated by adding validation, defaults, etc, but it's not necessary for this demonstration. We've successfully extended the default BackboneModel into our own Tweet Model, and namespaced it into TM.Models (see <strong>web-app/src/js/core/base.js</strong> to see how the app is namespaced).
 
 *   Locate and open <strong>web-app/js/src/models/keyword.js</strong>
 *   Add the following: 
@@ -347,7 +352,7 @@ Before we move on to the Views, let's take a look at Handlebars Templating. We'v
 If you're curious how this works, examine the 'compileTemplates' function located in 'web-app/js/src/core/utils.js'. In order to use a Handlebars template, you must 'compile' it. To avoid doing this step whenever we need to use template, this function 'pre-compiles' each of the templates on our page by looking for script blocks with the 'text/x-handlebars-template' type.
 
 
-Let's move onto Views in order to see how these Templates are used in practice
+Let's move onto Views in order to see how these Templates are used in practice.
 
 #### 4. Views
 
@@ -433,7 +438,7 @@ The bindEvents method adds some functionality to destroy the View, which is a de
             });
         }
 
-The keyword Model's destroy function will, by default, make a DELETE call to /twitterMonitor/keyword/<id>. It accepts a 'success' callback that is fired if the delete was successful on the server's end. 
+The keyword Model's destroy function will, by default, make a DELETE call to /twitterMonitor/keyword/<id>.  It accepts a 'success' callback that is fired if the delete was successful on the server's end. 
 
 Removing a View in Backbone is accomplished in a few steps: 1) unbind all event listeners and 2) call the view's remove() function.
 
@@ -613,7 +618,7 @@ The function accepts the built collection and a data attribute, passed in from t
             // else, view already exists
         }
 
-*   We'll need a way to remove a view from the tracking array when the user has deleted. Add the following:
+*   We'll need a way to remove a view from the tracking array when the user has deleted the underlying Model. Add the following:
 
         removeKeyWordView: function (view) {
             var self = this,
@@ -966,7 +971,7 @@ This bit of code adds an interval which triggers a function (fadeOldestTweet()).
             });  
         }; 
 
-There's a bit more yet to add to this View; we'll revisit it in a little while.
+There's a bit more yet to add to this View; we'll revisit it later.
 
 At this point, we have something we can interact with! Start up the grails app and navigate locally to [http://localhost:8080/twitterMonitor][localTM] or [http://localhost:8080/twitterMonitor/standAlone][localStandAlone] to view the application. Start the fetching by clicking the 'kicking it' toggle switch. 
 
@@ -1341,3 +1346,5 @@ Good luck!
 [zepto]: http://zeptojs.com/ "Zepto.js"
 [localTM]: http://localhost:8080/twitterMonitor
 [localStandAlone]: http://localhost:8080/twitterMonitor/standAlone
+
+</body>
