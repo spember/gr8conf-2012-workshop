@@ -19,10 +19,11 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         // first, lets see if any keywords actual exist
         this.reloadKeywords(false);
 
+        // keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
         TM.instance.viewManager.views.addContainer.on("saved", function () {
             self.reloadKeywords.call(self, true);
         });
-
+        // if we have no keyword models, show an empty message
         this.keywords.on("empty", function () {
             self.showEmptyMessage();
         });
@@ -52,6 +53,8 @@ TM.Views.KeywordContainer = Backbone.View.extend({
     },
 
     // triggers the collection's fetch call, then triggers the rendering of views to the screen
+    // @param add Determine whether or not to 'add' new elements rather than reset the whole collection
+    //
     reloadKeywords: function (add) {
         var self = this;
         this.keywords.fetch({
@@ -68,6 +71,7 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         if(self.views.length === 0) {
             this.$el.html("");
         }
+        //underscore.js's 'each' iterator function
         _.each(collection.models, function (model) {
             self.createView.call(self, model);
         });
@@ -76,7 +80,6 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         if (collection.models.length === 0){
             this.showEmptyMessage()
         }
-
     },
 
     showEmptyMessage: function () {
@@ -98,8 +101,6 @@ TM.Views.KeywordContainer = Backbone.View.extend({
             this.views.push(view);
         }
         // else, view already exists
-
-
     },
 
     removeKeyWordView: function (view) {

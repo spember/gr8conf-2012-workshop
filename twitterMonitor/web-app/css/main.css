@@ -433,6 +433,11 @@ img.rounded {
 #futureProof_3 img.rounded {
     width: 35rem;
 }
+#futureProof_3 .row div {
+    position: absolute;
+    left: 50em;
+    margin-top: -30%;
+}
 
 #futureProof_4 img.rounded {
     width:35rem;

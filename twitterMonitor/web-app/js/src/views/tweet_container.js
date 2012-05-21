@@ -15,7 +15,8 @@ TM.Views.TweetContainer = Backbone.View.extend({
         this.tweetLiveTime = 1600;
         //Threshold, in px,  above which to display the tweets
         this.displayThreshold = 700;
-
+        // class that the view will look for to stop searching; we could also set a flag internally,
+        // but this does double duty by hiding the view as well
         this.hideTweetClass = "verboten";
     },
 
@@ -23,18 +24,15 @@ TM.Views.TweetContainer = Backbone.View.extend({
 
         $(this.el).html(TM.Templates.tweetContainer({}));
 
-        // Backbone convention is to return this from render()
         this.visibilityCheck();
+
+        // Backbone convention is to return this from render()
         return this;
     },
 
     bindEvents: function () {
 
         var self = this;
-
-        if (self.allowFetching()) {
-            self.startTweetFade();
-        }
 
         self.on("tweetsReceived", function () {
             self.createTweetViews.call(self);
@@ -47,6 +45,10 @@ TM.Views.TweetContainer = Backbone.View.extend({
             }
 
         });
+
+        if (self.allowFetching()) {
+            self.startTweetFade();
+        }
 
         // we want to only show the tweets if the browser window is above a certain threshold
         window.addEventListener("resize", function () {
@@ -74,6 +76,14 @@ TM.Views.TweetContainer = Backbone.View.extend({
                 this.trigger("start");
             }
         }
+    },
+
+    allowFetching: function () {
+        var allow = true;
+        if (this.$el.hasClass(this.hideTweetClass)) {
+            allow = false;
+        }
+        return allow;
     },
 
     // sets up an interval which will fade and remove the topmost tweet
@@ -118,7 +128,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
         if (this.views.length === 0 && tweets.length > 0) {
             this.$el.html("");
         }
-        //will usually be 1 if things are flowing correctly
+        //will usually be 1 if things are flowing as planned
         max = this.NUM_RENDER - this.views.length;
         if (max > tweets.length) {
             max = tweets.length;
@@ -146,14 +156,6 @@ TM.Views.TweetContainer = Backbone.View.extend({
 
     },
 
-    allowFetching: function () {
-        var allow = true;
-        if (this.$el.hasClass(this.hideTweetClass)) {
-            allow = false;
-        }
-        return allow;
-    },
-
     fetchTweets: function () {
         // if the container has our hidden class, prevent tweets from fetching.
         if (this.allowFetching()) {
@@ -172,6 +174,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
                     for(var i = 0; i < max; i ++) {
                         TM.instance.tweets.push(new TM.Models.Tweet(data[i]));
                     }
+                    // if no views are present, alert the container that it's time to start rendering
                     if (self.views.length === 0) {
                         self.trigger("tweetsReceived");
                     }

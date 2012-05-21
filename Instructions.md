@@ -129,7 +129,7 @@ I'll assume that you 1) have the full twitterMonitor project (e.g. downladed the
 1.  See if there's anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!
 2.  Start the application with 'grails run-app'
 
-At this point, navigate to [http://localhost:8080/twitterMonitor](http://localhost:8080/twitterMonitor); you should see a blue banner with the words 'Twitter Monitor' and a blank white screen.
+At this point, navigate to [http://localhost:8080/twitterMonitor][localTM]; you should see a blue banner with the words 'Twitter Monitor' and a blank white screen.
 
 Let's get started!
 
@@ -353,6 +353,9 @@ Let's move onto Views in order to see how these Templates are used in practice
 
 We have two types of Views in twitterMonitor: 1) those that are directly responsible for rendering and managing a Model, and 2) those that are responsible for rendering and managing sections of the page. In that sense, Backbone Views are analagous to Controllers (with the Handlebars Templates being our 'views'), although we do include logic in our Backbone Views that manipulates the DOM directly. In a larger project, it may be wise to pull this functionality out into separate objects.
 
+
+##### Model Views
+
 Let's first tackle the Keyword view:
 
 *   Open <strong>web-app/js/src/views/keyword.js</strong>
@@ -525,13 +528,809 @@ Next, let's create the individual Tweet View.
             }
         });
 
+Not much to it; the only abnormal bit is using the model's id to determine whether to add an 'even' or 'odd' css class (take a look at the corresponding Template for reference, if you'd like).
+
+##### Container Views
+
+On to the container Views! These will manage the Keyword and Tweet sections of the page.
+
+*   Open <strong>web-app/js/src/views/keyword-container.js</strong>
+
+*   Add the following:
+
+        TM.Views.KeywordContainer = Backbone.View.extend({
+
+            initialize: function () {
+                this.keywords = new TM.Collections.Keywords(); //instantiate the collection
+                this.keywords.bindEvents(); // bind its events!
+                this.views = []; // set up an array to track our created views
+            },
+
+            render: function () {
+
+                $(this.el).html(TM.Templates.keywordContainer({}));
+                return this;
+            }
+        });
+
+Nothing fancy here, we instantiate the keyword collection, bind its events, and setup the rendering function
+
+*   Next, let's create function to kick off the collection's fetch mechanism. Add the following to the extend object:
+
+        reloadKeywords: function (add) {
+            var self = this;
+            this.keywords.fetch({
+                add: add,
+                success: function (collection, data) {
+                    self.populateKeywords.call(self, collection, data);
+                }
+            });
+        }
+
+Here we trigger the fetch command on the collection; as stated before this will automatically create the necessary models. Convenient! In addition, we pass a success parameter which triggers a 'populateKeywords' function, which we'll get to next. The 'add' option is of note as well: by default, a Collection fetch will recreate the entire collection, wiping out models and starting over, which is a bit overkill for our purposes. Instead, one can use the 'add' option, which if true will add new items to the collection without resetting the whole thing. The disadvantage of course is that we do not 'prune' deleted keywords.
+
+*   Add the 'populateKeywords' function:
+    
+        populateKeywords: function (collection, data) {
+            var self = this;
+
+            if(self.views.length === 0) {
+                this.$el.html("");
+            }
+            //underscore.js's 'each' iterator function
+            _.each(collection.models, function (model) {
+                self.createView.call(self, model);
+            });
+
+            //display empty message
+            if (collection.models.length === 0){
+                this.showEmptyMessage()
+            }
+        }
+
+The function accepts the built collection and a data attribute, passed in from the success callback, although we only use the collection. 
+
+*   Let's add the two functions referred to above:
+
+        showEmptyMessage: function () {
+            this.$el.html(TM.Templates.keywordContainerEmpty());
+        },
+
+        createView: function(model) {
+            //first, ensure the view hasn't already been created
+
+            if (!model.attachedView) {  // attachedView is set on the model's initialize
+                var view = new TM.Views.Keyword({model:model});
+                //render it initially
+                this.$el.append($(view.render().el));
+                //set the element on the new keyword
+                view.setElement(this.$el.children().last());
+                //and bind!
+                view.bindEvents();
+                //and store. We'll need to access the view object's reference later for destruction
+                this.views.push(view);
+            }
+            // else, view already exists
+        }
+
+*   We'll need a way to remove a view from the tracking array when the user has deleted. Add the following:
+
+        removeKeyWordView: function (view) {
+            var self = this,
+                pos = -1,
+                i = self.views.length;
+
+            while (i--) {
+                if (self.views[i].cid === view.cid) {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (pos > -1) {
+                // remove, if found
+                self.views.splice(pos, 1);
+            }
+
+        }
+
+*   When the keywords Collection sees a change to one of its members, we'll need a method that triggers the redrawing of the graphs for each of the views (thus adjusting the bar graphs of the other models as one grows larger). Add the following:
+
+        // update each view in the list with the new value and bar graph width
+        updateViews: function () {
+            var index = this.views.length,
+                view;
+            while (index--) {
+                view = this.views[index];
+                view.updateDisplayValues.call(view);
+            }
+        } 
+
+Now we need to add the bindEvents function, where we'll set the behavior.
+
+*   Add the following: 
+
+        bindEvents: function () {
+            var self = this;
+            // start of page functionality
+            // first, lets see if any keywords actual exist
+            this.reloadKeywords(false);
+
+            // keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
+            TM.instance.viewManager.views.addContainer.on("saved", function () {
+                self.reloadKeywords.call(self, true);
+            });
+            // if we have no keyword models, show an empty message
+            this.keywords.on("empty", function () {
+                self.showEmptyMessage();
+            });
+            // listen for a change event from the collection; update each view... this way, the relative size of the bar graph
+            // will update correctly... say, if one keyword is running away with all the hits, the others will adjust their
+            // sizes to reflect
+            this.keywords.on("change", function () {
+                self.updateViews.call(self);
+            });
+
+            this.keywords.on("destroy", function (keyword) {
+
+                self.removeKeyWordView(keyword.attachedView);
+
+            })
+
+        }   
+
+During the bindEvents, we listen for notifications from the collection whenever its empty, an item has changed value or an item has been deleted (destroyed) and act accordingly.
+
+In the end, you should have: 
+
+        TM.Views.KeywordContainer = Backbone.View.extend({
+
+            initialize: function () {
+                this.keywords = new TM.Collections.Keywords();
+                this.keywords.bindEvents();
+                this.views = [];
+            },
+
+            render: function () {
+
+                $(this.el).html(TM.Templates.keywordContainer({}));
+                return this;
+            },
+
+            bindEvents: function () {
+                var self = this;
+                // start of page functionality
+                // first, lets see if any keywords actual exist
+                this.reloadKeywords(false);
+
+                // keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
+                TM.instance.viewManager.views.addContainer.on("saved", function () {
+                    self.reloadKeywords.call(self, true);
+                });
+                // if we have no keyword models, show an empty message
+                this.keywords.on("empty", function () {
+                    self.showEmptyMessage();
+                });
+                // listen for a change event from the collection; update each view... this way, the relative size of the bar graph
+                // will update correctly... say, if one keyword is running away with all the hits, the others will adjust their
+                // sizes to reflect
+                this.keywords.on("change", function () {
+                    self.updateViews.call(self);
+                });
+
+                this.keywords.on("destroy", function (keyword) {
+
+                    self.removeKeyWordView(keyword.attachedView);
+
+                })
+
+            },
+
+            // update each view in the list with the new value and bar graph width
+            updateViews: function () {
+                var index = this.views.length,
+                    view;
+                while (index--) {
+                    view = this.views[index];
+                    view.updateDisplayValues.call(view);
+                }
+            },
+
+            // triggers the collection's fetch call, then triggers the rendering of views to the screen
+            // @param add Determine whether or not to 'add' new elements rather than reset the whole collection
+            //
+            reloadKeywords: function (add) {
+                var self = this;
+                this.keywords.fetch({
+                    add: add,
+                    success: function (collection, data) {
+                        self.populateKeywords.call(self, collection, data);
+                    }
+                });
+            },
+
+            populateKeywords: function (collection, data) {
+                var self = this;
+
+                if(self.views.length === 0) {
+                    this.$el.html("");
+                }
+                //underscore.js's each iterator function
+                _.each(collection.models, function (model) {
+                    self.createView.call(self, model);
+                });
+
+                //display empty message
+                if (collection.models.length === 0){
+                    this.showEmptyMessage()
+                }
+            },
+
+            showEmptyMessage: function () {
+                this.$el.html(TM.Templates.keywordContainerEmpty());
+            },
+
+            createView: function(model) {
+                //first, ensure the view hasn't already been created
+
+                if (!model.attachedView) {
+                    var view = new TM.Views.Keyword({model:model});
+                    //render it initially
+                    this.$el.append($(view.render().el));
+                    //set the element on the new keyword
+                    view.setElement(this.$el.children().last());
+                    //and bind!
+                    view.bindEvents();
+                    //and store. We'll need to access the view object's reference later for destruction
+                    this.views.push(view);
+                }
+                // else, view already exists
+            },
+
+            removeKeyWordView: function (view) {
+                var self = this,
+                    pos = -1,
+                    i = self.views.length;
+
+                while (i--) {
+                    if (self.views[i].cid === view.cid) {
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if (pos > -1) {
+                    // remove, if found
+                    self.views.splice(pos, 1);
+                }
+
+            }
+
+        });
+
+Finally, the Tweet container. This section will generate views of Tweet models that the server sends. Part of the behavior is to repeatedly fade and remove/destroy the oldest Tweet, 'pushing' the others up. It will also ask for more Tweets from the server when 'low' on Models.
+
+*   Open <strong>web-app/js/src/views/tweet-container.js</strong>
+
+*   Add:
+
+        TM.Views.TweetContainer = Backbone.View.extend({
+
+            initialize: function () {
+                //max tweets to render at a time, although several (the css overflow) will be hidden
+                this.NUM_RENDER = 10;
+                //number that once crossed triggers the service to look for more tweets
+                this.LOW_THRESHOLD = 10;
+                // array to track the views without having to re-query each time
+                this.views = [];
+                this.lastTweetId = -1;
+                // lock to prevent fetching twice
+                this.fetching = false;
+
+                //Time for a tweet to display before fading
+                this.tweetLiveTime = 1600;
+            },
 
 
+            render: function () {
+
+                $(this.el).html(TM.Templates.tweetContainer({}));
+                return this;
+            },
+
+            // will attempt to pull tweets from the instance queue and build views from them
+            createTweetViews: function () {
+                var i,
+                    max,
+                    tweets = TM.instance.tweets;
+
+                // clear out empty message
+                if (this.views.length === 0 && tweets.length > 0) {
+                    this.$el.html("");
+                }
+                //will usually be 1 if things are flowing as planned
+                max = this.NUM_RENDER - this.views.length;
+                if (max > tweets.length) {
+                    max = tweets.length;
+                }
+
+                for (var i = 0; i < max; i++) {
+                    this.createTweetView(tweets);
+                }
+
+            },
+
+            // creates an individual view from the oldest tweet in the queue.
+            createTweetView: function (tweets) {
+                var model = tweets.shift(),
+                    view = new TM.Views.Tweet({model:model});
+                //track the last seen id;
+                this.lastTweetId = model.id;
+                this.$el.append(view.render().el);
+                // setElement 
+                view.setElement(this.$el.find(".tweet").last());
+                this.views.push(view);
+                // finally check how many tweets are in the queue. If at threshold, get more
+                if (tweets.length === this.LOW_THRESHOLD) {
+                    this.trigger("start");
+                }
+
+            },
+
+            fetchTweets: function () {
+                // if the container has our hidden class, prevent tweets from fetching.
+                
+                var tweets = TM.instance.tweets,
+                    self = this;
+                self.fetching = true;
+
+                $.ajax({
+                    url:"/twitterMonitor/tweet/listBatch",
+                    data: {
+                        id: self.lastTweetId > 0 ? self.lastTweetId : null
+                    },
+                    type:"GET",
+                    success: function (data) {
+                        var max = data.length
+                        for(var i = 0; i < max; i ++) {
+                            TM.instance.tweets.push(new TM.Models.Tweet(data[i]));
+                        }
+                        // if no views are present, alert the container that it's time to start rendering
+                        if (self.views.length === 0) {
+                            self.trigger("tweetsReceived");
+                        }
+                        self.fetching = false;
+                    },
+                    failure: function (data) {
+                        self.fetching = false;
+                    }
+                });
+                
+            }
+
+        });
+
+The above adds in our now familiar initialize() and render() functions, as well as code to control the fetching and rendering of individual Tweet views.
+
+*   Now for the fade-out effect. Add:
+
+        // sets up an interval which will fade and remove the topmost tweet
+        startTweetFade: function () {
+            var self = this;
+            self.tweetFadeInterval = setInterval(function () {
+                self.fadeOldestTweet.call(self);
+            }, self.tweetLiveTime);
+
+        },
+        // clears the interval
+        stopTweetFade: function () {
+            clearInterval(this.tweetFadeInterval);
+        },
+
+        // fades and removes the 'oldest' tweet
+        fadeOldestTweet: function () {
+            var view,
+                self = this;
+
+            if (self.views.length > 0) {
+                self.views[0].$el.fadeOut("slow", function () {
+                    view = self.views.shift();
+                    // the following 2 lines are a technique for deleting a backbone object
+                    view.unbind();
+                    view.remove();
+
+                    if (self.views.length < self.NUM_RENDER) {
+                        self.createTweetViews.call(self);
+                    }
+                });
+            }
+        }
+
+This bit of code adds an interval which triggers a function (fadeOldestTweet()). 
+
+*   Time for bindEvents(). We need to add eventListeners for the various creation and fetching methods defined above. Add:
+
+        bindEvents: function () {
+
+            var self = this;
+
+            self.on("tweetsReceived", function () {
+                self.createTweetViews.call(self);
+            });
+
+            self.on("start", function () {
+                //only allow fetching if we're not already fetching, and the 'go' toggle has been switched on
+                if (!self.fetching && TM.instance.kickingIt) {
+                    self.fetchTweets.call(self);
+                }
+            });  
+        }; 
+
+There's a bit more yet to add to this View; we'll revisit it in a little while.
+
+At this point, we have something we can interact with! Start up the grails app and navigate locally to [http://localhost:8080/twitterMonitor][localTM] or [http://localhost:8080/twitterMonitor/standAlone][localStandAlone] to view the application. Start the fetching by clicking the 'kicking it' toggle switch. 
+
+If everything goes according to plan, you can begin adding keywords via the text input at the top of the screen. Once you've entered at least one, the Grails server will begin querying Twitter, and any found tweets will be displayed in the Tweet Container. 
+
+Note that all of this markup is being generated by the client, and very little actual data is being sent by the server!  Fun!
 
 
+#### 5. Template Helpers
+
+Let's start sprucing things up a little. First, take a look at the text of your tweets as they appear. A bit bland, no? Let's add some color to the text by highlighting the tags and mentions (bits of text that begin with '#' and '@', respectively). We can accomplish this by using a feature in Handlebars called 'Helpers', which are similar to taglibs in Grails. There are several existing Helpers, like iterators and conditionals, but one can easily create their own.
+
+To use a Helper, one creates a special function (which can accept an argument) that should return a bit of text to render. The function is then registered with Handlebars so it can understand the reference during Template compilation.
+
+To illustrate this, open the file <strong>web-app/js/src/helpers/tweet_text_decorator.js</strong>. The function 'tweetTextDecorator' accepts a string and performs a series of replaces via Regular Expressions, with the goal of wrapping the found expression with other strings. In our case, we're wrapping substrings with markup tags. The expressions and the wrapping markup are defined in the 'Resources' object at the beginning of this file.
+
+In order for this function to take effect, we'll need to do two things: register the Helper, and use the Helper in our Template.
+
+*   Register the Helper by adding the following to tweet_text_decorator.js:
+
+        //When registering the Helper, the first parameter is the name that Handlebars uses to reference your function in the templates
+        Handlebars.registerHelper('tweetTextDecorator', TM.Helpers.tweetTextDecorator);
+
+*   We can now use the string 'tweetTextDecorator' as a Helper in our Templates. Open up <strong>grails-app/views/standAlone/_handlebars.gsp</strong>.
+*   Change the HBtweet Template from:
+
+        <script id="HBtweet" type="text/x-handlebars-template">
+            <div class="tweet {{class}}">
+                <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
+                <div class="text clearfix">{{text}}</div>
+            </div>
+        </script>
+
+To:
+
+        <script id="HBtweet" type="text/x-handlebars-template">
+            <div class="tweet {{class}}">
+                <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
+                <div class="text clearfix">{{{tweetTextDecorator text}}}</div>
+            </div>
+        </script>
+
+With this change the text of the Tweet, as relayed to us from the server, will be passed through our Helper function before being rendered to the screen. Look carefully at what we've just done, though. See anything different? That's right, the helper block is wrapped with three curly braces instead of two!
+
+Using two curly braces tells Handlebars to simply render the string it receives for that block. By default, it will escape any HTML characters. Normally, this is great, however, we <em>want</em> the HTML characters to be rendered as markup. Using three curly braces tells Handlebars to do just that.
+
+Now, reload the page within your browser and start it up. Tweets that appear should have a bit of coloring, which is great. But what about when a user has a url in their tweet?
+
+*   Bonus: update the Helper and your CSS to add a link tag around a url in a tweet!
 
 
+#### 6. Adding a little Responsiveness
 
+Next, the goal is to add a little bit of Responsive Design to this application (note that, ideally, you would plan this from the beginning and incorporate the design during the building of your app). We've already added a bit of css to adjust some of the components based on browser window size. 
+
+*   Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now 'stacked'), the text size adjusts, and the Gr8conf logo disappears (sorry). 
+
+*   You can also view this in your mobile phone's browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in chrome and we had very little QA time!
+
+*   These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.
+
+Respnsive Design is more than just adjusting elements in your markup via @media queries, however. Some aspects of it are fairly philisophical, but in our case, let's assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.
+
+Thus, the Client asks for only for what it needs rather than having the Server sending everything to the Client. 
+
+To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets.
+
+*   Reopen <strong>web-app/js/src/views/tweet_container.js</strong>
+*   Add the following to the end of the initialize function:
+
+        //Threshold, in px,  above which to display the tweets
+        this.displayThreshold = 700;
+        // class that the view will look for to stop searching; we could also set a flag internally,
+        // but this does double duty by hiding the view as well
+        this.hideTweetClass = "verboten";
+
+*   Add the following two functions:
+
+        // Checks the innerWidth of the window, and adds a class to this view if the width is under a certain threshold
+        // will remove the class once the threshold is crossed again
+        visibilityCheck: function () {
+            var width = window.innerWidth,
+                hasClass = this.$el.hasClass(this.hideTweetClass);
+
+            if (width <= this.displayThreshold && !hasClass) {
+
+                this.el.classList.add(this.hideTweetClass);
+                this.stopTweetFade();
+
+            } else if (width > this.displayThreshold && hasClass){
+
+                this.el.classList.remove(this.hideTweetClass);
+                this.startTweetFade();
+                // also, alert the container that we can begin receiving tweets again
+                if (TM.instance.tweets.length === 0) {
+                    this.trigger("start");
+                }
+            }
+        },
+
+        // convenience function to check if the hideTweetClass has been attached; if not we allow fetching
+        allowFetching: function () {
+            var allow = true;
+            if (this.$el.hasClass(this.hideTweetClass)) {
+                allow = false;
+            }
+            return allow;
+        }
+
+*   Update the 'fetchTweets()' function, wrapping the code already in the function with an if statement that checks 'allowFetching', like so :
+
+        fetchTweets: function () {
+            // if the container has our hidden class, prevent tweets from fetching.
+            if (this.allowFetching()) {
+
+                ... Existing code!
+
+            }
+        }
+
+*   Update the render function to execute visibilityCheck, in case the browser starts at a small size (e.g. your phone):
+
+         render: function () {
+
+            $(this.el).html(TM.Templates.tweetContainer({}));
+
+            this.visibilityCheck();
+
+            // Backbone convention is to return this from render()
+            return this;
+        }
+
+*   Finally, update bindEvents to listen for window.resize():
+
+        bindEvents: function () {
+
+            var self = this;
+
+            self.on("tweetsReceived", function () {
+                self.createTweetViews.call(self);
+            });
+
+            self.on("start", function () {
+                //only allow fetching if we're not already fetching, and the 'go' switch has been switched on
+                if (!self.fetching && TM.instance.kickingIt) {
+                    self.fetchTweets.call(self);
+                }
+            });
+
+            if (self.allowFetching()) {
+                self.startTweetFade();
+            }
+
+            // we want to only show the tweets if the browser window is above a certain threshold
+            window.addEventListener("resize", function () {
+                self.visibilityCheck();
+            });
+        }
+
+*   In the end, your tweet_container.js should look something like:
+
+        TM.Views.TweetContainer = Backbone.View.extend({
+
+            initialize: function () {
+                //max tweets to render at a time, although several (the css overflow) will be hidden
+                this.NUM_RENDER = 10;
+                //number that once crossed triggers the service to look for more tweets
+                this.LOW_THRESHOLD = 10;
+                // array to track the views without having to re-query each time
+                this.views = [];
+                this.lastTweetId = -1;
+                // lock to prevent fetching twice
+                this.fetching = false;
+
+                //Time for a tweet to display before fading
+                this.tweetLiveTime = 1600;
+                //Threshold, in px,  above which to display the tweets
+                this.displayThreshold = 700;
+                // class that the view will look for to stop searching; we could also set a flag internally,
+                // but this does double duty by hiding the view as well
+                this.hideTweetClass = "verboten";
+            },
+
+            render: function () {
+
+                $(this.el).html(TM.Templates.tweetContainer({}));
+
+                this.visibilityCheck();
+
+                // Backbone convention is to return this from render()
+                return this;
+            },
+
+            bindEvents: function () {
+
+                var self = this;
+
+                self.on("tweetsReceived", function () {
+                    self.createTweetViews.call(self);
+                });
+
+                self.on("start", function () {
+                    //only allow fetching if we're not already fetching, and the 'go' switch has been switched on
+                    if (!self.fetching && TM.instance.kickingIt) {
+                        self.fetchTweets.call(self);
+                    }
+
+                });
+
+                if (self.allowFetching()) {
+                    self.startTweetFade();
+                }
+
+                // we want to only show the tweets if the browser window is above a certain threshold
+                window.addEventListener("resize", function () {
+                    self.visibilityCheck();
+                });
+            },
+
+            // Checks the innerWidth of the window, and adds a class to this view if the width is under a certain threshold
+            // will remove the class once the threshold is crossed again
+            visibilityCheck: function () {
+                var width = window.innerWidth,
+                    hasClass = this.$el.hasClass(this.hideTweetClass);
+
+                if (width <= this.displayThreshold && !hasClass) {
+
+                    this.el.classList.add(this.hideTweetClass);
+                    this.stopTweetFade();
+
+                } else if (width > this.displayThreshold && hasClass){
+
+                    this.el.classList.remove(this.hideTweetClass);
+                    this.startTweetFade();
+                    // also, alert the container that we can begin receiving tweets again
+                    if (TM.instance.tweets.length === 0) {
+                        this.trigger("start");
+                    }
+                }
+            },
+
+            allowFetching: function () {
+                var allow = true;
+                if (this.$el.hasClass(this.hideTweetClass)) {
+                    allow = false;
+                }
+                return allow;
+            },
+
+            // sets up an interval which will fade and remove the topmost tweet
+            startTweetFade: function () {
+                var self = this;
+                self.tweetFadeInterval = setInterval(function () {
+                    self.fadeOldestTweet.call(self);
+                }, self.tweetLiveTime);
+
+            },
+            // clears the interval
+            stopTweetFade: function () {
+                clearInterval(this.tweetFadeInterval);
+            },
+
+            // fades and removes the 'oldest' tweet
+            fadeOldestTweet: function () {
+                var view,
+                    self = this;
+
+                if (self.views.length > 0) {
+                    self.views[0].$el.fadeOut("slow", function () {
+                        view = self.views.shift();
+                        // the following 2 lines are a technique for deleting a backbone object
+                        view.unbind();
+                        view.remove();
+
+                        if (self.views.length < self.NUM_RENDER) {
+                            self.createTweetViews.call(self);
+                        }
+                    });
+                }
+            },
+
+            // will attempt to pull tweets from the instance queue and build views from them
+            createTweetViews: function () {
+                var i,
+                    max,
+                    tweets = TM.instance.tweets;
+
+                // clear out empty message
+                if (this.views.length === 0 && tweets.length > 0) {
+                    this.$el.html("");
+                }
+                //will usually be 1 if things are flowing as planned
+                max = this.NUM_RENDER - this.views.length;
+                if (max > tweets.length) {
+                    max = tweets.length;
+                }
+
+                for (var i = 0; i < max; i++) {
+                    this.createTweetView(tweets);
+                }
+
+            },
+
+            // creates an individual view from the oldest tweet in the queue.
+            createTweetView: function (tweets) {
+                var model = tweets.shift(),
+                    view = new TM.Views.Tweet({model:model});
+                //track the last seen id;
+                this.lastTweetId = model.id;
+                this.$el.append(view.render().el);
+                view.setElement(this.$el.find(".tweet").last());
+                this.views.push(view);
+                // finally check how many tweets are in the queue. If at threshold, get more
+                if (tweets.length === this.LOW_THRESHOLD) {
+                    this.trigger("start");
+                }
+
+            },
+
+            fetchTweets: function () {
+                // if the container has our hidden class, prevent tweets from fetching.
+                if (this.allowFetching()) {
+                    var tweets = TM.instance.tweets,
+                        self = this;
+                    self.fetching = true;
+
+                    $.ajax({
+                        url:"/twitterMonitor/tweet/listBatch",
+                        data: {
+                            id: self.lastTweetId > 0 ? self.lastTweetId : null
+                        },
+                        type:"GET",
+                        success: function (data) {
+                            var max = data.length
+                            for(var i = 0; i < max; i ++) {
+                                TM.instance.tweets.push(new TM.Models.Tweet(data[i]));
+                            }
+                            // if no views are present, alert the container that it's time to start rendering
+                            if (self.views.length === 0) {
+                                self.trigger("tweetsReceived");
+                            }
+                            self.fetching = false;
+                        },
+                        failure: function (data) {
+                            self.fetching = false;
+                        }
+                    });
+                }
+            }
+        });
+
+
+Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should dissappear, and no more traffic should be made to the /listBatch endpoint on the server
+
+#### 7. Final Task(s)
+
+
+Congratulations! We hope you've learned a bit about working with Javascript-based UIs, and possibly enjoyed yourself in the process. If you're up to it, we have a few more tasks for you:
+
+*   Update the TweetTextHelper to highlight urls (or other symbols, too)
+*   Update the TweetContainer and Tweet Views to use a Collection
+
+
+Good luck!
 
 
 [backbone]: http://backbonejs.org/  "Backbone.js"
@@ -540,3 +1339,5 @@ Next, let's create the individual Tweet View.
 [jasmine]: http://pivotal.github.com/jasmine/ "Jasmine BDD Testing"
 [jquery]: http://jquery.com/ "jQuery"
 [zepto]: http://zeptojs.com/ "Zepto.js"
+[localTM]: http://localhost:8080/twitterMonitor
+[localStandAlone]: http://localhost:8080/twitterMonitor/standAlone

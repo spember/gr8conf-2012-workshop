@@ -69,7 +69,7 @@
         <h2>Today...</h2>
         <div class="row">
             <img class="rounded" src="${resource(dir: 'images/slides', file: 'multiple_devices.jpg')}" alt="Multiple Devices"/>
-            <div class="right ">
+            <div>
                 <ul>
                     <li>Multiple speeds</li>
                     <li>Multiple devices</li>
@@ -200,7 +200,7 @@
         <br/>
         <br/>
         <ul>
-            <li class="animate-build" data-build="1"><p>Spring Security (and the rest of the plugins, too)</p></li>
+            <li class="animate-build" data-build="1"><p>Plugins! (Spring Security and Cache)</p></li>
             <li class="animate-build" data-build="2"><p>Write complicated bits in Java for speed</p></li>
             <li class="animate-build" data-build="3"><p>The JVM and all the power therein</p></li>
             <li class="animate-build" data-build="4"><p>Uses of alternative data stores with Grails 2.0</p></li>

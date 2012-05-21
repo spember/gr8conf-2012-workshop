@@ -10,6 +10,6 @@ $(function () {
 
     TM.instance.intervalDriver = new TM.Core.IntervalDriver();
 
-})
+});
 
 
