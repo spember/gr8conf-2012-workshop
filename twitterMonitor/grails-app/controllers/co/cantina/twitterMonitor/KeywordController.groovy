@@ -2,7 +2,6 @@ package co.cantina.twitterMonitor
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.converters.JSON
-import grails.web.JSONBuilder
 import javax.servlet.http.HttpServletResponse
 
 class KeywordController {

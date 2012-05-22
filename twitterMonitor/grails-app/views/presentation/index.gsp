@@ -105,9 +105,22 @@
     </div>
 
     <div id="futureProof_7" class="slide">
-        <h2 class="center-text title">Presentation / Service Layer Separation</h2>
-        <p class = "left">Regular</p>
-        <p class="right">SOA</p>
+        <div class="clearfix">
+            <h2 class="center-text title">Presentation / Service Layer Separation</h2>
+            <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'mvcmv_crude.png')}" alt="MvCMV - crude"/>
+            <ul class="left">
+                <li>Critical Business Logic</li>
+                <li>MVC (not much View)</li>
+                <li>Send Data Only</li>
+            </ul>
+
+            <ul class="right">
+                <li>Generates Markup</li>
+                <li>Minor Business Logic</li>
+            </ul>
+        </div>
+        <h2 class="animate-build center-text cantina-orange" data-build="1">MvCMV</h2>
+
     </div>
 
 
