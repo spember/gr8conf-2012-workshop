@@ -20,7 +20,7 @@
 	</head>
 	<body>
 		<div id="appLogo" role="banner" class="app-header">
-            <div>
+            <div class="clearfix">
                 <img class="left" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
                 <h2>Twitter Monitor</h2>
                 <img id="grailsLogo" class="right" src="${resource(dir: 'images', file: 'gr8conf-logo.png')}" alt="Gr8Conf"/>

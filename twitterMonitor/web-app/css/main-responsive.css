@@ -46,7 +46,7 @@
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 800px) {
     html {
         font-size: 10px;
     }
@@ -61,12 +61,15 @@
     }
 
     #addContainer a.button {
-        right: 15%;
+        right: 5%;
+        top: 65%;
+        font-size:3rem;
+
     }
     #addContainer input {
         width: 60%;
-        font-size:3rem;
-        height:3rem;
+        font-size:4rem;
+        height:5rem;
         margin-top:-1.5rem;
     }
 

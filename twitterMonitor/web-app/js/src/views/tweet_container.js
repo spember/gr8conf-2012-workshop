@@ -14,7 +14,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
         //Time for a tweet to display before fading
         this.tweetLiveTime = 1600;
         //Threshold, in px,  above which to display the tweets
-        this.displayThreshold = 700;
+        this.displayThreshold = 800;
         // class that the view will look for to stop searching; we could also set a flag internally,
         // but this does double duty by hiding the view as well
         this.hideTweetClass = "verboten";
