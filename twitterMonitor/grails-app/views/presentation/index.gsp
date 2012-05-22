@@ -66,7 +66,7 @@
     </div>
 
     <div id="futureProof_3" class="slide">
-        <h2>Today...</h2>
+        <h2 class="title">Today...</h2>
         <div class="row">
             <img class="rounded" src="${resource(dir: 'images/slides', file: 'multiple_devices.jpg')}" alt="Multiple Devices"/>
             <div>
@@ -80,7 +80,7 @@
     </div>
 
     <div id="futureProof_4" class="slide">
-        <h2 class="center-text">Responsive Design</h2>
+        <h2 class="center-text title">Responsive Design</h2>
         <p class="center-outer">Adapt to <br/><strong class="animate-in cantina-orange" data-animation="space-in">Capabilities</strong><br/>Not Devices</p>
         <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'ResponsiveDesignGlobe.png')}" alt="Responsive Design"/>
         <p class="right animate-in" data-animation="fly-in-left">Provide a <br/><strong class="cantina-orange">Consistant</strong><br/>Experience</p>
@@ -98,14 +98,14 @@
     </div>
 
     <div id="futureProof_6" class="slide">
-        <h2 class="center-text">Client-Side Templating</h2>
+        <h2 class="center-text title">Client-Side Templating</h2>
         <p class="animate-build" data-build="1"><span class="cantina-orange">Client</span> generates the Markup</p>
         <p class="animate-build right-text" data-build="2">Increases Perceived Performance</p>
         <p class="animate-build" data-build="3">Leads Naturally to...</p>
     </div>
 
     <div id="futureProof_7" class="slide">
-        <h2 class="center-text">Presentation / Service Layer Separation</h2>
+        <h2 class="center-text title">Presentation / Service Layer Separation</h2>
         <p class = "left">Regular</p>
         <p class="right">SOA</p>
     </div>
@@ -117,7 +117,7 @@
     </div>
 
     <div id="mvcmv_2" class="slide">
-        <h2 class="center-text positive">Pros</h2>
+        <h2 class="center-text positive title">Pros</h2>
         <ul>
             <li class="animate-build" data-build="1">Offload CPU Cycles</li>
             <li class="animate-build" data-build="2">Save Bandwidth</li>
@@ -136,7 +136,7 @@
     </div>
 
     <div id="mvcmv_3" class="slide">
-        <h2 class="center-text error">Cons</h2>
+        <h2 class="center-text error title">Cons</h2>
             <p class="animate-build right-text" data-build="1">2+ Codebases - </p>
             <p class="animate-build right-text" data-build="2">Increased Testing Requirements - </p>
             <p class="animate-build right-text" data-build="3">Vast Amounts of Javascript (if your team is not ready) - </p>
@@ -149,7 +149,7 @@
     </div>
 
     <div class="slide">
-        <h2 class="center-text">A Good API Should Be:</h2>
+        <h2 class="center-text title">A Good API Should Be:</h2>
         <ul>
             <li class="animate-build" data-build="1">Efficient</li>
             <li class="animate-build" data-build="2">Swift</li>
@@ -161,7 +161,7 @@
     </div>
 
     <div id="apiDesign_3" class="slide">
-        <h2 class="center-text animate-in" >So Why <span class="cantina-orange">Grails?</span></h2>
+        <h2 class="center-text animate-in title" >So Why <span class="cantina-orange">Grails?</span></h2>
         <p class="center-text sub">A Few Examples:</p>
         <div class="top-row clearfix">
             <img class="rounded animate-build left" data-build="1" src="${resource(dir: 'images/slides', file: 'grails_withFormat.png')}" alt="Grails - With Format"/>
@@ -179,14 +179,12 @@
     </div>
 
     <div class="slide">
-        <h3>Don't Send Everything!</h3>
-        <br/>
+        <h3 class="title">Don't Send Everything!</h3>
         <script src="https://gist.github.com/2476214.js?file=succinct.groovy"></script>
     </div>
 
     <div class="slide">
-        <h3>Versioning With withFormat</h3>
-        <br/>
+        <h3 class="title">Versioning With withFormat</h3>
         <script src="https://gist.github.com/2476214.js?file=versioning_with_format.groovy"></script>
     </div>
 
@@ -196,9 +194,7 @@
 
     <div class="slide">
         <h3 class="animate-in center-text" data-animation="fly-in-left">True, but we'd be here all night</h3>
-        <h3 class="animate-in center-text" data-animation="fly-in-right">if we talked about things like:</h3>
-        <br/>
-        <br/>
+        <h3 class="animate-in center-text title" data-animation="fly-in-right">if we talked about things like:</h3>
         <ul>
             <li class="animate-build" data-build="1"><p>Plugins! (Spring Security and Cache)</p></li>
             <li class="animate-build" data-build="2"><p>Write complicated bits in Java for speed</p></li>
@@ -215,11 +211,11 @@
 
     <div class="slide">
         <p class="center-text">Creating large-scale Javascript apps can be <br/><span class="cantina-orange animate-in">difficult</span>,<br/>
-        especially if your team is new to this idea</p>
+        especially if your team is new to event-based programming.</p>
     </div>
 
     <div id="jsHelp_3" class="slide">
-        <h3 class="center-text">Luckily, There are Myriad <span class="cantina-orange">Frameworks</span> To Help</h3>
+        <h3 class="center-text title">Luckily, There are Myriad <span class="cantina-orange">Frameworks</span> To Help</h3>
         <img class="push-left" src="${resource(dir: 'images/slides', file: 'javascript_frameworks.png')}" alt="Countless Javascript Frameworks"/>
     </div>
 
