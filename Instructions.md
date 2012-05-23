@@ -1,6 +1,3 @@
-<html>
-<head></head>
-
 <style>
     code {
         border: 2px solid #EAEAEA;
@@ -22,8 +19,6 @@
     }
 </style>
 
-<body>
-
 Gr8Conf 2012 Workshop Guide
 ========
 
@@ -38,17 +33,17 @@ We encourage you to read through the Backbone [documentation][backbone] (or at l
 
 First off, when creating a new Backbone object, one 'extends' a from a base type, like so: 
 
-    var keyword = new Backbone.Model.extend({options});
+    TM.Models.Keyword = new Backbone.Model.extend({options});
 
 
-The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a contsructor method called 'initialize' which is empty by default.
+The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a constructor method called 'initialize' which is empty by default.
 
 
 Below are listed some important features and methods from each object type
 
 ### [Models](http://backbonejs.org/#Model)
 
-Models typically act as a direct mapping from an object on your server to one in your UI. Each Backbone model knows how to access it's mapped Model (by default via a pure REST implementation) and allows a range of functionality, including performing client-side validation of objects.
+Models typically act as a direct mapping from an object on your server to one in your UI. Each Backbone model knows how to access its mapped Model (by default via a pure REST implementation) and allows a range of functionality, including performing client-side validation of objects.
 
 #### fetch({options})
 The fetch method pulls information from the server and updates the model with any new data. If data has been changed, a 'changed' event is fired from this object. The options parameter allows for 'success' and 'error' callback methods.
@@ -1346,5 +1341,3 @@ Good luck!
 [zepto]: http://zeptojs.com/ "Zepto.js"
 [localTM]: http://localhost:8080/twitterMonitor
 [localStandAlone]: http://localhost:8080/twitterMonitor/standAlone
-
-</body>
