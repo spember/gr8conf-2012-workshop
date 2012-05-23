@@ -1,3 +1,4 @@
+// Contains an error message display
 TM.Views.ErrorDisplay = Backbone.View.extend({
     tagName: "div",
     id: "errorDisplay",

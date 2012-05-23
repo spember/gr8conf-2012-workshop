@@ -19,7 +19,7 @@ The purpose of this document is to provide a brief description of each Javascrip
 
 Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
 
-We encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind.
+We encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind. In addition, the un-minified version of the Backbone source is highly readable; we recommend looking through it.
 
 First off, when creating a new Backbone object, one 'extends' a from a base type, like so: 
 

@@ -20,7 +20,7 @@
                 }
 
 
-                "/"(controller: "presentation", action: "index")
+                "/"(controller: "standAlone", action: "index")
 
                 "500"(view:'/error')
                 "405"(view:'/denied')
