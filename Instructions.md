@@ -20,7 +20,7 @@
 </style>
 
 Gr8Conf 2012 Workshop Guide
-========
+
 
 The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.
 

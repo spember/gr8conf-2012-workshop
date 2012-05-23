@@ -8,6 +8,8 @@ class KeywordController {
 
     static allowedMethods = [list:"GET", show: "GET", save: "POST", delete: "DELETE"]
 
+    def messageSource
+
     def index() {
         redirect(action: "list", params: params)
     }
@@ -34,14 +36,24 @@ class KeywordController {
 
     def save() {
         def keywordInstance = new Keyword(params)
-        def saved = keywordInstance.save(flush: true)
+        //def saved = keywordInstance.save(flush: true)
 
         // differ the responses based on request type
         if (request.xhr) {
             Map result = [status: false]
-            if (saved) {
+            if (keywordInstance.save(flush: true)) {
                 result.status = true
+            } else {
+                // gather errors
+                result.errors = [] as List
+                for (fieldErrors in keywordInstance.errors) {
+                    for (error in fieldErrors.allErrors) {
+                        result.errors.add messageSource.getMessage(error, Locale.getDefault())
+
+                    }
+                }
             }
+            print result
             render result as JSON
         } else {
             response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)

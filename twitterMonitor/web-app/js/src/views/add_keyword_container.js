@@ -13,7 +13,7 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
         });
 
         $(this.el).find(".iPhoneCheckContainer").addClass("center-inner right");
-
+        return this;
     },
 
     bindEvents: function () {
@@ -30,12 +30,27 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
                   text: field.val()
                 },
                 type:"POST",
-                success: function () {
-                    self.trigger("saved");
+                success: function (data) {
+                    if(data.status === false) {
+                        console.log("No good!");
+                        self.displayError(data);
+                    } else {
+                        self.trigger("saved");
+                    }
                     field.val("");
+
                 }
             });
         });
+    },
+
+    displayError: function(data) {
+        console.log(data.errors);
+
+        var error = new TM.Views.ErrorDisplay({text:data.errors});
+        $("body").append(error.render().el);
+        error.bindEvents();
+
     },
 
     // starts and stops the intervalDriver

@@ -13,7 +13,7 @@ class Keyword {
 
     static constraints = {
         numSeen min: 0
-        text maxSize: 20
+        text maxSize: 20, unique: true
     }
 
     public String toString() {

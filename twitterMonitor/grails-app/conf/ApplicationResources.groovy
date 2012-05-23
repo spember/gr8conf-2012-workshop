@@ -40,6 +40,7 @@ modules = {
                 "views/add_keyword_container",
                 "views/tweet_container",
                 "views/keyword_container",
+                "views/error_display",
                 "views/keyword",
                 "views/tweet",
 

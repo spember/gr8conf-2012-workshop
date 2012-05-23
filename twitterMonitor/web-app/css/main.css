@@ -344,6 +344,18 @@ a:hover, a:active {
 
 #appHeader .nav a:hover, #appHeader .nav a.current { color: #FF5200; }
 
+#errorDisplay {
+    position: fixed;
+    bottom: 1em;
+    width: 75%;
+    z-index: 2;
+    text-align: center;
+    height: auto;
+    padding: 1em;
+    font-size:3rem;
+
+}
+
 .slide {
     margin: 0 auto;
     width: 95%;
@@ -402,7 +414,7 @@ ul {
     top: 50%;
 }
 
-img.rounded {
+.rounded {
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     border-radius: 15px;
