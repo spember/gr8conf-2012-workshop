@@ -1,14 +1,4 @@
 <style>
-    code {
-        border: 2px solid #EAEAEA;
-        background-color: #F8F8F8;
-        border-radius: 5px;
-        width: 80%;
-        margin: 0 auto;
-        padding: 1.5em;
-        display: block;
-    }
-
     a {
         color: #4183C4;     
         text-decoration: none;
@@ -19,7 +9,7 @@
     }
 </style>
 
-Gr8Conf 2012 Workshop Guide
+Gr8Conf 2012 Workshop&nbsp;Guide
 ========
 
 The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.
@@ -33,8 +23,9 @@ We encourage you to read through the Backbone [documentation][backbone] (or at l
 
 First off, when creating a new Backbone object, one 'extends' a from a base type, like so: 
 
+```javascript
     TM.Models.Keyword = new Backbone.Model.extend({options});
-
+```
 
 The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a constructor method called 'initialize' which is empty by default.
 
