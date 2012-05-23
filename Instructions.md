@@ -61,7 +61,7 @@ Note the 'this.$el' object, which is a cached jQuery/Zepto selector for the view
 
 Collections provide a range of convenience methods for managing ordered sets of Models. One of the most interesting features is the ability to hook into a 'list' type action on the server to auto-instantiate a set of Models.
 
-
+<hr />
 
 Templating - [Handlebars][handlebars]
 --------------

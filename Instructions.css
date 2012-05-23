@@ -61,6 +61,12 @@ code {
   background: rgb(250,250,250);
 }
 
+hr {
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+
 @media print {
   hr  { page-break-before: always }
 }
