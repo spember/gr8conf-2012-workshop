@@ -35,7 +35,9 @@
 
 <script id="HBtweet" type="text/x-handlebars-template">
     <div class="tweet {{class}}">
-        <div class="header"><img src="{{imageUrl}}" alt="userImage"/><div class="right">{{userName}}</div></div>
+        <div class="header">
+            <img src="{{imageUrl}}" alt="userImage"/>
+            <div class="right">{{userName}}</div></div>
         <div class="text clearfix">{{{tweetTextDecorator text}}}</div>
     </div>
 </script>

@@ -1,0 +1,1228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="Instructions.css" type="text/css" />
+</head>
+<body>
+<style>
+    a {
+        color: #4183C4;     
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h1 id="gr8conf-2012-workshopguide">Gr8Conf 2012 Workshop Guide</h1>
+<p>The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.</p>
+<h3 id="structure---backbone.js-and-underscore.js">Structure - <a href="http://backbonejs.org/" title="Backbone.js">Backbone.js</a> (and <a href="http://documentcloud.github.com/underscore/" title="Underscore.js">Underscore.js</a>)</h3>
+<p>Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: <a href="http://documentcloud.github.com/underscore/" title="Underscore.js">Underscore.js</a> ( a functional ‘utility belt’ which Backbone takes advantage of) and either <a href="http://jquery.com/" title="jQuery">jQuery</a> or <a href="http://zeptojs.com/" title="Zepto.js">Zepto</a>.</p>
+<p>We encourage you to read through the Backbone <a href="http://backbonejs.org/" title="Backbone.js">documentation</a> (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind.</p>
+<p>First off, when creating a new Backbone object, one ‘extends’ a from a base type, like so:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Models</span>.<span class="fu">Keyword</span> = <span class="kw">new</span> <span class="kw">Backbone.Model</span>.<span class="fu">extend</span>({options});</code></pre>
+<p>The extend method accepts an options parameter, which is a normal JS object that contains additional functionality. A base Backbone object inherits quite a bit of functionality, but the options parameter can override anything you wish. For example, each Backbone object contains a constructor method called ‘initialize’ which is empty by default.</p>
+<p>Below are listed some important features and methods from each object type</p>
+<hr />
+
+<h4 id="models"><a href="http://backbonejs.org/#Model">Models</a></h4>
+<p>Models typically act as a direct mapping from an object on your server to one in your UI. Each Backbone model knows how to access its mapped Model (by default via a pure REST implementation) and allows a range of functionality, including performing client-side validation of objects.</p>
+<h5 id="fetchoptions">fetch({options})</h5>
+<p>The fetch method pulls information from the server and updates the model with any new data. If data has been changed, a ‘changed’ event is fired from this object. The options parameter allows for ‘success’ and ‘error’ callback methods.</p>
+<h4 id="views"><a href="http://backbonejs.org/#View">Views</a></h4>
+<p>Just like you’d imagine, Views are responsible for rendering and code surrounding the DOM nodes they’ve created. When creating a new view, one typically attaches the model, then calls render() followed by bindEvents() (or use a <a href="http://backbonejs.org/#View-delegateEvents">declarative events</a> object). One nice feature is that Backbone encourages the use of JS Templates.</p>
+<h5 id="render">render()</h5>
+<p>Responsible for rendering some set of nodes, typically based on a model. If done nicely, a typical render method may look something like this:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">render</span>: <span class="kw">function</span> () {
+        
+        <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>($(<span class="kw">TM.Templates</span>.<span class="fu">tweet</span>({
+            <span class="dt">text</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;text&quot;</span>)
+        })));
+        <span class="kw">return</span> <span class="kw">this</span>;
+    },</code></pre>
+<p>Note the ‘this.$el’ object, which is a cached jQuery/Zepto selector for the view’s root node, and the use of ‘return this’. A view is <em>not</em>, by convention, responsible for inserting itself in the DOM; that task generally falls to whatever created the view.</p>
+<h4 id="collections"><a href="http://backbonejs.org/#Collection">Collections</a></h4>
+<p>Collections provide a range of convenience methods for managing ordered sets of Models. One of the most interesting features is the ability to hook into a ‘list’ type action on the server to auto-instantiate a set of Models.</p>
+<h4 id="templating---handlebars">Templating - <a href="http://handlebarsjs.com/" title="Handlebars Templating">Handlebars</a></h4>
+<p>Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element.</p>
+<p>Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your Javascript.</p>
+<h3 id="testing---jasmine">Testing - <a href="http://pivotal.github.com/jasmine/" title="Jasmine BDD Testing">Jasmine</a></h3>
+<p>Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as ‘specs’.</p>
+<hr />
+
+<h2 id="about-this-app">About this App</h2>
+<p>The included Grails application, called ‘twitterMonitor’, is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets.</p>
+<p>While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.</p>
+<h3 id="server">Server</h3>
+<p>The twitterMonitor server will receive data from the front-end, either a string representing a keyword to add or a number representing the id of a keyword to delete. It will also send data about the keywords and saved tweets to any client in JSON format.</p>
+<p>The server also periodically executes two Quartz jobs: one which deletes tweets older than a specific threshold, and another which searches Twitter for new tweets containing the keywords. When a keyword is first searched, twitterMonitor will grab the previous n tweets (where n is a config option), but subsequent searches will return new tweets in between the last seen tweet. Keywords with matches will have a counter increased, and matching tweets are saved, then subsets of data are sent to the client.</p>
+<h3 id="client">Client</h3>
+<p>The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a ‘control’ area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).</p>
+<h3 id="file-locations">File Locations</h3>
+<p>Nearly every file we add or edit today will be within <strong>web-app/js/src/</strong>. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in <strong>grails-app/conf</strong> so that the Resources plugin will bundle it for you.</p>
+<hr />
+
+<h2 id="instructions">Instructions</h2>
+<p>The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes:</p>
+<ol style="list-style-type: decimal">
+<li>Try to keep Javascript objects and CSS class names the same as the guide; otherwise you’ll need to change the corresponding values in multiple places.</li>
+<li>This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands.</li>
+<li>Our apologies ahead of time for any bugs that may have crept in.</li>
+<li>Refer to the <a href="http://backbonejs.org/" title="Backbone.js">Backbone.js</a>, <a href="http://handlebarsjs.com/" title="Handlebars Templating">Handlebars</a>, or <a href="http://pivotal.github.com/jasmine/" title="Jasmine BDD Testing">Jasmine</a> docs often for further clarification.</li>
+<li>Be Creative! This document is just a guide; there’s much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.</li>
+</ol>
+<h3 id="getting-started">Getting Started</h3>
+<p>I’ll assume that you 1) have the full twitterMonitor project (e.g. downladed the repo from github) and 2) you have grails version 2.0.3 installed. Great. Now:</p>
+<ol style="list-style-type: decimal">
+<li>See if there’s anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!</li>
+<li>Start the application with ‘grails run-app’</li>
+</ol>
+<p>At this point, navigate to <a href="http://localhost:8080/twitterMonitor">http://localhost:8080/twitterMonitor</a>; you should see a blue banner with the words ‘Twitter Monitor’ and a blank white screen.</p>
+<p>Let’s get started!</p>
+<h4 id="models-1">1. Models</h4>
+<p>We will need to create two models: Keyword and Tweet.</p>
+<ul>
+<li>Locate and open the the file <strong>web-app/js/src/models/tweet.js</strong></li>
+<li>Create the model and add it to our TwitterMonitor JS namespace by typing:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Models</span>.<span class="fu">Tweet</span> = <span class="kw">Backbone.Model</span>.<span class="fu">extend</span>({});</code></pre>
+<p>Congratulations, you’ve created your first Backbone Model! We could certainly make this more complicated by adding validation, defaults, etc, but it’s not necessary for this demonstration. We’ve successfully extended the default BackboneModel into our own Tweet Model, and namespaced it into TM.Models (see <strong>web-app/src/js/core/base.js</strong> to see how the app is namespaced).</p>
+<ul>
+<li>Locate and open <strong>web-app/js/src/models/keyword.js</strong></li>
+<li>Add the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Models</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.Model</span>.<span class="fu">extend</span>({ 
+        <span class="dt">url</span>: <span class="kw">function</span> () { 
+            <span class="kw">return</span> <span class="st">&quot;/twitterMonitor/keyword/&quot;</span> + <span class="kw">this</span>.<span class="fu">get</span>(<span class="st">&quot;id&quot;</span>); 
+        } 
+    }); </code></pre>
+<p>We’ve just created our second Model, this time extendeding it’s base functionality by defining a <strong>url</strong> function. Backbone will use an Object’s <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model’s data; it should map to our keyword’s endpoint on the server. We’re not quite finished with the model yet; let’s add a function to help calculate the relative size of the keywords hit count. The function should return a ratio of its ‘numSeen’ variable to that of the other keywords. We can take advantage of this by using the model’s <strong>collection</strong> parameter.</p>
+<ul>
+<li>Enter the following (or something similar) into the Model’s extend object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">getBarPercentage</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> maxSeen = <span class="kw">this</span>.<span class="fu">collection</span>.<span class="fu">getMaxNumSeen</span>(),
+            percentage = (<span class="kw">this</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>) / maxSeen) * <span class="dv">100</span>;
+        <span class="co">// ensure a max percentage of 100</span>
+        <span class="kw">if</span> (percentage &gt; <span class="dv">100</span>) {
+            percentage = <span class="dv">100</span>;
+        }
+        <span class="kw">return</span> <span class="kw">Math</span>.<span class="fu">round</span>( percentage );
+    }</code></pre>
+<p>In the code, ‘this’ refers to the model itself (you may note that throughout we often cache ‘this’ into a local variable named ‘self’ in the cases where ‘this’ will be of an improper scope). The ‘collection’ parameter is a reference to a collection object that the model is a member of; we’ll create the ‘getMaxNumSeen’ function later on, when we create the Collection.</p>
+<ul>
+<li>Let’s set a default value for ‘numSeen’. Add the following to the Model’s extend object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">defaults</span>: {
+        <span class="st">&quot;numSeen&quot;</span>: <span class="dv">0</span>
+    }</code></pre>
+<p>Make sure to separate each of our objects/functions within the extend object with commas! In the end, you should have something like this:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Models</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.Model</span>.<span class="fu">extend</span>({
+        <span class="dt">defaults</span>: {
+            <span class="st">&quot;numSeen&quot;</span>: <span class="dv">0</span>
+        },
+
+        <span class="dt">url</span>: <span class="kw">function</span> () {
+            <span class="kw">return</span> <span class="st">&quot;/twitterMonitor/keyword/&quot;</span> + <span class="kw">this</span>.<span class="fu">get</span>(<span class="st">&quot;id&quot;</span>);
+        },
+
+        <span class="co">// Returns the relative percentage of the bar graph&#39;s width compared with the other models in the collection</span>
+        <span class="dt">getBarPercentage</span>: <span class="kw">function</span> () {
+            <span class="co">// A model that becomes part of a collection gets assigned a reference</span>
+            <span class="kw">var</span> maxSeen = <span class="kw">this</span>.<span class="fu">collection</span>.<span class="fu">getMaxNumSeen</span>(),
+                percentage = (<span class="kw">this</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>) / maxSeen) * <span class="dv">100</span>;
+            <span class="co">// ensure a max percentage of 100</span>
+            <span class="kw">if</span> (percentage &gt; <span class="dv">100</span>) {
+                percentage = <span class="dv">100</span>;
+            }
+            <span class="kw">return</span> <span class="kw">Math</span>.<span class="fu">round</span>( percentage );
+        }
+
+    });</code></pre>
+<h4 id="collections-1">2. Collections</h4>
+<p>Seeing as how we reference the Collection in the previous section, let’s work on that next. Collections are a great way for managing groups of Models; they provide Array-esque methods for adding/removing, events for when items are altered, and (my favorite) access our keyword/list end point to automatically instantiate our set of keywords.</p>
+<ul>
+<li>Open up <strong>web-app/src/js/collections/keywords.js</strong> and enter the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span> = <span class="kw">Backbone.Collection</span>.<span class="fu">extend</span>({
+        <span class="dt">url</span>: <span class="st">&quot;/twitterMonitor/keyword&quot;</span>, <span class="co">// maps to the &#39;list&#39; action on our server </span>
+
+        <span class="dt">model</span>: <span class="kw">TM.Models</span>.<span class="fu">Keyword</span>,
+
+        <span class="co">// in addition, this collection also keeps track of the current maximum &#39;numSeen&#39; of the models in its care</span>
+        <span class="co">// this maximum is used to help set the width of the bar graphs on each keywords&#39; view. The width of the bar graph</span>
+        <span class="co">// is relational to the keywords&#39; current count versus the others (i.e. the bar graph will have a max width of 100%)</span>
+        <span class="co">//</span>
+        <span class="co">// Thus, we default to 100</span>
+        <span class="dt">defaultMax</span>: <span class="dv">100</span>,
+        <span class="dt">maxNumSeen</span>: <span class="dv">0</span>,
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.<span class="fu">maxNumSeen</span> = <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+        }
+    });</code></pre>
+<p>We do not use the ‘defaults’ object here to help highlight the constructor function ‘initialize’. This collection, beyond simply holding and syncing the Keywords, should also be aware of the maximum ‘numSeen’ value in its keywords, so that each keyword can know its proper relative width that its View will display. The Collection’s maxNumSeen value should return either maxNumSeen or the defaultMax (100), whichever is greater.</p>
+<ul>
+<li>Add the following to your extend options object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// returns maxNumSeen or defaultMax, of maxNumSeen has not been set yet</span>
+    <span class="dt">getMaxNumSeen</span>: <span class="kw">function</span> () {
+        <span class="kw">return</span> <span class="kw">this</span>.<span class="fu">maxNumSeen</span> ? <span class="dt">this.maxNumSeen </span>: <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+    }</code></pre>
+<p>But now we need a function that will discover the maxNumSeen for us. Luckily, we can make use of the Collection’s ‘pluck’ function.</p>
+<ul>
+<li>Add the following function:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">findMax</span>: <span class="kw">function</span> () {
+        <span class="co">// the &#39;pluck&#39; function extracts a value from each model in this collection, and places those values in an Array</span>
+        <span class="kw">var</span> counts = <span class="kw">this</span>.<span class="fu">pluck</span>(<span class="st">&quot;numSeen&quot;</span>),
+            i = <span class="kw">counts</span>.<span class="fu">length</span>,
+            max = <span class="dv">0</span>;
+
+        <span class="kw">while</span> (i--) {
+            <span class="kw">if</span> (counts[i] &gt; max) {
+                max = counts[i];
+            }
+        }
+        <span class="kw">this</span>.<span class="fu">maxNumSeen</span> = max &gt; <span class="kw">this</span>.<span class="fu">defaultMax</span> ? <span class="dt">max </span>: <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+    }</code></pre>
+<p>That’s nice, but when should we search the models for the maximum? Whenever we call getMaxNumSeen? We could… but that’s no fun. Let’s instead hook into the Collection’s event system! Whenever a member Model is added, removed, or updated, the Collection fires events that we can listen for. Where should we listen for these events? There is certainly an argument to be made that we should add the bindings during the initialize function. However, Backbone Views have a convention where the rendering of an item and the binding of its events are kept as separate steps. Let’s extend that notion to our Collection.</p>
+<ul>
+<li>Add the following function to the extend options object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">bindEvents</span>: <span class="kw">function</span> (){
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="co">// &quot;reset&quot; is fired when the collection is created or reloaded</span>
+        <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;reset&quot;</span>, <span class="kw">function</span> (){
+            <span class="kw">self</span>.<span class="fu">findMax</span>();
+        });
+        <span class="co">// &quot;change is fired when a value in the collection is altered or a new item is added&quot;</span>
+        <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self</span>.<span class="fu">findMax</span>();
+        });
+        <span class="co">// &quot;destroy&quot; is fired when a model is removed</span>
+        <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">if</span> (<span class="kw">self.models</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                <span class="co">// alert the higher-ups that the collection is empty</span>
+                <span class="kw">self</span>.<span class="fu">trigger</span>(<span class="st">&quot;empty&quot;</span>);
+            }
+        })
+    }</code></pre>
+<p>In the end, your collection should look something like:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span> = <span class="kw">Backbone.Collection</span>.<span class="fu">extend</span>({
+        <span class="dt">url</span>: <span class="st">&quot;/twitterMonitor/keyword&quot;</span>,
+
+        <span class="dt">model</span>: <span class="kw">TM.Models</span>.<span class="fu">Keyword</span>,
+        <span class="co">// in addition, this collection also keeps track of the current maximum &#39;numSeen&#39; of the models in its care</span>
+        <span class="co">// this maximum is used to help set the width of the bar graphs on each keywords&#39; view. The width of the bar graph</span>
+        <span class="co">// is relational to the keywords&#39; current count versus the others (i.e. the bar graph will have a max width of 100%)</span>
+        <span class="co">//</span>
+        <span class="co">// Thus, we default to 100</span>
+        <span class="dt">defaultMax</span>: <span class="dv">100</span>,
+        <span class="dt">maxNumSeen</span>: <span class="dv">0</span>,
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.<span class="fu">maxNumSeen</span> = <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+        },
+
+        <span class="dt">bindEvents</span>: <span class="kw">function</span> (){
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;reset&quot;</span>, <span class="kw">function</span> (){
+                <span class="kw">self</span>.<span class="fu">findMax</span>();
+            });
+
+            <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self</span>.<span class="fu">findMax</span>();
+            });
+
+            <span class="kw">this</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">if</span> (<span class="kw">self.models</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                    <span class="co">// alert the higher-ups that the collection is empty</span>
+                    <span class="kw">self</span>.<span class="fu">trigger</span>(<span class="st">&quot;empty&quot;</span>);
+                }
+            })
+        },
+
+        <span class="co">// looks through the collection for the maximum numSeen value</span>
+        <span class="dt">findMax</span>: <span class="kw">function</span> () {
+            <span class="co">// the &#39;pluck&#39; function extracts a value from each model in this collection, and places those values in an Array</span>
+            <span class="kw">var</span> counts = <span class="kw">this</span>.<span class="fu">pluck</span>(<span class="st">&quot;numSeen&quot;</span>),
+                i = <span class="kw">counts</span>.<span class="fu">length</span>,
+                max = <span class="dv">0</span>;
+
+            <span class="kw">while</span> (i--) {
+                <span class="kw">if</span> (counts[i] &gt; max) {
+                    max = counts[i];
+                }
+            }
+            <span class="kw">this</span>.<span class="fu">maxNumSeen</span> = max &gt; <span class="kw">this</span>.<span class="fu">defaultMax</span> ? <span class="dt">max </span>: <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+        },
+
+        <span class="co">// returns maxNumSeen or defaultMax, of maxNumSeen has not been set yet</span>
+        <span class="dt">getMaxNumSeen</span>: <span class="kw">function</span> () {
+            <span class="kw">return</span> <span class="kw">this</span>.<span class="fu">maxNumSeen</span> ? <span class="dt">this.maxNumSeen </span>: <span class="kw">this</span>.<span class="fu">defaultMax</span>;
+        }
+    });</code></pre>
+<p>We intentionally do not create a Collection for the Tweet model, in order to demonstrate their convenience when we work with Tweets later on. We leave to you the task of working in a Tweet Collection.</p>
+<h4 id="templates">3. Templates</h4>
+<p>Before we move on to the Views, let’s take a look at Handlebars Templating. We’ve created much of the templating already, which you can find stored currently as a partial located at <strong>grails-app/views/standAlone/_handlebars.gsp</strong>. This partial is rendered on a page that will display our app and adds a series of script blocks (with the type ‘text/x-handlebars-template’). Each of these blocks are our individual templates; our client-side code will use these templates as the building blocks of the UI. The client-side code will store each of these templates by their id attribute as a function in the namespaced object ‘TM.Templates’.</p>
+<p>If you’re curious how this works, examine the ‘compileTemplates’ function located in ‘web-app/js/src/core/utils.js’. In order to use a Handlebars template, you must ‘compile’ it. To avoid doing this step whenever we need to use template, this function ‘pre-compiles’ each of the templates on our page by looking for script blocks with the ‘text/x-handlebars-template’ type.</p>
+<p>Let’s move onto Views in order to see how these Templates are used in practice.</p>
+<h4 id="views-1">4. Views</h4>
+<p>We have two types of Views in twitterMonitor: 1) those that are directly responsible for rendering and managing a Model, and 2) those that are responsible for rendering and managing sections of the page. In that sense, Backbone Views are analagous to Controllers (with the Handlebars Templates being our ‘views’), although we do include logic in our Backbone Views that manipulates the DOM directly. In a larger project, it may be wise to pull this functionality out into separate objects.</p>
+<h5 id="model-views">Model Views</h5>
+<p>Let’s first tackle the Keyword view:</p>
+<ul>
+<li>Open <strong>web-app/js/src/views/keyword.js</strong></li>
+<li>Add the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> (options) {
+            <span class="co">//attach a reference on the model so that interval driver knows to delete this view without having to search for it</span>
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">attachedView</span> = <span class="kw">this</span>;
+        },
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keyword</span>({
+                <span class="dt">text</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;text&quot;</span>),
+                <span class="dt">numSeen</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>)
+            }));
+            <span class="kw">this</span>.<span class="fu">updateGraphWidth</span>(); <span class="co">//we&#39;ll add this next</span>
+            <span class="kw">return</span> <span class="kw">this</span>;
+        },
+
+        <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="co">// add a click handler to remove the keyword</span>
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword-remove&quot;</span>).<span class="fu">on</span>(<span class="st">&quot;click&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.destroy</span>.<span class="fu">call</span>(self);
+            });
+
+        }
+    });</code></pre>
+<p>When a View is created, a model is passed to it (as we’ll see later), which is then attached and referenced as ‘this.model’. A view contains a reference to it’s DOM node in the form of ‘this.el’ and ‘this.$el’ (jQuery/Zepto cached version of this.el), which we use here in the ‘render’ function. Note the use of the template, and the fact we pass in an object of values from the model (compare the names of the object with the values in its Template). Finally, note the fact that render returns the view itself. By convention, a View does not insert itself in the DOM, it’s up to the object that creates the View to determine when to do the insertion.</p>
+<p>One convention is to bind a ‘change’ event on the view’s model and re-render when a change occurs. That would work just fine here, but we’re added some fun css animations for when the bar graph should change. To accomplish, let’s add functions to update the bar graph width and the counter display.</p>
+<ul>
+<li>Add the following to the extend object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// convenience method to handle these two functions as a single callback</span>
+    <span class="dt">updateDisplayValues</span>: <span class="kw">function</span> () {
+        <span class="kw">this</span>.<span class="fu">updateGraphWidth</span>();
+        <span class="kw">this</span>.<span class="fu">updateDisplayCount</span>();
+    },
+
+    <span class="co">// update the bar graph width based on the model&#39;s</span>
+    <span class="dt">updateGraphWidth</span>: <span class="kw">function</span> () {
+        <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.bar&quot;</span>).<span class="fu">width</span>(<span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">getBarPercentage</span>() +<span class="st">&quot;%&quot;</span>);
+    },
+
+    <span class="dt">updateDisplayCount</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;span.num-seen&quot;</span>).<span class="fu">text</span>(<span class="kw">self.model</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>));
+    }</code></pre>
+<p>The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after wev’e alerted the server to our change. This can be accomplished by overriding the default destroy fuction.</p>
+<ul>
+<li>Add the following to the extend object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// responsible for deleting the keyword on the server and destroying this view</span>
+    <span class="dt">destroy</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="co">//attempt to delete from the server, if successful we proceed with UI removal</span>
+        <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">success</span>: <span class="kw">function</span> () {
+            <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
+        }});
+    },
+
+    <span class="co">// fancy removal</span>
+    <span class="dt">removeUI</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>(); <span class="co">//clear any bindings</span>
+        <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
+            <span class="co">//remove view from the dom</span>
+            <span class="kw">self</span>.<span class="fu">remove</span>();
+        });
+    }</code></pre>
+<p>The keyword Model’s destroy function will, by default, make a DELETE call to /twitterMonitor/keyword/<id>. It accepts a ‘success’ callback that is fired if the delete was successful on the server’s end.</p>
+<p>Removing a View in Backbone is accomplished in a few steps: 1) unbind all event listeners and 2) call the view’s remove() function.</p>
+<p>At this point, our Keyword View should look like:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> (options) {
+            <span class="co">//attach a reference on the model so that interval driver knows to delete this view without having to search for it</span>
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">attachedView</span> = <span class="kw">this</span>;
+        },
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keyword</span>({
+                <span class="dt">text</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;text&quot;</span>),
+                <span class="dt">numSeen</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>)
+            }));
+            <span class="kw">this</span>.<span class="fu">updateGraphWidth</span>();
+            <span class="kw">return</span> <span class="kw">this</span>;
+        },
+
+        <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword-remove&quot;</span>).<span class="fu">on</span>(<span class="st">&quot;click&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.destroy</span>.<span class="fu">call</span>(self);
+            });
+
+        },
+
+        <span class="co">// convenience method to handle these two functions as a single callback</span>
+        <span class="dt">updateDisplayValues</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.<span class="fu">updateGraphWidth</span>();
+            <span class="kw">this</span>.<span class="fu">updateDisplayCount</span>();
+        },
+
+        <span class="co">// update the bar graph width based on the model&#39;s</span>
+        <span class="dt">updateGraphWidth</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.bar&quot;</span>).<span class="fu">width</span>(<span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">getBarPercentage</span>() +<span class="st">&quot;%&quot;</span>);
+        },
+
+        <span class="dt">updateDisplayCount</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;span.num-seen&quot;</span>).<span class="fu">text</span>(<span class="kw">self.model</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>));
+        },
+
+        <span class="co">// responsible for deleting the keyword on the server and destroying this view</span>
+        <span class="dt">destroy</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="co">//attempt to delete from the server, if successful we proceed with UI removal</span>
+            <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">success</span>: <span class="kw">function</span> () {
+                <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
+            }});
+        },
+
+        <span class="co">// fancy removal</span>
+        <span class="dt">removeUI</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>(); <span class="co">//clear any bindings</span>
+            <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
+                <span class="co">//remove view from the dom</span>
+                <span class="kw">self</span>.<span class="fu">remove</span>();
+            });
+        }
+    });</code></pre>
+<p>Next, let’s create the individual Tweet View.</p>
+<ul>
+<li><p>Open <strong>web-app/js/src/views/tweet.js</strong></p></li>
+<li><p>Add the following:</p></li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">Tweet</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> ctx = <span class="kw">this</span>.<span class="fu">mapModelToContext</span>();
+            <span class="kw">this</span>.<span class="fu">el</span> = $(<span class="kw">TM.Templates</span>.<span class="fu">tweet</span>(ctx));
+            <span class="kw">return</span> <span class="kw">this</span>
+        },
+
+        <span class="co">// because generating the context for rendering has some small variability,</span>
+        <span class="co">// we pull out the generation to a separate function for easier testing</span>
+        <span class="dt">mapModelToContext</span>: <span class="kw">function</span> () {
+            <span class="kw">return</span> {
+                <span class="dt">class</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">id</span> % <span class="dv">2</span> === <span class="dv">0</span> ? <span class="st">&quot;even&quot;</span> : <span class="st">&quot;odd&quot;</span>,
+                <span class="dt">imageUrl</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;profileImageUrl&quot;</span>),
+                <span class="dt">text</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;text&quot;</span>),
+                <span class="dt">userName</span>: <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">get</span>(<span class="st">&quot;userName&quot;</span>)
+            };
+        }
+    });</code></pre>
+<p>Not much to it; the only abnormal bit is using the model’s id to determine whether to add an ‘even’ or ‘odd’ css class (take a look at the corresponding Template for reference, if you’d like).</p>
+<h5 id="container-views">Container Views</h5>
+<p>On to the container Views! These will manage the Keyword and Tweet sections of the page.</p>
+<ul>
+<li><p>Open <strong>web-app/js/src/views/keyword-container.js</strong></p></li>
+<li><p>Add the following:</p></li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">KeywordContainer</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.<span class="fu">keywords</span> = <span class="kw">new</span> <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span>(); <span class="co">//instantiate the collection</span>
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">bindEvents</span>(); <span class="co">// bind its events!</span>
+            <span class="kw">this</span>.<span class="fu">views</span> = []; <span class="co">// set up an array to track our created views</span>
+        },
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keywordContainer</span>({}));
+            <span class="kw">return</span> <span class="kw">this</span>;
+        }
+    });</code></pre>
+<p>Nothing fancy here, we instantiate the keyword collection, bind its events, and setup the rendering function</p>
+<ul>
+<li>Next, let’s create function to kick off the collection’s fetch mechanism. Add the following to the extend object:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">reloadKeywords</span>: <span class="kw">function</span> (add) {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">fetch</span>({
+            <span class="dt">add</span>: add,
+            <span class="dt">success</span>: <span class="kw">function</span> (collection, data) {
+                <span class="kw">self.populateKeywords</span>.<span class="fu">call</span>(self, collection, data);
+            }
+        });
+    }</code></pre>
+<p>Here we trigger the fetch command on the collection; as stated before this will automatically create the necessary models. Convenient! In addition, we pass a success parameter which triggers a ‘populateKeywords’ function, which we’ll get to next. The ‘add’ option is of note as well: by default, a Collection fetch will recreate the entire collection, wiping out models and starting over, which is a bit overkill for our purposes. Instead, one can use the ‘add’ option, which if true will add new items to the collection without resetting the whole thing. The disadvantage of course is that we do not ‘prune’ deleted keywords.</p>
+<ul>
+<li>Add the ‘populateKeywords’ function:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">populateKeywords</span>: <span class="kw">function</span> (collection, data) {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+
+        <span class="kw">if</span>(<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
+        }
+        <span class="co">//underscore.js&#39;s &#39;each&#39; iterator function</span>
+        <span class="kw">_</span>.<span class="fu">each</span>(<span class="kw">collection</span>.<span class="fu">models</span>, <span class="kw">function</span> (model) {
+            <span class="kw">self.createView</span>.<span class="fu">call</span>(self, model);
+        });
+
+        <span class="co">//display empty message</span>
+        <span class="kw">if</span> (<span class="kw">collection.models</span>.<span class="fu">length</span> === <span class="dv">0</span>){
+            <span class="kw">this</span>.<span class="fu">showEmptyMessage</span>()
+        }
+    }</code></pre>
+<p>The function accepts the built collection and a data attribute, passed in from the success callback, although we only use the collection.</p>
+<ul>
+<li>Let’s add the two functions referred to above:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">showEmptyMessage</span>: <span class="kw">function</span> () {
+        <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keywordContainerEmpty</span>());
+    },
+
+    <span class="dt">createView</span>: <span class="kw">function</span>(model) {
+        <span class="co">//first, ensure the view hasn&#39;t already been created</span>
+
+        <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {  <span class="co">// attachedView is set on the model&#39;s initialize</span>
+            <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
+            <span class="co">//render it initially</span>
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>($(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>));
+            <span class="co">//set the element on the new keyword</span>
+            <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
+            <span class="co">//and bind!</span>
+            <span class="kw">view</span>.<span class="fu">bindEvents</span>();
+            <span class="co">//and store. We&#39;ll need to access the view object&#39;s reference later for destruction</span>
+            <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
+        }
+        <span class="co">// else, view already exists</span>
+    }</code></pre>
+<ul>
+<li>We’ll need a way to remove a view from the tracking array when the user has deleted the underlying Model. Add the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">removeKeyWordView</span>: <span class="kw">function</span> (view) {
+        <span class="kw">var</span> self = <span class="kw">this</span>,
+            pos = -<span class="dv">1</span>,
+            i = <span class="kw">self.views</span>.<span class="fu">length</span>;
+
+        <span class="kw">while</span> (i--) {
+            <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">views</span>[i].<span class="fu">cid</span> === <span class="kw">view</span>.<span class="fu">cid</span>) {
+                pos = i;
+                <span class="kw">break</span>;
+            }
+        }
+
+        <span class="kw">if</span> (pos &gt; -<span class="dv">1</span>) {
+            <span class="co">// remove, if found</span>
+            <span class="kw">self.views</span>.<span class="fu">splice</span>(pos, <span class="dv">1</span>);
+        }
+
+    }</code></pre>
+<ul>
+<li>When the keywords Collection sees a change to one of its members, we’ll need a method that triggers the redrawing of the graphs for each of the views (thus adjusting the bar graphs of the other models as one grows larger). Add the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// update each view in the list with the new value and bar graph width</span>
+    <span class="dt">updateViews</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> index = <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>,
+            view;
+        <span class="kw">while</span> (index--) {
+            view = <span class="kw">this</span>.<span class="fu">views</span>[index];
+            <span class="kw">view.updateDisplayValues</span>.<span class="fu">call</span>(view);
+        }
+    }</code></pre>
+<p>Now we need to add the bindEvents function, where we’ll set the behavior.</p>
+<ul>
+<li>Add the following:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="co">// start of page functionality</span>
+        <span class="co">// first, lets see if any keywords actual exist</span>
+        <span class="kw">this</span>.<span class="fu">reloadKeywords</span>(<span class="kw">false</span>);
+
+        <span class="co">// keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
+        <span class="kw">TM.instance.viewManager.views.addContainer</span>.<span class="fu">on</span>(<span class="st">&quot;saved&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self.reloadKeywords</span>.<span class="fu">call</span>(self, <span class="kw">true</span>);
+        });
+        <span class="co">// if we have no keyword models, show an empty message</span>
+        <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;empty&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self</span>.<span class="fu">showEmptyMessage</span>();
+        });
+        <span class="co">// listen for a change event from the collection; update each view... this way, the relative size of the bar graph</span>
+        <span class="co">// will update correctly... say, if one keyword is running away with all the hits, the others will adjust their</span>
+        <span class="co">// sizes to reflect</span>
+        <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self.updateViews</span>.<span class="fu">call</span>(self);
+        });
+
+        <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> (keyword) {
+
+            <span class="kw">self</span>.<span class="fu">removeKeyWordView</span>(<span class="kw">keyword</span>.<span class="fu">attachedView</span>);
+
+        });
+    }</code></pre>
+<p>During the bindEvents, we listen for notifications from the collection whenever its empty, an item has changed value or an item has been deleted (destroyed) and act accordingly.</p>
+<p>In the end, you should have:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">KeywordContainer</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.<span class="fu">keywords</span> = <span class="kw">new</span> <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span>();
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">bindEvents</span>();
+            <span class="kw">this</span>.<span class="fu">views</span> = [];
+        },
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keywordContainer</span>({}));
+            <span class="kw">return</span> <span class="kw">this</span>;
+        },
+
+        <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="co">// start of page functionality</span>
+            <span class="co">// first, lets see if any keywords actual exist</span>
+            <span class="kw">this</span>.<span class="fu">reloadKeywords</span>(<span class="kw">false</span>);
+
+            <span class="co">// keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
+            <span class="kw">TM.instance.viewManager.views.addContainer</span>.<span class="fu">on</span>(<span class="st">&quot;saved&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.reloadKeywords</span>.<span class="fu">call</span>(self, <span class="kw">true</span>);
+            });
+            <span class="co">// if we have no keyword models, show an empty message</span>
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;empty&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self</span>.<span class="fu">showEmptyMessage</span>();
+            });
+            <span class="co">// listen for a change event from the collection; update each view... this way, the relative size of the bar graph</span>
+            <span class="co">// will update correctly... say, if one keyword is running away with all the hits, the others will adjust their</span>
+            <span class="co">// sizes to reflect</span>
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.updateViews</span>.<span class="fu">call</span>(self);
+            });
+
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> (keyword) {
+
+                <span class="kw">self</span>.<span class="fu">removeKeyWordView</span>(<span class="kw">keyword</span>.<span class="fu">attachedView</span>);
+
+            })
+
+        },
+
+        <span class="co">// update each view in the list with the new value and bar graph width</span>
+        <span class="dt">updateViews</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> index = <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>,
+                view;
+            <span class="kw">while</span> (index--) {
+                view = <span class="kw">this</span>.<span class="fu">views</span>[index];
+                <span class="kw">view.updateDisplayValues</span>.<span class="fu">call</span>(view);
+            }
+        },
+
+        <span class="co">// triggers the collection&#39;s fetch call, then triggers the rendering of views to the screen</span>
+        <span class="co">// @param add Determine whether or not to &#39;add&#39; new elements rather than reset the whole collection</span>
+        <span class="co">//</span>
+        <span class="dt">reloadKeywords</span>: <span class="kw">function</span> (add) {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">fetch</span>({
+                <span class="dt">add</span>: add,
+                <span class="dt">success</span>: <span class="kw">function</span> (collection, data) {
+                    <span class="kw">self.populateKeywords</span>.<span class="fu">call</span>(self, collection, data);
+                }
+            });
+        },
+
+        <span class="dt">populateKeywords</span>: <span class="kw">function</span> (collection, data) {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+
+            <span class="kw">if</span>(<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
+            }
+            <span class="co">//underscore.js&#39;s each iterator function</span>
+            <span class="kw">_</span>.<span class="fu">each</span>(<span class="kw">collection</span>.<span class="fu">models</span>, <span class="kw">function</span> (model) {
+                <span class="kw">self.createView</span>.<span class="fu">call</span>(self, model);
+            });
+
+            <span class="co">//display empty message</span>
+            <span class="kw">if</span> (<span class="kw">collection.models</span>.<span class="fu">length</span> === <span class="dv">0</span>){
+                <span class="kw">this</span>.<span class="fu">showEmptyMessage</span>()
+            }
+        },
+
+        <span class="dt">showEmptyMessage</span>: <span class="kw">function</span> () {
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">keywordContainerEmpty</span>());
+        },
+
+        <span class="dt">createView</span>: <span class="kw">function</span>(model) {
+            <span class="co">//first, ensure the view hasn&#39;t already been created</span>
+
+            <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {
+                <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
+                <span class="co">//render it initially</span>
+                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>($(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>));
+                <span class="co">//set the element on the new keyword</span>
+                <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
+                <span class="co">//and bind!</span>
+                <span class="kw">view</span>.<span class="fu">bindEvents</span>();
+                <span class="co">//and store. We&#39;ll need to access the view object&#39;s reference later for destruction</span>
+                <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
+            }
+            <span class="co">// else, view already exists</span>
+        },
+
+        <span class="dt">removeKeyWordView</span>: <span class="kw">function</span> (view) {
+            <span class="kw">var</span> self = <span class="kw">this</span>,
+                pos = -<span class="dv">1</span>,
+                i = <span class="kw">self.views</span>.<span class="fu">length</span>;
+
+            <span class="kw">while</span> (i--) {
+                <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">views</span>[i].<span class="fu">cid</span> === <span class="kw">view</span>.<span class="fu">cid</span>) {
+                    pos = i;
+                    <span class="kw">break</span>;
+                }
+            }
+
+            <span class="kw">if</span> (pos &gt; -<span class="dv">1</span>) {
+                <span class="co">// remove, if found</span>
+                <span class="kw">self.views</span>.<span class="fu">splice</span>(pos, <span class="dv">1</span>);
+            }
+
+        }
+
+    });</code></pre>
+<p>Finally, the Tweet container. This section will generate views of Tweet models that the server sends. Part of the behavior is to repeatedly fade and remove/destroy the oldest Tweet, ‘pushing’ the others up. It will also ask for more Tweets from the server when ‘low’ on Models.</p>
+<ul>
+<li><p>Open <strong>web-app/js/src/views/tweet-container.js</strong></p></li>
+<li><p>Add:</p></li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">TweetContainer</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="co">//max tweets to render at a time, although several (the css overflow) will be hidden</span>
+            <span class="kw">this</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span> = <span class="dv">10</span>;
+            <span class="co">//number that once crossed triggers the service to look for more tweets</span>
+            <span class="kw">this</span>.<span class="fu">LOW</span>_<span class="fu">THRESHOLD</span> = <span class="dv">10</span>;
+            <span class="co">// array to track the views without having to re-query each time</span>
+            <span class="kw">this</span>.<span class="fu">views</span> = [];
+            <span class="kw">this</span>.<span class="fu">lastTweetId</span> = -<span class="dv">1</span>;
+            <span class="co">// lock to prevent fetching twice</span>
+            <span class="kw">this</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+
+            <span class="co">//Time for a tweet to display before fading</span>
+            <span class="kw">this</span>.<span class="fu">tweetLiveTime</span> = <span class="dv">1600</span>;
+        },
+
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">tweetContainer</span>({}));
+            <span class="kw">return</span> <span class="kw">this</span>;
+        },
+
+        <span class="co">// will attempt to pull tweets from the instance queue and build views from them</span>
+        <span class="dt">createTweetViews</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> i,
+                max,
+                tweets = <span class="kw">TM.instance</span>.<span class="fu">tweets</span>;
+
+            <span class="co">// clear out empty message</span>
+            <span class="kw">if</span> (<span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span> === <span class="dv">0</span> &amp;&amp; <span class="kw">tweets</span>.<span class="fu">length</span> &gt; <span class="dv">0</span>) {
+                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
+            }
+            <span class="co">//will usually be 1 if things are flowing as planned</span>
+            max = <span class="kw">this</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span> - <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>;
+            <span class="kw">if</span> (max &gt; <span class="kw">tweets</span>.<span class="fu">length</span>) {
+                max = <span class="kw">tweets</span>.<span class="fu">length</span>;
+            }
+
+            <span class="kw">for</span> (<span class="kw">var</span> i = <span class="dv">0</span>; i &lt; max; i++) {
+                <span class="kw">this</span>.<span class="fu">createTweetView</span>(tweets);
+            }
+
+        },
+
+        <span class="co">// creates an individual view from the oldest tweet in the queue.</span>
+        <span class="dt">createTweetView</span>: <span class="kw">function</span> (tweets) {
+            <span class="kw">var</span> model = <span class="kw">tweets</span>.<span class="fu">shift</span>(),
+                view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Tweet</span>({<span class="dt">model</span>:model});
+            <span class="co">//track the last seen id;</span>
+            <span class="kw">this</span>.<span class="fu">lastTweetId</span> = <span class="kw">model</span>.<span class="fu">id</span>;
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>);
+            <span class="co">// setElement </span>
+            <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.tweet&quot;</span>).<span class="fu">last</span>());
+            <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
+            <span class="co">// finally check how many tweets are in the queue. If at threshold, get more</span>
+            <span class="kw">if</span> (<span class="kw">tweets</span>.<span class="fu">length</span> === <span class="kw">this</span>.<span class="fu">LOW</span>_<span class="fu">THRESHOLD</span>) {
+                <span class="kw">this</span>.<span class="fu">trigger</span>(<span class="st">&quot;start&quot;</span>);
+            }
+
+        },
+
+        <span class="dt">fetchTweets</span>: <span class="kw">function</span> () {
+            <span class="co">// if the container has our hidden class, prevent tweets from fetching.</span>
+            
+            <span class="kw">var</span> tweets = <span class="kw">TM.instance</span>.<span class="fu">tweets</span>,
+                self = <span class="kw">this</span>;
+            <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">true</span>;
+
+            $.<span class="fu">ajax</span>({
+                <span class="dt">url</span>:<span class="st">&quot;/twitterMonitor/tweet/listBatch&quot;</span>,
+                <span class="dt">data</span>: {
+                    <span class="dt">id</span>: <span class="kw">self</span>.<span class="fu">lastTweetId</span> &gt; <span class="dv">0</span> ? <span class="dt">self.lastTweetId </span>: null
+                },
+                <span class="dt">type</span>:<span class="st">&quot;GET&quot;</span>,
+                <span class="dt">success</span>: <span class="kw">function</span> (data) {
+                    <span class="kw">var</span> max = <span class="kw">data</span>.<span class="fu">length</span>
+                    <span class="kw">for</span>(<span class="kw">var</span> i = <span class="dv">0</span>; i &lt; max; i ++) {
+                        <span class="kw">TM.instance.tweets</span>.<span class="fu">push</span>(<span class="kw">new</span> <span class="kw">TM.Models</span>.<span class="fu">Tweet</span>(data[i]));
+                    }
+                    <span class="co">// if no views are present, alert the container that it&#39;s time to start rendering</span>
+                    <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                        <span class="kw">self</span>.<span class="fu">trigger</span>(<span class="st">&quot;tweetsReceived&quot;</span>);
+                    }
+                    <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+                },
+                <span class="dt">failure</span>: <span class="kw">function</span> (data) {
+                    <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+                }
+            });
+            
+        }
+
+    });</code></pre>
+<p>The above adds in our now familiar initialize() and render() functions, as well as code to control the fetching and rendering of individual Tweet views.</p>
+<ul>
+<li>Now for the fade-out effect. Add:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// sets up an interval which will fade and remove the topmost tweet</span>
+    <span class="dt">startTweetFade</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+        <span class="kw">self</span>.<span class="fu">tweetFadeInterval</span> = setInterval(<span class="kw">function</span> () {
+            <span class="kw">self.fadeOldestTweet</span>.<span class="fu">call</span>(self);
+        }, <span class="kw">self</span>.<span class="fu">tweetLiveTime</span>);
+
+    },
+    <span class="co">// clears the interval</span>
+    <span class="dt">stopTweetFade</span>: <span class="kw">function</span> () {
+        clearInterval(<span class="kw">this</span>.<span class="fu">tweetFadeInterval</span>);
+    },
+
+    <span class="co">// fades and removes the &#39;oldest&#39; tweet</span>
+    <span class="dt">fadeOldestTweet</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> view,
+            self = <span class="kw">this</span>;
+
+        <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> &gt; <span class="dv">0</span>) {
+            <span class="kw">self</span>.<span class="fu">views</span>[<span class="dv">0</span>].$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
+                view = <span class="kw">self.views</span>.<span class="fu">shift</span>();
+                <span class="co">// the following 2 lines are a technique for deleting a backbone object</span>
+                <span class="kw">view</span>.<span class="fu">unbind</span>();
+                <span class="kw">view</span>.<span class="fu">remove</span>();
+
+                <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> &lt; <span class="kw">self</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span>) {
+                    <span class="kw">self.createTweetViews</span>.<span class="fu">call</span>(self);
+                }
+            });
+        }
+    }</code></pre>
+<p>This bit of code adds an interval which triggers a function (fadeOldestTweet()).</p>
+<ul>
+<li>Time for bindEvents(). We need to add eventListeners for the various creation and fetching methods defined above. Add:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+
+        <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;tweetsReceived&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self.createTweetViews</span>.<span class="fu">call</span>(self);
+        });
+
+        <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;start&quot;</span>, <span class="kw">function</span> () {
+            <span class="co">//only allow fetching if we&#39;re not already fetching, and the &#39;go&#39; toggle has been switched on</span>
+            <span class="kw">if</span> (!<span class="kw">self</span>.<span class="fu">fetching</span> &amp;&amp; <span class="kw">TM.instance</span>.<span class="fu">kickingIt</span>) {
+                <span class="kw">self.fetchTweets</span>.<span class="fu">call</span>(self);
+            }
+        });  
+    }; </code></pre>
+<p>There’s a bit more yet to add to this View; we’ll revisit it later.</p>
+<p>At this point, we have something we can interact with! Start up the grails app and navigate locally to <a href="http://localhost:8080/twitterMonitor">http://localhost:8080/twitterMonitor</a> or <a href="http://localhost:8080/twitterMonitor/standAlone">http://localhost:8080/twitterMonitor/standAlone</a> to view the application. Start the fetching by clicking the ‘kicking it’ toggle switch.</p>
+<p>If everything goes according to plan, you can begin adding keywords via the text input at the top of the screen. Once you’ve entered at least one, the Grails server will begin querying Twitter, and any found tweets will be displayed in the Tweet Container.</p>
+<p>Note that all of this markup is being generated by the client, and very little actual data is being sent by the server! Fun!</p>
+<h4 id="template-helpers">5. Template Helpers</h4>
+<p>Let’s start sprucing things up a little. First, take a look at the text of your tweets as they appear. A bit bland, no? Let’s add some color to the text by highlighting the tags and mentions (bits of text that begin with ‘#’ and ‘@’, respectively). We can accomplish this by using a feature in Handlebars called ‘Helpers’, which are similar to taglibs in Grails. There are several existing Helpers, like iterators and conditionals, but one can easily create their own.</p>
+<p>To use a Helper, one creates a special function (which can accept an argument) that should return a bit of text to render. The function is then registered with Handlebars so it can understand the reference during Template compilation.</p>
+<p>To illustrate this, open the file <strong>web-app/js/src/helpers/tweet_text_decorator.js</strong>. The function ‘tweetTextDecorator’ accepts a string and performs a series of replaces via Regular Expressions, with the goal of wrapping the found expression with other strings. In our case, we’re wrapping substrings with markup tags. The expressions and the wrapping markup are defined in the ‘Resources’ object at the beginning of this file.</p>
+<p>In order for this function to take effect, we’ll need to do two things: register the Helper, and use the Helper in our Template.</p>
+<ul>
+<li>Register the Helper by adding the following to tweet_text_decorator.js:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">//When registering the Helper, the first parameter is the name that Handlebars </span>
+    <span class="co">//uses to reference your function in the templates</span>
+    <span class="kw">Handlebars</span>.<span class="fu">registerHelper</span>(<span class="ch">&#39;tweetTextDecorator&#39;</span>, <span class="kw">TM.Helpers</span>.<span class="fu">tweetTextDecorator</span>);</code></pre>
+<ul>
+<li>We can now use the string ‘tweetTextDecorator’ as a Helper in our Templates. Open up <strong>grails-app/views/standAlone/_handlebars.gsp</strong>.</li>
+<li>Change the HBtweet Template from:</li>
+</ul>
+<pre class="sourceCode jsp"><code class="sourceCode jsp">    &lt;script<span class="ot"> id</span>=<span class="dt">&quot;HBtweet&quot;</span><span class="ot"> type</span>=<span class="dt">&quot;text/x-handlebars-template&quot;</span>&gt;
+        &lt;div<span class="ot"> class</span>=<span class="dt">&quot;tweet {{class}}&quot;</span>&gt;
+            &lt;div<span class="ot"> class</span>=<span class="dt">&quot;header&quot;</span>&gt;
+                &lt;img<span class="ot"> src</span>=<span class="dt">&quot;{{imageUrl}}&quot;</span><span class="ot"> alt</span>=<span class="dt">&quot;userImage&quot;</span>/&gt;
+                &lt;div<span class="ot"> class</span>=<span class="dt">&quot;right&quot;</span>&gt;{{userName}}&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div<span class="ot"> class</span>=<span class="dt">&quot;text clearfix&quot;</span>&gt;{{text}}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/script&gt;</code></pre>
+<p>To:</p>
+<pre class="sourceCode jsp"><code class="sourceCode jsp">    &lt;script<span class="ot"> id</span>=<span class="dt">&quot;HBtweet&quot;</span><span class="ot"> type</span>=<span class="dt">&quot;text/x-handlebars-template&quot;</span>&gt;
+        &lt;div<span class="ot"> class</span>=<span class="dt">&quot;tweet {{class}}&quot;</span>&gt;
+            &lt;div<span class="ot"> class</span>=<span class="dt">&quot;header&quot;</span>&gt;
+                &lt;img<span class="ot"> src</span>=<span class="dt">&quot;{{imageUrl}}&quot;</span><span class="ot"> alt</span>=<span class="dt">&quot;userImage&quot;</span>/&gt;
+                &lt;div<span class="ot"> class</span>=<span class="dt">&quot;right&quot;</span>&gt;{{userName}}&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div<span class="ot"> class</span>=<span class="dt">&quot;text clearfix&quot;</span>&gt;{{{tweetTextDecorator text}}}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/script&gt;</code></pre>
+<p>With this change the text of the Tweet, as relayed to us from the server, will be passed through our Helper function before being rendered to the screen. Look carefully at what we’ve just done, though. See anything different? That’s right, the helper block is wrapped with three curly braces instead of two!</p>
+<p>Using two curly braces tells Handlebars to simply render the string it receives for that block. By default, it will escape any HTML characters. Normally, this is great, however, we <em>want</em> the HTML characters to be rendered as markup. Using three curly braces tells Handlebars to do just that.</p>
+<p>Now, reload the page within your browser and start it up. Tweets that appear should have a bit of coloring, which is great. But what about when a user has a url in their tweet?</p>
+<ul>
+<li>Bonus: update the Helper and your CSS to add a link tag around a url in a tweet!</li>
+</ul>
+<h4 id="adding-a-little-responsiveness">6. Adding a little Responsiveness</h4>
+<p>Next, the goal is to add a little bit of Responsive Design to this application (note that, ideally, you would plan this from the beginning and incorporate the design during the building of your app). We’ve already added a bit of css to adjust some of the components based on browser window size.</p>
+<ul>
+<li><p>Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now ‘stacked’), the text size adjusts, and the Gr8conf logo disappears (sorry).</p></li>
+<li><p>You can also view this in your mobile phone’s browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in chrome and we had very little QA time!</p></li>
+<li><p>These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.</p></li>
+</ul>
+<p>Respnsive Design is more than just adjusting elements in your markup via @media queries, however. Some aspects of it are fairly philisophical, but in our case, let’s assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.</p>
+<p>Thus, the Client asks for only for what it needs rather than having the Server sending everything to the Client.</p>
+<p>To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets.</p>
+<ul>
+<li>Reopen <strong>web-app/js/src/views/tweet_container.js</strong></li>
+<li>Add the following to the end of the initialize function:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">//Threshold, in px,  above which to display the tweets</span>
+    <span class="kw">this</span>.<span class="fu">displayThreshold</span> = <span class="dv">700</span>;
+    <span class="co">// class that the view will look for to stop searching; we could also set a flag internally,</span>
+    <span class="co">// but this does double duty by hiding the view as well</span>
+    <span class="kw">this</span>.<span class="fu">hideTweetClass</span> = <span class="st">&quot;verboten&quot;</span>;</code></pre>
+<ul>
+<li>Add the following two functions:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// Checks the innerWidth of the window, and adds a class to this view if the width is under a certain threshold</span>
+    <span class="co">// will remove the class once the threshold is crossed again</span>
+    <span class="dt">visibilityCheck</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> width = <span class="kw">window</span>.<span class="fu">innerWidth</span>,
+            hasClass = <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">hasClass</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+
+        <span class="kw">if</span> (width &lt;= <span class="kw">this</span>.<span class="fu">displayThreshold</span> &amp;&amp; !hasClass) {
+
+            <span class="kw">this</span>.<span class="fu">el</span>.<span class="fu">classList</span>.<span class="fu">add</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+            <span class="kw">this</span>.<span class="fu">stopTweetFade</span>();
+
+        } <span class="kw">else</span> <span class="kw">if</span> (width &gt; <span class="kw">this</span>.<span class="fu">displayThreshold</span> &amp;&amp; hasClass){
+
+            <span class="kw">this</span>.<span class="fu">el</span>.<span class="fu">classList</span>.<span class="fu">remove</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+            <span class="kw">this</span>.<span class="fu">startTweetFade</span>();
+            <span class="co">// also, alert the container that we can begin receiving tweets again</span>
+            <span class="kw">if</span> (<span class="kw">TM.instance.tweets</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                <span class="kw">this</span>.<span class="fu">trigger</span>(<span class="st">&quot;start&quot;</span>);
+            }
+        }
+    },
+
+    <span class="co">// convenience function to check if the hideTweetClass has been attached; if not we allow fetching</span>
+    <span class="dt">allowFetching</span>: <span class="kw">function</span> () {
+        <span class="kw">var</span> allow = <span class="kw">true</span>;
+        <span class="kw">if</span> (<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">hasClass</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>)) {
+            allow = <span class="kw">false</span>;
+        }
+        <span class="kw">return</span> allow;
+    }</code></pre>
+<ul>
+<li>Update the ‘fetchTweets()’ function, wrapping the code already in the function with an if statement that checks ‘allowFetching’, like so :</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">fetchTweets</span>: <span class="kw">function</span> () {
+        <span class="co">// if the container has our hidden class, prevent tweets from fetching.</span>
+        <span class="kw">if</span> (<span class="kw">this</span>.<span class="fu">allowFetching</span>()) {
+
+            ... Existing code!
+
+        }
+    }</code></pre>
+<ul>
+<li>Update the render function to execute visibilityCheck, in case the browser starts at a small size (e.g. your phone):</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">     <span class="dt">render</span>: <span class="kw">function</span> () {
+
+        $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">tweetContainer</span>({}));
+
+        <span class="kw">this</span>.<span class="fu">visibilityCheck</span>();
+
+        <span class="co">// Backbone convention is to return this from render()</span>
+        <span class="kw">return</span> <span class="kw">this</span>;
+    }</code></pre>
+<ul>
+<li>Finally, update bindEvents to listen for window.resize():</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+
+        <span class="kw">var</span> self = <span class="kw">this</span>;
+
+        <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;tweetsReceived&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self.createTweetViews</span>.<span class="fu">call</span>(self);
+        });
+
+        <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;start&quot;</span>, <span class="kw">function</span> () {
+            <span class="co">//only allow fetching if we&#39;re not already fetching, and the &#39;go&#39; switch has been switched on</span>
+            <span class="kw">if</span> (!<span class="kw">self</span>.<span class="fu">fetching</span> &amp;&amp; <span class="kw">TM.instance</span>.<span class="fu">kickingIt</span>) {
+                <span class="kw">self.fetchTweets</span>.<span class="fu">call</span>(self);
+            }
+        });
+
+        <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">allowFetching</span>()) {
+            <span class="kw">self</span>.<span class="fu">startTweetFade</span>();
+        }
+
+        <span class="co">// we want to only show the tweets if the browser window is above a certain threshold</span>
+        <span class="kw">window</span>.<span class="fu">addEventListener</span>(<span class="st">&quot;resize&quot;</span>, <span class="kw">function</span> () {
+            <span class="kw">self</span>.<span class="fu">visibilityCheck</span>();
+        });
+    }</code></pre>
+<ul>
+<li>In the end, your tweet_container.js should look something like:</li>
+</ul>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">TweetContainer</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
+
+        <span class="dt">initialize</span>: <span class="kw">function</span> () {
+            <span class="co">//max tweets to render at a time, although several (the css overflow) will be hidden</span>
+            <span class="kw">this</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span> = <span class="dv">10</span>;
+            <span class="co">//number that once crossed triggers the service to look for more tweets</span>
+            <span class="kw">this</span>.<span class="fu">LOW</span>_<span class="fu">THRESHOLD</span> = <span class="dv">10</span>;
+            <span class="co">// array to track the views without having to re-query each time</span>
+            <span class="kw">this</span>.<span class="fu">views</span> = [];
+            <span class="kw">this</span>.<span class="fu">lastTweetId</span> = -<span class="dv">1</span>;
+            <span class="co">// lock to prevent fetching twice</span>
+            <span class="kw">this</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+
+            <span class="co">//Time for a tweet to display before fading</span>
+            <span class="kw">this</span>.<span class="fu">tweetLiveTime</span> = <span class="dv">1600</span>;
+            <span class="co">//Threshold, in px,  above which to display the tweets</span>
+            <span class="kw">this</span>.<span class="fu">displayThreshold</span> = <span class="dv">700</span>;
+            <span class="co">// class that the view will look for to stop searching; we could also set a flag internally,</span>
+            <span class="co">// but this does double duty by hiding the view as well</span>
+            <span class="kw">this</span>.<span class="fu">hideTweetClass</span> = <span class="st">&quot;verboten&quot;</span>;
+        },
+
+        <span class="dt">render</span>: <span class="kw">function</span> () {
+
+            $(<span class="kw">this</span>.<span class="fu">el</span>).<span class="fu">html</span>(<span class="kw">TM.Templates</span>.<span class="fu">tweetContainer</span>({}));
+
+            <span class="kw">this</span>.<span class="fu">visibilityCheck</span>();
+
+            <span class="co">// Backbone convention is to return this from render()</span>
+            <span class="kw">return</span> <span class="kw">this</span>;
+        },
+
+        <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
+
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+
+            <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;tweetsReceived&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.createTweetViews</span>.<span class="fu">call</span>(self);
+            });
+
+            <span class="kw">self</span>.<span class="fu">on</span>(<span class="st">&quot;start&quot;</span>, <span class="kw">function</span> () {
+                <span class="co">//only allow fetching if we&#39;re not already fetching, and the &#39;go&#39; switch has been switched on</span>
+                <span class="kw">if</span> (!<span class="kw">self</span>.<span class="fu">fetching</span> &amp;&amp; <span class="kw">TM.instance</span>.<span class="fu">kickingIt</span>) {
+                    <span class="kw">self.fetchTweets</span>.<span class="fu">call</span>(self);
+                }
+
+            });
+
+            <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">allowFetching</span>()) {
+                <span class="kw">self</span>.<span class="fu">startTweetFade</span>();
+            }
+
+            <span class="co">// we want to only show the tweets if the browser window is above a certain threshold</span>
+            <span class="kw">window</span>.<span class="fu">addEventListener</span>(<span class="st">&quot;resize&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self</span>.<span class="fu">visibilityCheck</span>();
+            });
+        },
+
+        <span class="co">// Checks the innerWidth of the window, and adds a class to this view if the width is under a certain threshold</span>
+        <span class="co">// will remove the class once the threshold is crossed again</span>
+        <span class="dt">visibilityCheck</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> width = <span class="kw">window</span>.<span class="fu">innerWidth</span>,
+                hasClass = <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">hasClass</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+
+            <span class="kw">if</span> (width &lt;= <span class="kw">this</span>.<span class="fu">displayThreshold</span> &amp;&amp; !hasClass) {
+
+                <span class="kw">this</span>.<span class="fu">el</span>.<span class="fu">classList</span>.<span class="fu">add</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+                <span class="kw">this</span>.<span class="fu">stopTweetFade</span>();
+
+            } <span class="kw">else</span> <span class="kw">if</span> (width &gt; <span class="kw">this</span>.<span class="fu">displayThreshold</span> &amp;&amp; hasClass){
+
+                <span class="kw">this</span>.<span class="fu">el</span>.<span class="fu">classList</span>.<span class="fu">remove</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>);
+                <span class="kw">this</span>.<span class="fu">startTweetFade</span>();
+                <span class="co">// also, alert the container that we can begin receiving tweets again</span>
+                <span class="kw">if</span> (<span class="kw">TM.instance.tweets</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                    <span class="kw">this</span>.<span class="fu">trigger</span>(<span class="st">&quot;start&quot;</span>);
+                }
+            }
+        },
+
+        <span class="dt">allowFetching</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> allow = <span class="kw">true</span>;
+            <span class="kw">if</span> (<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">hasClass</span>(<span class="kw">this</span>.<span class="fu">hideTweetClass</span>)) {
+                allow = <span class="kw">false</span>;
+            }
+            <span class="kw">return</span> allow;
+        },
+
+        <span class="co">// sets up an interval which will fade and remove the topmost tweet</span>
+        <span class="dt">startTweetFade</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> self = <span class="kw">this</span>;
+            <span class="kw">self</span>.<span class="fu">tweetFadeInterval</span> = setInterval(<span class="kw">function</span> () {
+                <span class="kw">self.fadeOldestTweet</span>.<span class="fu">call</span>(self);
+            }, <span class="kw">self</span>.<span class="fu">tweetLiveTime</span>);
+
+        },
+        <span class="co">// clears the interval</span>
+        <span class="dt">stopTweetFade</span>: <span class="kw">function</span> () {
+            clearInterval(<span class="kw">this</span>.<span class="fu">tweetFadeInterval</span>);
+        },
+
+        <span class="co">// fades and removes the &#39;oldest&#39; tweet</span>
+        <span class="dt">fadeOldestTweet</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> view,
+                self = <span class="kw">this</span>;
+
+            <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> &gt; <span class="dv">0</span>) {
+                <span class="kw">self</span>.<span class="fu">views</span>[<span class="dv">0</span>].$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
+                    view = <span class="kw">self.views</span>.<span class="fu">shift</span>();
+                    <span class="co">// the following 2 lines are a technique for deleting a backbone object</span>
+                    <span class="kw">view</span>.<span class="fu">unbind</span>();
+                    <span class="kw">view</span>.<span class="fu">remove</span>();
+
+                    <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> &lt; <span class="kw">self</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span>) {
+                        <span class="kw">self.createTweetViews</span>.<span class="fu">call</span>(self);
+                    }
+                });
+            }
+        },
+
+        <span class="co">// will attempt to pull tweets from the instance queue and build views from them</span>
+        <span class="dt">createTweetViews</span>: <span class="kw">function</span> () {
+            <span class="kw">var</span> i,
+                max,
+                tweets = <span class="kw">TM.instance</span>.<span class="fu">tweets</span>;
+
+            <span class="co">// clear out empty message</span>
+            <span class="kw">if</span> (<span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span> === <span class="dv">0</span> &amp;&amp; <span class="kw">tweets</span>.<span class="fu">length</span> &gt; <span class="dv">0</span>) {
+                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
+            }
+            <span class="co">//will usually be 1 if things are flowing as planned</span>
+            max = <span class="kw">this</span>.<span class="fu">NUM</span>_<span class="fu">RENDER</span> - <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>;
+            <span class="kw">if</span> (max &gt; <span class="kw">tweets</span>.<span class="fu">length</span>) {
+                max = <span class="kw">tweets</span>.<span class="fu">length</span>;
+            }
+
+            <span class="kw">for</span> (<span class="kw">var</span> i = <span class="dv">0</span>; i &lt; max; i++) {
+                <span class="kw">this</span>.<span class="fu">createTweetView</span>(tweets);
+            }
+
+        },
+
+        <span class="co">// creates an individual view from the oldest tweet in the queue.</span>
+        <span class="dt">createTweetView</span>: <span class="kw">function</span> (tweets) {
+            <span class="kw">var</span> model = <span class="kw">tweets</span>.<span class="fu">shift</span>(),
+                view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Tweet</span>({<span class="dt">model</span>:model});
+            <span class="co">//track the last seen id;</span>
+            <span class="kw">this</span>.<span class="fu">lastTweetId</span> = <span class="kw">model</span>.<span class="fu">id</span>;
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>);
+            <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.tweet&quot;</span>).<span class="fu">last</span>());
+            <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
+            <span class="co">// finally check how many tweets are in the queue. If at threshold, get more</span>
+            <span class="kw">if</span> (<span class="kw">tweets</span>.<span class="fu">length</span> === <span class="kw">this</span>.<span class="fu">LOW</span>_<span class="fu">THRESHOLD</span>) {
+                <span class="kw">this</span>.<span class="fu">trigger</span>(<span class="st">&quot;start&quot;</span>);
+            }
+
+        },
+
+        <span class="dt">fetchTweets</span>: <span class="kw">function</span> () {
+            <span class="co">// if the container has our hidden class, prevent tweets from fetching.</span>
+            <span class="kw">if</span> (<span class="kw">this</span>.<span class="fu">allowFetching</span>()) {
+                <span class="kw">var</span> tweets = <span class="kw">TM.instance</span>.<span class="fu">tweets</span>,
+                    self = <span class="kw">this</span>;
+                <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">true</span>;
+
+                $.<span class="fu">ajax</span>({
+                    <span class="dt">url</span>:<span class="st">&quot;/twitterMonitor/tweet/listBatch&quot;</span>,
+                    <span class="dt">data</span>: {
+                        <span class="dt">id</span>: <span class="kw">self</span>.<span class="fu">lastTweetId</span> &gt; <span class="dv">0</span> ? <span class="dt">self.lastTweetId </span>: null
+                    },
+                    <span class="dt">type</span>:<span class="st">&quot;GET&quot;</span>,
+                    <span class="dt">success</span>: <span class="kw">function</span> (data) {
+                        <span class="kw">var</span> max = <span class="kw">data</span>.<span class="fu">length</span>
+                        <span class="kw">for</span>(<span class="kw">var</span> i = <span class="dv">0</span>; i &lt; max; i ++) {
+                            <span class="kw">TM.instance.tweets</span>.<span class="fu">push</span>(<span class="kw">new</span> <span class="kw">TM.Models</span>.<span class="fu">Tweet</span>(data[i]));
+                        }
+                        <span class="co">// if no views are present, alert the container that it&#39;s time to start rendering</span>
+                        <span class="kw">if</span> (<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+                            <span class="kw">self</span>.<span class="fu">trigger</span>(<span class="st">&quot;tweetsReceived&quot;</span>);
+                        }
+                        <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+                    },
+                    <span class="dt">failure</span>: <span class="kw">function</span> (data) {
+                        <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
+                    }
+                });
+            }
+        }
+    });</code></pre>
+<p>Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should dissappear, and no more traffic should be made to the /listBatch endpoint on the server</p>
+<h4 id="final-tasks">7. Final Task(s)</h4>
+<p>Congratulations! We hope you’ve learned a bit about working with Javascript-based UIs, and possibly enjoyed yourself in the process. If you’re up to it, we have a few more tasks for you:</p>
+<ul>
+<li>Update the TweetTextHelper to highlight urls (or other symbols, too)</li>
+<li>Update the TweetContainer and Tweet Views to use a Collection</li>
+</ul>
+<p>Good luck!</p>
+</body>
+</html>
