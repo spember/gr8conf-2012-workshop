@@ -9,3 +9,7 @@ The contents of this mostly fall within the sample Grails app, called 'twitterMo
 2.	To host the presentation, written in full html + javascript 
 
 The other main file is an Instructions document detailing the steps the participants should follow to successfully build the application
+
+Build this with:
+
+pandoc -S Instructions.md -c Instructions.css -o Instructions.html
