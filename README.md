@@ -14,7 +14,7 @@ There are two main endpoints with which to access this application. Start up the
 
 *	[http://localhost:8080/twitterMonitor/presentation](http://localhost:8080/twitterMonitor/presentation) to view the presentation.
 
-Note: because this is meant as a lesson, several of the Javascript files will be empty. Follow the guide to restore them! (Alternatively, one can revert the JS files in question to the commit before they were erased)
+Note: because this is meant as a lesson, several of the Javascript files will be empty. Follow the guide to restore them! (Alternatively, can checkout the completed branch)
 
 ### Instructions
 
