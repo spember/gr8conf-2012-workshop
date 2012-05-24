@@ -259,8 +259,11 @@
     </div>
 
     <div id="credits" class="slide">
-        <h2>Credits:</h2>
+        <h3>Contact:</h3>
         <p class="sub">@svpember</p>
+        <p class="sub">steve@cantina.co</p>
+        <p class="sub"><a href="http://www.cantina.co">http://cantina.co</a></p>
+        
     </div>
 
 
