@@ -1,6 +1,1 @@
-/*
-    Client side representation of the Tweet model.
- */
-TM.Models.Tweet = Backbone.Model.extend({
-
-});
+//Refer to the Instructions at the root of the repo to rebuild me!
