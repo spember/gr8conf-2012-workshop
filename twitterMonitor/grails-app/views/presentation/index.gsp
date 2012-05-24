@@ -14,7 +14,7 @@
             <a class="nav-button" href="#apiDesign">API</a>
             <a class="nav-button" href="#jsHelp">Javascript</a>
             <a class="nav-button" href="#twitterMonitor">Sample App</a>
-            <a class="nav-button" href="#credits">Credits</a>
+            <a class="nav-button" href="#contact">Contact</a>
         </div>
         <img class="logo right" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
     </div>
@@ -88,7 +88,7 @@
 
 
     <div id="futureProof_5" class="slide">
-        <p class="animate-build center-outer" data-build="1">More than adjusting layout with @media</p>
+        <p class="animate-build center-outer" data-build="1">More than Flexible Grid, Flexible Media, and adjusting layout with @media</p>
         <p class="animate-build center-outer" data-build="2">Only send what is necessary to client</p>
         <p class="animate-build center-outer" data-build="3">Pro-Tip: Have <span class="cantina-orange">Client</span> ask for only what it needs</p>
         <div class="right center-inner animate-build" data-build="4">
@@ -254,19 +254,27 @@
         <div id="main">
             <g:render template="/standAlone/placeholders"/>
         </div>
-
-
     </div>
 
-    <div id="credits" class="slide">
+    <div class="slide">
+        <h1 class="title">Questions?</h1>
+        <p class="sub">Or, we could just get started</p>
+    </div>
+
+    <div id="contact" class="slide">
         <h3>Contact:</h3>
         <p class="sub">@svpember</p>
         <p class="sub">steve@cantina.co</p>
-        <p class="sub"><a href="http://www.cantina.co">http://cantina.co</a></p>
-        
+        <p class="sub"><a href="http://www.cantina.co" target="_blank">http://cantina.co</a></p>
+        <br/><br/>
+        <h3>Credits</h3>
+        <ul class="sub">
+            <li>Presentation created with <a href="http://johnpolacek.github.com/scrolldeck.js/" target="_blank">Scrolldeck</a></li>
+            <li>Some images taken from a <a href="http://www.netmagazine.com/tutorials/build-responsive-site-week-going-further-part-5" target="_blank">Net Magazine</a> article</li>
+        </ul>
+        <p></p>
+        <p></p>
     </div>
-
-
 
 
 
