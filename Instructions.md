@@ -78,7 +78,7 @@ Templates can placed in an HTML page as a node that your scripts must locate, or
 ### Testing - [Jasmine][jasmine]
 
 
-Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as 'specs'.
+Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as 'specs'. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as 'specs') located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine), but you should probably wait until completely rebuilding the Javascript components by following the steps in this guide.
 
 <hr />
 
@@ -103,6 +103,17 @@ The twitterMonitor client, once complete, will display information about keyword
 ### File Locations
 
 Nearly every file we add or edit today will be within <strong>web-app/js/src/</strong>. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in <strong>grails-app/conf</strong> so that the Resources plugin will bundle it for you. 
+
+### Server Endpoints
+
+There are three main endpoints that you may want to view:
+
+*   [http://localhost:8080/twitterMonitor](http://localhost:8080/twitterMonitor) or [http://localhost:8080/twitterMonitor/standAlone](http://localhost:8080/twitterMonitor/standAlone) to access the sample application.
+
+*   [http://localhost:8080/twitterMonitor/presentation](http://localhost:8080/twitterMonitor/presentation) to view the presentation.
+
+*   [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine Javascript unit tests.
+
 
 <hr />
 

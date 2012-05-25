@@ -71,7 +71,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element.</p>
 <p>Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your Javascript.</p>
 <h3 id="testing---jasmine">Testing - <a href="http://pivotal.github.com/jasmine/" title="Jasmine BDD Testing">Jasmine</a></h3>
-<p>Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as ‘specs’.</p>
+<p>Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as ‘specs’. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as ‘specs’) located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint <a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a>, but you should probably wait until completely rebuilding the Javascript components by following the steps in this guide.</p>
 <hr />
 
 <h2 id="about-this-app">About this App</h2>
@@ -84,6 +84,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a ‘control’ area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).</p>
 <h3 id="file-locations">File Locations</h3>
 <p>Nearly every file we add or edit today will be within <strong>web-app/js/src/</strong>. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in <strong>grails-app/conf</strong> so that the Resources plugin will bundle it for you.</p>
+<h3 id="server-endpoints">Server Endpoints</h3>
+<p>There are three main endpoints that you may want to view:</p>
+<ul>
+<li><p><a href="http://localhost:8080/twitterMonitor">http://localhost:8080/twitterMonitor</a> or <a href="http://localhost:8080/twitterMonitor/standAlone">http://localhost:8080/twitterMonitor/standAlone</a> to access the sample application.</p></li>
+<li><p><a href="http://localhost:8080/twitterMonitor/presentation">http://localhost:8080/twitterMonitor/presentation</a> to view the presentation.</p></li>
+<li><p><a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a> to execute the Jasmine Javascript unit tests.</p></li>
+</ul>
 <hr />
 
 <h2 id="instructions">Instructions</h2>
