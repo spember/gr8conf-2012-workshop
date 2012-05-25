@@ -8,11 +8,13 @@ The contents of this mostly fall within the sample Grails app, called 'twitterMo
 1.	To serve up the sample application that participants will re-create, called 'twitterMonitor'
 2.	To host the presentation, written in full html + javascript 
 
-There are two main endpoints with which to access this application. Start up the grails app (version 2.0.4) and use: 
+There are three main endpoints with which to access this application. Start up the grails app (version 2.0.4) and use: 
 
 *	[http://localhost:8080/twitterMonitor](http://localhost:8080/twitterMonitor) or [http://localhost:8080/twitterMonitor/standAlone](http://localhost:8080/twitterMonitor/standAlone) to access the sample application.
 
 *	[http://localhost:8080/twitterMonitor/presentation](http://localhost:8080/twitterMonitor/presentation) to view the presentation.
+
+*	[http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine Javascript unit tests.
 
 Note: because this is meant as a lesson, several of the Javascript files will be empty. Follow the guide to restore them! (Alternatively, can checkout the completed branch)
 
