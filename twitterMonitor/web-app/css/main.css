@@ -435,6 +435,10 @@ ul {
     font-size: 2rem;
 }
 
+#aboutCantina .push-left {
+    margin-left: -473px;
+}
+
 #html5 .logo { margin-left: -128px; }
 #html5 p {font-weight: bold; margin-top: 2em;}
 
@@ -459,7 +463,7 @@ ul {
     margin-left:-18.5rem;
 }
 
-#futureProof_5 .center-inner {top:20%; right:15%;}
+#futureProof_5 .center-inner {top:35%; right:15%;}
 
 #futureProof_7 .clearfix {
     height: 33em;

@@ -24,6 +24,10 @@
         <cite><a href="http://cantina.co/author/steve/" target="_blank">With Steve Pember</a></cite>
     </div>
 
+    <div id="aboutCantina" class="slide">
+        <img class="push-left" src="${resource(dir: 'images/slides', file: 'about_cantina.png')}" alt="Cantina tech"/>
+    </div>
+
     <div id="html5" class="slide">
         <p class="left cantina-orange animate-build" data-build="1">Does it work in IE?</p>
         <img class="logo push-left" src="${resource(dir: 'images/slides', file: 'HTML5-logo.png')}" alt="HTML 5"/>
@@ -32,7 +36,7 @@
 
     <div id="html5_2" class="slide">
         <h2 class="title">Collection of New Markup & APIs</h2>
-        <img  src="${resource(dir: 'images/slides', file: 'html5_chart.png')}" alt="HTML 5 Capabilities Chart"/>
+        <img src="${resource(dir: 'images/slides', file: 'html5_chart.png')}" alt="HTML 5 Capabilities Chart"/>
         <h3 class="error content-right animate-build" data-build="1">Not Final!</h3>
         <a class="animate-build" data-build="2" href="http://cantina.co/wp-content/uploads/2012/03/HTML5GuideFin312.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's HTML 5 Guide"/></a>
     </div>
