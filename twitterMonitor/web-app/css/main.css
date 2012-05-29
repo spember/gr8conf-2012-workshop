@@ -32,6 +32,11 @@ body {
 
 a {
     text-decoration: none;
+    color: #00AED8;
+}
+
+a:visited {
+    color: #00AED8;
 }
 a:hover, a:active {
     outline: none; /* prevents outline in webkit on active links but retains it for tab focus */
@@ -429,14 +434,18 @@ ul {
     Slides (Individual slide overrides)
 ****************/
 
-#overview cite {
-    display: block;
+#overview .sub {
+    padding-top: 3rem;
+    font-size: 1.5rem;
+}
+#overview .row {
     margin-top: 2em;
-    font-size: 2rem;
+    width: 40%;
 }
 
 #aboutCantina .push-left {
-    margin-left: -473px;
+    margin-left: -43%;
+    width: 80%;
 }
 
 #html5 .logo { margin-left: -128px; }
@@ -453,7 +462,7 @@ ul {
 }
 #futureProof_3 .row div {
     position: absolute;
-    left: 50em;
+    left: 40em;
     margin-top: -30%;
 }
 
@@ -463,7 +472,7 @@ ul {
     margin-left:-18.5rem;
 }
 
-#futureProof_5 .center-inner {top:35%; right:15%;}
+#futureProof_5 .center-inner {top:40%; right:45%;}
 
 #futureProof_7 .clearfix {
     height: 33em;

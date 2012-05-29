@@ -20,8 +20,14 @@
     </div>
 
     <div id="overview" class="slide">
-        <h1>Building Responsive HTML5 Applications with Grails</h1>
-        <cite><a href="http://cantina.co/author/steve/" target="_blank">With Steve Pember</a></cite>
+        <h1 class="title">Building Responsive HTML5 Applications with Grails</h1>
+        <p class="center-text"><a href="http://www.cantina.co/author/steve/" target="_blank">Steve Pember</a></p>
+        <p class="center-text"><a href="http://www.cantina.co" target="_blank">Cantina</a></p>
+
+        <div class="row">
+            <img class="left" src="${resource(dir:'images/slides', file:'gr8conf_eu_first_slide.png')}" alt="Gr8Conf EU Logo"/>
+            <p class="sub right">Gr8Conf Europe 2012<br/>June 6th-8th<br/>Copenhagen, Denmark</p>
+        </div>
     </div>
 
     <div id="aboutCantina" class="slide">
@@ -35,7 +41,7 @@
     </div>
 
     <div id="html5_2" class="slide">
-        <h2 class="title">Collection of New Markup & APIs</h2>
+        <h2 class="title">New Markup & APIs</h2>
         <img src="${resource(dir: 'images/slides', file: 'html5_chart.png')}" alt="HTML 5 Capabilities Chart"/>
         <h3 class="error content-right animate-build" data-build="1">Not Final!</h3>
         <a class="animate-build" data-build="2" href="http://cantina.co/wp-content/uploads/2012/03/HTML5GuideFin312.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's HTML 5 Guide"/></a>
@@ -46,7 +52,8 @@
         <p class="animate-build" data-build="1">Responsive Design / Progressive Enhancement</p>
         <p class="animate-build" data-build="2">Client-Side Markup Generation</p>
         <p class="animate-build" data-build="3">Presentation / Service Layer Separation</p>
-        <h3 class="animate-in cantina-orange"  data-animation="fly-in-right">USABILITY!</h3>
+        <br/>
+        <h3 class="animate-build cantina-orange"  data-build="4">USABILITY!</h3>
     </div>
 
 
@@ -91,10 +98,20 @@
     </div>
 
 
+    <div class="slide">
+        <p class="animate-in" data-animation="fly-in-right"><span class="cantina-orange">RWD</span> requires three features:</p>
+        <br/>
+        <ul>
+            <li class="animate-build" data-build="1">Flexible Grid</li>
+            <li class="animate-build" data-build="2">Flexible Media</li>
+            <li class="animate-build" data-build="3">@media Queries</li>
+        </ul>
+
+    </div>
+
     <div id="futureProof_5" class="slide">
-        <p class="animate-build center-outer" data-build="1">More than Flexible Grid, Flexible Media, and adjusting layout with @media</p>
-        <p class="animate-build center-outer" data-build="2">Only send what is necessary to client</p>
-        <p class="animate-build center-outer" data-build="3">Pro-Tip: Have <span class="cantina-orange">Client</span> ask for only what it needs</p>
+        <p class="animate-build center-outer" data-build="1">However, <span class="cantina-orange">RWD</span> should involve more</p>
+        <p class="animate-build center-outer" data-build="2">For example: Program the <span class="cantina-orange">Client</span> to ask for only what it needs</p>
         <div class="right center-inner animate-build" data-build="4">
             <a href="http://cantina.co/wp-content/uploads/2012/01/ResponsiveDesignGuideFnll0110121.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's Responsive Design Guide"/></a>
             <p class="sub">readme</p>
@@ -105,7 +122,7 @@
         <h2 class="center-text title">Client-Side Templating</h2>
         <p class="animate-build" data-build="1"><span class="cantina-orange">Client</span> generates the Markup</p>
         <p class="animate-build right-text" data-build="2">Increases Perceived Performance</p>
-        <p class="animate-build" data-build="3">Leads Naturally to...</p>
+        <p class="animate-build" data-build="3">Goes hand-in-hand with...</p>
     </div>
 
     <div id="futureProof_7" class="slide">
@@ -214,8 +231,8 @@
         <h3 class="animate-in center-text title" data-animation="fly-in-right">if we talked about things like:</h3>
         <ul>
             <li class="animate-build" data-build="1"><p>Plugins! (Spring Security and Cache)</p></li>
-            <li class="animate-build" data-build="2"><p>Write complicated bits in Java for speed</p></li>
-            <li class="animate-build" data-build="3"><p>The JVM and all the power therein</p></li>
+            <li class="animate-build" data-build="2"><p>Ability to write complicated bits in Java for speed</p></li>
+            <li class="animate-build" data-build="3"><p>Power and convenience of the JVM</p></li>
             <li class="animate-build" data-build="4"><p>Uses of alternative data stores with Grails 2.0</p></li>
         </ul>
     </div>
