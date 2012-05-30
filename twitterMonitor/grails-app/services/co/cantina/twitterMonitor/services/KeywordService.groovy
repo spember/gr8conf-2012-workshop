@@ -6,9 +6,9 @@ import co.cantina.twitterMonitor.Keyword
 class KeywordService {
 
     // Given a message, increments a keyword count
-    def updateCounts(Tweet message, List<Keyword> keywords) {
+    def updateCounts(Tweet tweet, List<Keyword> keywords) {
 
-        if (message.text && !message.processed && !message.hasErrors()) {
+        if (tweet.text && !tweet.processed && !tweet.hasErrors()) {
             if (!keywords) {
                 //if no keywords provided, use the whole list
                 log.trace "Generating list of keywords for updating!"
@@ -16,24 +16,24 @@ class KeywordService {
             }
             keywords.each { keyword->
 
-                matchKeywordToMessage(keyword, message)
+                matchKeywordToTweet(keyword, tweet)
 
             }
             // mark message as processed to avoid doing so again
-            message.processed = true
-            message.save()
+            tweet.processed = true
+            tweet.save()
         }
     }
 
-    def matchKeywordToMessage(Keyword keyword, Tweet message) {
-        boolean found = message.text.toLowerCase().find(keyword.text.toLowerCase())
+    def matchKeywordToTweet(Keyword keyword, Tweet tweet) {
+        boolean found = tweet.text.toLowerCase().find(keyword.text.toLowerCase())
         if (found) {
-            log.trace "${message.id} - Found ${keyword.text} in ${message.text}"
+            log.trace "${tweet.twitterId} - Found ${keyword.text} in ${tweet.text}"
             keyword.numSeen++
             // also, update the last tweet seen for this tweet
-            if(keyword.mostRecentTweet < message.id) {
-                log.info("Updating tweeet id to ${message.id} from ${keyword.mostRecentTweet}")
-                keyword.mostRecentTweet = message.id
+            if(keyword.mostRecentTweet < tweet.twitterId) {
+                log.info("Updating tweeet id to ${tweet.twitterId} from ${keyword.mostRecentTweet}")
+                keyword.mostRecentTweet = tweet.twitterId
             }
 
             if ( !keyword.save() ) {

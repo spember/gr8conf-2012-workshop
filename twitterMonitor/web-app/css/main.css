@@ -3,7 +3,7 @@
 ********/
 
 /* FONT STACK */
-body, input, select, textarea { "adelle", Georgia, serif; }
+/*body, input, select, textarea { "adelle", Georgia, serif; }*/
 
 /* BASE LAYOUT */
 
@@ -26,7 +26,12 @@ body {
     color: #333333;
     margin: 0 auto;
     /*max-width: 70em;*/
+    font-family: Georgia, serif;
 
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;;
 }
 
 
@@ -121,6 +126,7 @@ a:hover, a:active {
 .center-outer {position:relative;}
 .center-inner {position:absolute;top:50%;}
 .center-text {text-align: center;}
+.center-block {display:block; margin: 0 auto;}
 .right-text {text-align: right;}
 
 
@@ -358,6 +364,7 @@ a:hover, a:active {
 
 #appHeader .logo.left {
     width: 10em;
+    height: 3em;
 }
 #appHeader .logo.right {
     margin-right: 2em;
@@ -393,7 +400,7 @@ a:hover, a:active {
     margin: 0 auto;
     width: 95%;
     padding: 120px 12px;
-    padding: 12rem 2rem;
+    padding: 8rem 2rem;
     height: 40rem;
     background-color: #ffffff;
 }
@@ -476,8 +483,8 @@ ul {
     width: 80%;
 }
 
-#html5 .logo { margin-left: -128px; }
-#html5 p {font-weight: bold; margin-top: 2em;}
+#html5 .logo {margin-top: 2rem; margin-bottom: 2rem;}
+#html5 p {font-weight: bold;}
 
 #html5_2 a {
     position: absolute;
