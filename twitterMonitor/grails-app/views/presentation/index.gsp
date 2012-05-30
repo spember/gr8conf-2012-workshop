@@ -95,7 +95,7 @@
         <h2 class="center-text title">Responsive Design</h2>
         <p class="center-outer">Adapt to <br/><strong class="animate-in cantina-orange" data-animation="space-in">Capabilities</strong><br/>Not Devices</p>
         <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'ResponsiveDesignGlobe.png')}" alt="Responsive Design"/>
-        <p class="right animate-in" data-animation="fly-in-left">Provide a <br/><strong class="cantina-orange">Consistant</strong><br/>Experience</p>
+        <p class="right animate-in" data-animation="fly-in-left">Provide a <br/><strong class="cantina-orange">Consistent</strong><br/>Experience</p>
     </div>
 
 

@@ -84,7 +84,7 @@ Jasmine is a BDD testing framework for JavaScript. The library creates a highly 
 
 ## About this App
 
-The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets. 
+The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurrences within Tweets. The number of occurrences are tallied and displayed to the user, as well as the Tweets.
 
 While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.
 
@@ -97,7 +97,7 @@ The server also periodically executes two Quartz jobs: one which deletes tweets 
 
 ### Client
 
-The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a 'control' area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).
+The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a 'control' area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurrences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).
 
 
 ### File Locations
@@ -131,7 +131,7 @@ The following guide will walk you through the steps needed to build the twitterM
 
 ### Getting Started
 
-I'll assume that you 1) have the full twitterMonitor project (e.g. downladed the repo from github) and 2) you have grails version 2.0.3 installed. Great. Now:
+I'll assume that you 1) have the full twitterMonitor project (e.g. you've downloaded the repo from Github) and 2) you have grails version 2.0.3 installed. Great. Now:
 
 1.  See if there's anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!
 2.  Start the application with 'grails run-app'
@@ -166,7 +166,7 @@ Congratulations, you've created your first Backbone Model! We could certainly ma
     }); 
 ```
 
-We've just created our second Model, this time extendeding it's base functionality by defining a <strong>url</strong> function. Backbone will use an Object's <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model's data; it should map to our keyword's endpoint on the server. 
+We've just created our second Model, this time extending it's base functionality by defining a <strong>url</strong> function. Backbone will use an Object's <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model's data; it should map to our keyword's endpoint on the server.
 We're not quite finished with the model yet; let's add a function to help calculate the relative size of the keywords hit count. The function should return a ratio of its 'numSeen' variable to that of the other keywords. We can take advantage of this by using the model's <strong>collection</strong> parameter.
 
 *   Enter the following (or something similar) into the Model's extend object: 
@@ -440,7 +440,7 @@ One convention is to bind a 'change' event on the view's model and re-render whe
     }
 ```
 
-The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after wev'e alerted the server to our change. This can be accomplished by overriding the default destroy fuction.
+The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after we've alerted the server to our change. This can be accomplished by overriding the default destroy function.
 
 *   Add the following to the extend object:
 
@@ -753,7 +753,7 @@ In the end, you should have:
             // first, lets see if any keywords actual exist
             this.reloadKeywords(false);
 
-            // keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
+            // load the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
             TM.instance.viewManager.views.addContainer.on("saved", function () {
                 self.reloadKeywords.call(self, true);
             });
@@ -1092,17 +1092,19 @@ Now, reload the page within your browser and start it up. Tweets that appear sho
 
 Next, the goal is to add a little bit of Responsive Design to this application (note that, ideally, you would plan this from the beginning and incorporate the design during the building of your app). We've already added a bit of css to adjust some of the components based on browser window size. 
 
-*   Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now 'stacked'), the text size adjusts, and the Gr8conf logo disappears (sorry). 
+*   Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now 'stacked'), the text size adjusts, and the Gr8Conf logo disappears (sorry).
 
-*   You can also view this in your mobile phone's browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in Chrome and we had very little QA time!
+*   You can also view this in your mobile phone's browser, although we apologize ahead of time for any inconsistencies. This small app was developed in Chrome and we had very little QA time!
 
-*   These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.
+*   These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicative of any particular device, but merely as a tool to demonstrate how to use the queries.
 
-Respnsive Design is more than just adjusting elements in your markup via @media queries, however. Some aspects of it are fairly philisophical, but in our case, let's assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.
+Responsive Design is more than just adjusting elements in your markup via @media queries, however. As outlined in [the book](http://www.abookapart.com/products/responsive-web-design), RWD is defined by three elements: Flexible Grid Layout, Flexible Media, and the use of @media queries. We argue that there's more to this concept: why not also be responsive about the data you send to the client?
 
-Thus, the Client asks for only for what it needs rather than having the Server sending everything to the Client. 
+In our case, let's assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.
 
-To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets.
+Thus, the Client asks for only for what it needs rather than having the Server overwhelm the Client with data. 
+
+To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets. Once the window size is increased, the client will resume querying the serve for tweet information.
 
 *   Reopen <strong>web-app/js/src/views/tweet_container.js</strong>
 *   Add the following to the end of the initialize function:
@@ -1401,7 +1403,7 @@ To accomplish this in our small application, we will add some code to the tweetC
 ```
 
 
-Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should dissappear, and no more traffic should be made to the /listBatch endpoint on the server
+Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should disappear, and no more traffic should be made to the /listBatch endpoint on the server.
 
 #### 7. Final Task(s)
 
