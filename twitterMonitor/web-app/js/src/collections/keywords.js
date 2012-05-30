@@ -37,6 +37,7 @@ TM.Collections.Keywords = Backbone.Collection.extend({
     },
 
     // looks through the collection for the maximum numSeen value
+    // Note that we could alternatively use Underscore's 'max' function
     findMax: function () {
         // the 'pluck' function extracts a value from each model in this collection, and places those values in an Array
         var counts = this.pluck("numSeen"),

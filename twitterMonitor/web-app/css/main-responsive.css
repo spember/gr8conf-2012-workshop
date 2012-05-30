@@ -1,3 +1,9 @@
+@media (max-width:1350px) {
+    #futureProof_7 .left {
+        top: 55%;
+    }
+}
+
 @media (max-width: 979px) {
     html {
         font-size: 12px;
@@ -23,7 +29,7 @@
         width: 98%;
     }
     .keyword {
-        width:100%;
+        width: 100%;
     }
 
     .graph {
