@@ -6,7 +6,8 @@
 </head>
 <body>
     <div id="appHeader" class="app-header">
-        <div class="nav">
+        <img class="logo left span-1" src="${resource(dir: 'images', file: 'gr8conf-logo.png')}" alt="Cantina"/>
+        <div class="nav left span-7 center-text">
             <a class="nav-button" href="#overview">Overview</a>
             <a class="nav-button" href="#html5">HTML 5</a>
             <a class="nav-button" href="#futureProof">Future Proof</a>
@@ -16,12 +17,12 @@
             <a class="nav-button" href="#twitterMonitor">Sample App</a>
             <a class="nav-button" href="#contact">Contact</a>
         </div>
-        <img class="logo right" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
+        <img class="logo right span-1" src="${resource(dir: 'images', file: 'cantina-logo-white.png')}" alt="Cantina"/>
     </div>
 
     <div id="overview" class="slide">
-        <h1 class="title">Building Responsive HTML5 Applications with Grails</h1>
-        <p class="center-text"><a href="http://www.cantina.co/author/steve/" target="_blank">Steve Pember</a></p>
+        <h1 class="title center-text">Building Responsive HTML5 Applications with Grails</h1>
+        <h3 class="center-text"><a href="http://www.cantina.co/author/steve/" target="_blank">Steve Pember</a></h3>
         <p class="center-text"><a href="http://www.cantina.co" target="_blank">Cantina</a></p>
 
         <div class="row">
@@ -41,7 +42,7 @@
     </div>
 
     <div id="html5_2" class="slide">
-        <h2 class="title">New Markup & APIs</h2>
+        <h2 class="title center-text">New Markup & APIs</h2>
         <img src="${resource(dir: 'images/slides', file: 'html5_chart.png')}" alt="HTML 5 Capabilities Chart"/>
         <h3 class="error content-right animate-build" data-build="1">Not Final!</h3>
         <a class="animate-build" data-build="2" href="http://cantina.co/wp-content/uploads/2012/03/HTML5GuideFin312.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's HTML 5 Guide"/></a>
@@ -64,7 +65,7 @@
     </div>
 
     <div id="futureProof_2" class="slide">
-        <h2 class="title">What's Old is New Again</h2>
+        <h2 class="title center-text">What's Old is New Again</h2>
         <div class="row center-outer animate-build" data-build="1">
             <img class="rounded" src="${resource(dir: 'images/slides', file: 'dialup.png')}" alt="Dialup, gross"/>
             <p class="right center-inner center-text">Low / Slow Bandwidth<br/>'Lo-fi' UX</p>
