@@ -1,4 +1,4 @@
-// initializes the Twitter Monitor Javascript Namespace structure. Should be loaded first
+// initializes the Twitter Monitor JavaScript Namespace structure. Should be loaded first
 
 
 // instantiate the TwitterMonitor (TM) object, if it doesn't exist

@@ -39,9 +39,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 <h1 id="gr8conf-2012-workshopguide">Gr8Conf 2012 Workshop Guide</h1>
-<p>The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.</p>
+<p>The purpose of this document is to provide a brief description of each JavaScript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.</p>
 <h3 id="structure---backbone.js-and-underscore.js">Structure - <a href="http://backbonejs.org/" title="Backbone.js">Backbone.js</a> (and <a href="http://documentcloud.github.com/underscore/" title="Underscore.js">Underscore.js</a>)</h3>
-<p>Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: <a href="http://documentcloud.github.com/underscore/" title="Underscore.js">Underscore.js</a> ( a functional ‘utility belt’ which Backbone takes advantage of) and either <a href="http://jquery.com/" title="jQuery">jQuery</a> or <a href="http://zeptojs.com/" title="Zepto.js">Zepto</a>.</p>
+<p>Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large JavaScript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: <a href="http://documentcloud.github.com/underscore/" title="Underscore.js">Underscore.js</a> ( a functional ‘utility belt’ which Backbone takes advantage of) and either <a href="http://jquery.com/" title="jQuery">jQuery</a> or <a href="http://zeptojs.com/" title="Zepto.js">Zepto</a>.</p>
 <p>We encourage you to read through the Backbone <a href="http://backbonejs.org/" title="Backbone.js">documentation</a> (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind. In addition, the un-minified version of the Backbone source is highly readable; we recommend looking through it.</p>
 <p>First off, when creating a new Backbone object, one ‘extends’ a from a base type, like so:</p>
 <pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Models</span>.<span class="fu">Keyword</span> = <span class="kw">new</span> <span class="kw">Backbone.Model</span>.<span class="fu">extend</span>({options});</code></pre>
@@ -68,14 +68,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h4 id="collections"><a href="http://backbonejs.org/#Collection">Collections</a></h4>
 <p>Collections provide a range of convenience methods for managing ordered sets of Models. One of the most interesting features is the ability to hook into a ‘list’ type action on the server to auto-instantiate a set of Models.</p>
 <h4 id="templating---handlebars">Templating - <a href="http://handlebarsjs.com/" title="Handlebars Templating">Handlebars</a></h4>
-<p>Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element.</p>
-<p>Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your Javascript.</p>
+<p>Based on the Mustache template format, Handlebars is an excellent choice for building JavaScript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a JavaScript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element.</p>
+<p>Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your JavaScript.</p>
 <h3 id="testing---jasmine">Testing - <a href="http://pivotal.github.com/jasmine/" title="Jasmine BDD Testing">Jasmine</a></h3>
-<p>Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as ‘specs’. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as ‘specs’) located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint <a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a>, but you should probably wait until completely rebuilding the Javascript components by following the steps in this guide.</p>
+<p>Jasmine is a BDD testing framework for JavaScript. The library creates a highly readable DSL for describing your tests, which are referred to as ‘specs’. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as ‘specs’) located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint <a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a>, but you should probably wait until completely rebuilding the JavaScript components by following the steps in this guide.</p>
 <hr />
 
 <h2 id="about-this-app">About this App</h2>
-<p>The included Grails application, called ‘twitterMonitor’, is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets.</p>
+<p>The included Grails application, called ‘twitterMonitor’, is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets.</p>
 <p>While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.</p>
 <h3 id="server">Server</h3>
 <p>The twitterMonitor server will receive data from the front-end, either a string representing a keyword to add or a number representing the id of a keyword to delete. It will also send data about the keywords and saved tweets to any client in JSON format.</p>
@@ -89,14 +89,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ul>
 <li><p><a href="http://localhost:8080/twitterMonitor">http://localhost:8080/twitterMonitor</a> or <a href="http://localhost:8080/twitterMonitor/standAlone">http://localhost:8080/twitterMonitor/standAlone</a> to access the sample application.</p></li>
 <li><p><a href="http://localhost:8080/twitterMonitor/presentation">http://localhost:8080/twitterMonitor/presentation</a> to view the presentation.</p></li>
-<li><p><a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a> to execute the Jasmine Javascript unit tests.</p></li>
+<li><p><a href="http://localhost:8080/twitterMonitor/jasmine">http://localhost:8080/twitterMonitor/jasmine</a> to execute the Jasmine JavaScript unit tests.</p></li>
 </ul>
 <hr />
 
 <h2 id="instructions">Instructions</h2>
 <p>The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes:</p>
 <ol style="list-style-type: decimal">
-<li>Try to keep Javascript objects and CSS class names the same as the guide; otherwise you’ll need to change the corresponding values in multiple places.</li>
+<li>Try to keep JavaScript objects and CSS class names the same as the guide; otherwise you’ll need to change the corresponding values in multiple places.</li>
 <li>This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands.</li>
 <li>Our apologies ahead of time for any bugs that may have crept in.</li>
 <li>Refer to the <a href="http://backbonejs.org/" title="Backbone.js">Backbone.js</a>, <a href="http://handlebarsjs.com/" title="Handlebars Templating">Handlebars</a>, or <a href="http://pivotal.github.com/jasmine/" title="Jasmine BDD Testing">Jasmine</a> docs often for further clarification.</li>
@@ -531,7 +531,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {  <span class="co">// attachedView is set on the model&#39;s initialize</span>
             <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
             <span class="co">//render it initially</span>
-            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>($(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>));
+            <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().$<span class="fu">el</span>);
             <span class="co">//set the element on the new keyword</span>
             <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
             <span class="co">//and bind!</span>
@@ -700,7 +700,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {
                 <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
                 <span class="co">//render it initially</span>
-                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>($(<span class="kw">view</span>.<span class="fu">render</span>().<span class="fu">el</span>));
+                <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().$<span class="fu">el</span>);
                 <span class="co">//set the element on the new keyword</span>
                 <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
                 <span class="co">//and bind!</span>
@@ -933,7 +933,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Next, the goal is to add a little bit of Responsive Design to this application (note that, ideally, you would plan this from the beginning and incorporate the design during the building of your app). We’ve already added a bit of css to adjust some of the components based on browser window size.</p>
 <ul>
 <li><p>Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now ‘stacked’), the text size adjusts, and the Gr8conf logo disappears (sorry).</p></li>
-<li><p>You can also view this in your mobile phone’s browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in chrome and we had very little QA time!</p></li>
+<li><p>You can also view this in your mobile phone’s browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in Chrome and we had very little QA time!</p></li>
 <li><p>These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.</p></li>
 </ul>
 <p>Respnsive Design is more than just adjusting elements in your markup via @media queries, however. Some aspects of it are fairly philisophical, but in our case, let’s assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.</p>
@@ -1225,7 +1225,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     });</code></pre>
 <p>Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should dissappear, and no more traffic should be made to the /listBatch endpoint on the server</p>
 <h4 id="final-tasks">7. Final Task(s)</h4>
-<p>Congratulations! We hope you’ve learned a bit about working with Javascript-based UIs, and possibly enjoyed yourself in the process. If you’re up to it, we have a few more tasks for you:</p>
+<p>Congratulations! We hope you’ve learned a bit about working with JavaScript-based UIs, and possibly enjoyed yourself in the process. If you’re up to it, we have a few more tasks for you:</p>
 <ul>
 <li>Update the TweetTextHelper to highlight urls (or other symbols, too)</li>
 <li>Update the TweetContainer and Tweet Views to use a Collection</li>

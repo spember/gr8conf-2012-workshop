@@ -12,12 +12,12 @@
 # Gr8Conf 2012 Workshop&nbsp;Guide
 
 
-The purpose of this document is to provide a brief description of each Javascript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.
+The purpose of this document is to provide a brief description of each JavaScript library we will use and to guide the reader through the process of building or sample app, twitterMonitor.
 
 ### Structure - [Backbone.js][backbone] (and [Underscore.js][underscore])
 
 
-Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large Javascript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
+Backbone.js provides exactly what it sounds like: a solid foundation from which to build a large JavaScript based web app. It provides structure and functionality for Models and their corresponding Views, Collections, History, and a custom Event system. It allows a developer to quickly set up synchronization between a model and the server. It does not, however, provide much in the way of Controller structure, and it is thus up to the developer to handle that portion of the application. Backbone has two requirements: [Underscore.js][underscore] ( a functional 'utility belt' which Backbone takes advantage of) and either [jQuery][jquery] or [Zepto][zepto].
 
 We encourage you to read through the Backbone [documentation][backbone] (or at least have it open as a reference) during this project, but we highlight here a few important bits to keep in mind. In addition, the un-minified version of the Backbone source is highly readable; we recommend looking through it.
 
@@ -70,21 +70,21 @@ Collections provide a range of convenience methods for managing ordered sets of 
 #### Templating - [Handlebars][handlebars]
 
 
-Based on the Mustache template format, Handlebars is an excellent choice for building Javascript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a Javascript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element. 
+Based on the Mustache template format, Handlebars is an excellent choice for building JavaScript templates. Usage is simple: create a set of Templates (which contain named placeholders for data) and compile them, which transforms them into a JavaScript function. This function accepts a context - an object containing data mapped to your named placeholders - and returns a string which one can inject into your page as a DOM element. 
 
-Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your Javascript. 
+Templates can placed in an HTML page as a node that your scripts must locate, or included as escaped strings in your JavaScript. 
 
 
 ### Testing - [Jasmine][jasmine]
 
 
-Jasmine is a BDD testing framework for Javascript. The library creates a highly readable DSL for describing your tests, which are referred to as 'specs'. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as 'specs') located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine), but you should probably wait until completely rebuilding the Javascript components by following the steps in this guide.
+Jasmine is a BDD testing framework for JavaScript. The library creates a highly readable DSL for describing your tests, which are referred to as 'specs'. We do not explicitly cover writing Jasmine tests in this guide, but we encourage you to look over the tests (referred to as 'specs') located in <strong>webapp/js/test/</strong>. You can execute the tests with the endpoint [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine), but you should probably wait until completely rebuilding the JavaScript components by following the steps in this guide.
 
 <hr />
 
 ## About this App
 
-The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, Javascript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets. 
+The included Grails application, called 'twitterMonitor', is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets. 
 
 While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.
 
@@ -112,7 +112,7 @@ There are three main endpoints that you may want to view:
 
 *   [http://localhost:8080/twitterMonitor/presentation](http://localhost:8080/twitterMonitor/presentation) to view the presentation.
 
-*   [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine Javascript unit tests.
+*   [http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine JavaScript unit tests.
 
 
 <hr />
@@ -122,7 +122,7 @@ There are three main endpoints that you may want to view:
 
 The following guide will walk you through the steps needed to build the twitterMonitor UI; please follow it at your own pace. A few notes: 
 
-1.  Try to keep Javascript objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places.
+1.  Try to keep JavaScript objects and CSS class names the same as the guide; otherwise you'll need to change the corresponding values in multiple places.
 2.  This guide assumes that the reader has created a Grails app before, and is aware of the standard file locations and commands.
 3.  Our apologies ahead of time for any bugs that may have crept in.
 5.  Refer to the [Backbone.js][backbone], [Handlebars][handlebars], or [Jasmine][jasmine] docs often for further clarification.
@@ -645,7 +645,7 @@ The function accepts the built collection and a data attribute, passed in from t
         if (!model.attachedView) {  // attachedView is set on the model's initialize
             var view = new TM.Views.Keyword({model:model});
             //render it initially
-            this.$el.append($(view.render().el));
+            this.$el.append(view.render().$el);
             //set the element on the new keyword
             view.setElement(this.$el.children().last());
             //and bind!
@@ -826,7 +826,7 @@ In the end, you should have:
             if (!model.attachedView) {
                 var view = new TM.Views.Keyword({model:model});
                 //render it initially
-                this.$el.append($(view.render().el));
+                this.$el.append(view.render().$el);
                 //set the element on the new keyword
                 view.setElement(this.$el.children().last());
                 //and bind!
@@ -1094,7 +1094,7 @@ Next, the goal is to add a little bit of Responsive Design to this application (
 
 *   Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now 'stacked'), the text size adjusts, and the Gr8conf logo disappears (sorry). 
 
-*   You can also view this in your mobile phone's browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in chrome and we had very little QA time!
+*   You can also view this in your mobile phone's browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in Chrome and we had very little QA time!
 
 *   These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.
 
@@ -1406,7 +1406,7 @@ Reload the application in your browser, monitor the traffic from your browser to
 #### 7. Final Task(s)
 
 
-Congratulations! We hope you've learned a bit about working with Javascript-based UIs, and possibly enjoyed yourself in the process. If you're up to it, we have a few more tasks for you:
+Congratulations! We hope you've learned a bit about working with JavaScript-based UIs, and possibly enjoyed yourself in the process. If you're up to it, we have a few more tasks for you:
 
 *   Update the TweetTextHelper to highlight urls (or other symbols, too)
 *   Update the TweetContainer and Tweet Views to use a Collection

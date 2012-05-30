@@ -13,7 +13,7 @@
             <a class="nav-button" href="#futureProof">Future Proof</a>
             <a class="nav-button" href="#mvcmv">Pros / Cons</a>
             <a class="nav-button" href="#apiDesign">API</a>
-            <a class="nav-button" href="#jsHelp">Javascript</a>
+            <a class="nav-button" href="#jsHelp">JavaScript</a>
             <a class="nav-button" href="#twitterMonitor">Sample App</a>
             <a class="nav-button" href="#contact">Contact</a>
         </div>
@@ -174,7 +174,7 @@
         <h2 class="center-text error title">Cons</h2>
             <p class="animate-build right-text" data-build="1">2+ Codebases - </p>
             <p class="animate-build right-text" data-build="2">Increased Testing Requirements - </p>
-            <p class="animate-build right-text" data-build="3">Vast Amounts of Javascript (if your team is not ready) - </p>
+            <p class="animate-build right-text" data-build="3">Vast Amounts of JavaScript (if your team is not ready) - </p>
             <p class="animate-build right-text error" data-build="4">Security Model Change Required - </p>
     </div>
 
@@ -240,18 +240,18 @@
 
 
     <div id="jsHelp" class="slide">
-        <h1><span class="cantina-orange">Javascript</span></h1>
+        <h1><span class="cantina-orange">JavaScript</span></h1>
         <p class="sub">It's Dangerous to go Alone. Take This!</p>
     </div>
 
     <div class="slide">
-        <p class="center-text">Creating large-scale Javascript apps can be <br/><span class="cantina-orange animate-in">difficult</span>,<br/>
+        <p class="center-text">Creating large-scale JavaScript apps can be <br/><span class="cantina-orange animate-in">difficult</span>,<br/>
         especially if your team is new to event-based programming.</p>
     </div>
 
     <div id="jsHelp_3" class="slide">
         <h3 class="center-text title">Luckily, There are Myriad <span class="cantina-orange">Frameworks</span> To Help</h3>
-        <img class="push-left" src="${resource(dir: 'images/slides', file: 'javascript_frameworks.png')}" alt="Countless Javascript Frameworks"/>
+        <img class="push-left" src="${resource(dir: 'images/slides', file: 'javascript_frameworks.png')}" alt="Countless JavaScript Frameworks"/>
     </div>
 
     <div class="slide">

@@ -7,7 +7,8 @@ class TweetService {
 
     def saveFromJSON (params) {
         Tweet tweet = new Tweet()
-        if (!Tweet.exists(params["id"])) {
+
+        if (!Tweet.findByTwitterId(params["id"])) {
 
             //avoid blindly binding data from the passed in params. Not entirely necessary here, but demonstrates a good practice
             tweet.properties["text"] = params

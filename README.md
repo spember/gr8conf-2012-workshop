@@ -1,7 +1,7 @@
 # GR8Conf 2012 Workshop
 
 
-This project contains materials related to a workshop I'm running / have run at Gr8conf 2012. The purpose of the workshop is to give the participants hands-on experience building a responsive application in which the presentation and services layers are separated (i.e. the server sends data only to the front end, which is capable of rendering itself via Javascript & templates). In addition, there is a short presentation on the merits of this approach and why Grails is an excellent choice for building such an app.
+This project contains materials related to a workshop I'm running / have run at Gr8conf 2012. The purpose of the workshop is to give the participants hands-on experience building a responsive application in which the presentation and services layers are separated (i.e. the server sends data only to the front end, which is capable of rendering itself via JavaScript & templates). In addition, there is a short presentation on the merits of this approach and why Grails is an excellent choice for building such an app.
 
 The contents of this mostly fall within the sample Grails app, called 'twitterMonitor', which has a handful of purposes:
 
@@ -14,9 +14,9 @@ There are three main endpoints with which to access this application. Start up t
 
 *	[http://localhost:8080/twitterMonitor/presentation](http://localhost:8080/twitterMonitor/presentation) to view the presentation.
 
-*	[http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine Javascript unit tests.
+*	[http://localhost:8080/twitterMonitor/jasmine](http://localhost:8080/twitterMonitor/jasmine) to execute the Jasmine JavaScript unit tests.
 
-Note: because this is meant as a lesson, several of the Javascript files will be empty. Follow the guide to restore them! (Alternatively, can checkout the completed branch)
+Note: because this is meant as a lesson, several of the JavaScript files will be empty. Follow the guide to restore them! (Alternatively, can checkout the completed branch)
 
 ### Instructions
 
