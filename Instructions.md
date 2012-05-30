@@ -264,6 +264,7 @@ But now we need a function that will discover the maxNumSeen for us. Luckily, we
 *   Add the following function: 
 
 ```javascript
+    // Note that we could alternatively use Underscore's 'max' function
     findMax: function () {
         // the 'pluck' function extracts a value from each model in this collection, and places those values in an Array
         var counts = this.pluck("numSeen"),
@@ -391,8 +392,8 @@ Let's first tackle the Keyword view:
     TM.Views.Keyword = Backbone.View.extend({
 
         initialize: function (options) {
-            //attach a reference on the model so that interval driver knows to delete this view without having to search for it
-            this.model.attachedView = this;
+            // attach a flag on the model so that we do not recreate views
+            this.model.hasView = true;
         },
 
         render: function () {
@@ -407,18 +408,25 @@ Let's first tackle the Keyword view:
 
         bindEvents: function () {
             var self = this;
-            // add a click handler to remove the keyword
+
             this.$el.find(".keyword-remove").on("click", function () {
                 self.destroy.call(self);
             });
 
+            this.model.on("destroy", function () {
+                self.removeUI.call(self);
+            });
+
+            TM.instance.on("update:keywords", function () {
+                self.updateDisplayValues.call(self);
+            });
         }
     });
 ```
 
 When a View is created, a model is passed to it (as we'll see later), which is then attached and referenced as 'this.model'. A view contains a reference to it's DOM node in the form of 'this.el' and 'this.$el' (jQuery/Zepto cached version of this.el), which we use here in the 'render' function. Note the use of the template, and the fact we pass in an object of values from the model (compare the names of the object with the values in its Template). Finally, note the fact that render returns the view itself. By convention, a View does not insert itself in the DOM, it's up to the object that creates the View to determine when to do the insertion.
 
-One convention is to bind a 'change' event on the view's model and re-render when a change occurs. That would work just fine here, but we're added some fun css animations for when the bar graph should change. To accomplish, let's add functions to update the bar graph width and the counter display.
+One convention is to bind a 'change' event on the view's model and re-render when a change occurs. That would work just fine here, but we're added some fun css animations for when the bar graph should change. To accomplish this, we'll need to update the existing View, rather than re-render it (thus, the flag on the Model to know whether it's been rendered yet). The listeners added in 'bindEvents' deal with this notion, as well as responding to when a Model is deleted. Let's add functions to update the bar graph width and the counter display.
 
 *   Add the following to the extend object: 
    
@@ -449,7 +457,7 @@ The bindEvents method adds some functionality to destroy the View, which is a de
     destroy: function () {
         var self = this;
         //attempt to delete from the server, if successful we proceed with UI removal
-        self.model.destroy({success: function () {
+        self.model.destroy({wait:true, success: function () {
             self.removeUI.call(self);
         }});
     },
@@ -475,8 +483,8 @@ At this point, our Keyword View should look like:
     TM.Views.Keyword = Backbone.View.extend({
 
         initialize: function (options) {
-            //attach a reference on the model so that interval driver knows to delete this view without having to search for it
-            this.model.attachedView = this;
+            // attach a flag on the model so that we do not recreate views
+            this.model.hasView = true;
         },
 
         render: function () {
@@ -494,6 +502,14 @@ At this point, our Keyword View should look like:
 
             this.$el.find(".keyword-remove").on("click", function () {
                 self.destroy.call(self);
+            });
+
+            this.model.on("destroy", function () {
+                self.removeUI.call(self);
+            });
+
+            TM.instance.on("update:keywords", function () {
+                self.updateDisplayValues.call(self);
             });
 
         },
@@ -518,7 +534,7 @@ At this point, our Keyword View should look like:
         destroy: function () {
             var self = this;
             //attempt to delete from the server, if successful we proceed with UI removal
-            self.model.destroy({success: function () {
+            self.model.destroy({wait:true, success: function () {
                 self.removeUI.call(self);
             }});
         },
@@ -580,7 +596,6 @@ On to the container Views! These will manage the Keyword and Tweet sections of t
         initialize: function () {
             this.keywords = new TM.Collections.Keywords(); //instantiate the collection
             this.keywords.bindEvents(); // bind its events!
-            this.views = []; // set up an array to track our created views
         },
 
         render: function () {
@@ -609,13 +624,15 @@ Nothing fancy here, we instantiate the keyword collection, bind its events, and 
 
 Here we trigger the fetch command on the collection; as stated before this will automatically create the necessary models. Convenient! In addition, we pass a success parameter which triggers a 'populateKeywords' function, which we'll get to next. The 'add' option is of note as well: by default, a Collection fetch will recreate the entire collection, wiping out models and starting over, which is a bit overkill for our purposes. Instead, one can use the 'add' option, which if true will add new items to the collection without resetting the whole thing. The disadvantage of course is that we do not 'prune' deleted keywords.
 
+Note that here we call 'fetch' during the creation of the page. A more user-friendly pattern is to bootstrap your initial data in the initial page request, rather than rendering the application before fetching initial data.
+
 *   Add the 'populateKeywords' function:
 
 ```javascript
     populateKeywords: function (collection, data) {
         var self = this;
 
-        if(self.views.length === 0) {
+        if(self.$el.find(".keyword").length === 0) {
             this.$el.html("");
         }
         //underscore.js's 'each' iterator function
@@ -642,7 +659,7 @@ The function accepts the built collection and a data attribute, passed in from t
     createView: function(model) {
         //first, ensure the view hasn't already been created
 
-        if (!model.attachedView) {  // attachedView is set on the model's initialize
+        if (!model.hasView) {  // hasView is set on the model's initialize
             var view = new TM.Views.Keyword({model:model});
             //render it initially
             this.$el.append(view.render().$el);
@@ -650,49 +667,12 @@ The function accepts the built collection and a data attribute, passed in from t
             view.setElement(this.$el.children().last());
             //and bind!
             view.bindEvents();
-            //and store. We'll need to access the view object's reference later for destruction
-            this.views.push(view);
+            
         }
         // else, view already exists
     }
 ```
 
-*   We'll need a way to remove a view from the tracking array when the user has deleted the underlying Model. Add the following:
-
-```javascript
-    removeKeyWordView: function (view) {
-        var self = this,
-            pos = -1,
-            i = self.views.length;
-
-        while (i--) {
-            if (self.views[i].cid === view.cid) {
-                pos = i;
-                break;
-            }
-        }
-
-        if (pos > -1) {
-            // remove, if found
-            self.views.splice(pos, 1);
-        }
-
-    }
-```
-
-*   When the keywords Collection sees a change to one of its members, we'll need a method that triggers the redrawing of the graphs for each of the views (thus adjusting the bar graphs of the other models as one grows larger). Add the following:
-
-```javascript
-    // update each view in the list with the new value and bar graph width
-    updateViews: function () {
-        var index = this.views.length,
-            view;
-        while (index--) {
-            view = this.views[index];
-            view.updateDisplayValues.call(view);
-        }
-    }
-``` 
 
 Now we need to add the bindEvents function, where we'll set the behavior.
 
@@ -717,13 +697,7 @@ Now we need to add the bindEvents function, where we'll set the behavior.
         // will update correctly... say, if one keyword is running away with all the hits, the others will adjust their
         // sizes to reflect
         this.keywords.on("change", function () {
-            self.updateViews.call(self);
-        });
-
-        this.keywords.on("destroy", function (keyword) {
-
-            self.removeKeyWordView(keyword.attachedView);
-
+            TM.instance.trigger("update:keywords");
         });
     }
 ```   
@@ -738,7 +712,6 @@ In the end, you should have:
         initialize: function () {
             this.keywords = new TM.Collections.Keywords();
             this.keywords.bindEvents();
-            this.views = [];
         },
 
         render: function () {
@@ -753,7 +726,7 @@ In the end, you should have:
             // first, lets see if any keywords actual exist
             this.reloadKeywords(false);
 
-            // load the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
+            // keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)
             TM.instance.viewManager.views.addContainer.on("saved", function () {
                 self.reloadKeywords.call(self, true);
             });
@@ -765,25 +738,9 @@ In the end, you should have:
             // will update correctly... say, if one keyword is running away with all the hits, the others will adjust their
             // sizes to reflect
             this.keywords.on("change", function () {
-                self.updateViews.call(self);
+                TM.instance.trigger("update:keywords");
             });
 
-            this.keywords.on("destroy", function (keyword) {
-
-                self.removeKeyWordView(keyword.attachedView);
-
-            })
-
-        },
-
-        // update each view in the list with the new value and bar graph width
-        updateViews: function () {
-            var index = this.views.length,
-                view;
-            while (index--) {
-                view = this.views[index];
-                view.updateDisplayValues.call(view);
-            }
         },
 
         // triggers the collection's fetch call, then triggers the rendering of views to the screen
@@ -802,10 +759,10 @@ In the end, you should have:
         populateKeywords: function (collection, data) {
             var self = this;
 
-            if(self.views.length === 0) {
+            if(self.$el.find(".keyword").length === 0) {
                 this.$el.html("");
             }
-            //underscore.js's each iterator function
+            //underscore.js's 'each' iterator function
             _.each(collection.models, function (model) {
                 self.createView.call(self, model);
             });
@@ -822,8 +779,7 @@ In the end, you should have:
 
         createView: function(model) {
             //first, ensure the view hasn't already been created
-
-            if (!model.attachedView) {
+            if (!model.hasView) {
                 var view = new TM.Views.Keyword({model:model});
                 //render it initially
                 this.$el.append(view.render().$el);
@@ -831,29 +787,8 @@ In the end, you should have:
                 view.setElement(this.$el.children().last());
                 //and bind!
                 view.bindEvents();
-                //and store. We'll need to access the view object's reference later for destruction
-                this.views.push(view);
             }
             // else, view already exists
-        },
-
-        removeKeyWordView: function (view) {
-            var self = this,
-                pos = -1,
-                i = self.views.length;
-
-            while (i--) {
-                if (self.views[i].cid === view.cid) {
-                    pos = i;
-                    break;
-                }
-            }
-
-            if (pos > -1) {
-                // remove, if found
-                self.views.splice(pos, 1);
-            }
-
         }
 
     });
@@ -953,7 +888,7 @@ Finally, the Tweet container. This section will generate views of Tweet models t
                     }
                     self.fetching = false;
                 },
-                failure: function (data) {
+                error: function (data) {
                     self.fetching = false;
                 }
             });
@@ -1393,7 +1328,7 @@ To accomplish this in our small application, we will add some code to the tweetC
                         }
                         self.fetching = false;
                     },
-                    failure: function (data) {
+                    error: function (data) {
                         self.fetching = false;
                     }
                 });

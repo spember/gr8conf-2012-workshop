@@ -204,7 +204,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ul>
 <li>Add the following function:</li>
 </ul>
-<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">findMax</span>: <span class="kw">function</span> () {
+<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// Note that we could alternatively use Underscore&#39;s &#39;max&#39; function</span>
+    <span class="dt">findMax</span>: <span class="kw">function</span> () {
         <span class="co">// the &#39;pluck&#39; function extracts a value from each model in this collection, and places those values in an Array</span>
         <span class="kw">var</span> counts = <span class="kw">this</span>.<span class="fu">pluck</span>(<span class="st">&quot;numSeen&quot;</span>),
             i = <span class="kw">counts</span>.<span class="fu">length</span>,
@@ -310,8 +311,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
 
         <span class="dt">initialize</span>: <span class="kw">function</span> (options) {
-            <span class="co">//attach a reference on the model so that interval driver knows to delete this view without having to search for it</span>
-            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">attachedView</span> = <span class="kw">this</span>;
+            <span class="co">// attach a flag on the model so that we do not recreate views</span>
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">hasView</span> = <span class="kw">true</span>;
         },
 
         <span class="dt">render</span>: <span class="kw">function</span> () {
@@ -326,15 +327,22 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
         <span class="dt">bindEvents</span>: <span class="kw">function</span> () {
             <span class="kw">var</span> self = <span class="kw">this</span>;
-            <span class="co">// add a click handler to remove the keyword</span>
+
             <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword-remove&quot;</span>).<span class="fu">on</span>(<span class="st">&quot;click&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.destroy</span>.<span class="fu">call</span>(self);
             });
 
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
+            });
+
+            <span class="kw">TM.instance</span>.<span class="fu">on</span>(<span class="st">&quot;update:keywords&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.updateDisplayValues</span>.<span class="fu">call</span>(self);
+            });
         }
     });</code></pre>
 <p>When a View is created, a model is passed to it (as we’ll see later), which is then attached and referenced as ‘this.model’. A view contains a reference to it’s DOM node in the form of ‘this.el’ and ‘this.$el’ (jQuery/Zepto cached version of this.el), which we use here in the ‘render’ function. Note the use of the template, and the fact we pass in an object of values from the model (compare the names of the object with the values in its Template). Finally, note the fact that render returns the view itself. By convention, a View does not insert itself in the DOM, it’s up to the object that creates the View to determine when to do the insertion.</p>
-<p>One convention is to bind a ‘change’ event on the view’s model and re-render when a change occurs. That would work just fine here, but we’re added some fun css animations for when the bar graph should change. To accomplish, let’s add functions to update the bar graph width and the counter display.</p>
+<p>One convention is to bind a ‘change’ event on the view’s model and re-render when a change occurs. That would work just fine here, but we’re added some fun css animations for when the bar graph should change. To accomplish this, we’ll need to update the existing View, rather than re-render it (thus, the flag on the Model to know whether it’s been rendered yet). The listeners added in ‘bindEvents’ deal with this notion, as well as responding to when a Model is deleted. Let’s add functions to update the bar graph width and the counter display.</p>
 <ul>
 <li>Add the following to the extend object:</li>
 </ul>
@@ -361,7 +369,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="dt">destroy</span>: <span class="kw">function</span> () {
         <span class="kw">var</span> self = <span class="kw">this</span>;
         <span class="co">//attempt to delete from the server, if successful we proceed with UI removal</span>
-        <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">success</span>: <span class="kw">function</span> () {
+        <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">wait</span>:<span class="kw">true</span>, <span class="dt">success</span>: <span class="kw">function</span> () {
             <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
         }});
     },
@@ -381,8 +389,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="kw">TM.Views</span>.<span class="fu">Keyword</span> = <span class="kw">Backbone.View</span>.<span class="fu">extend</span>({
 
         <span class="dt">initialize</span>: <span class="kw">function</span> (options) {
-            <span class="co">//attach a reference on the model so that interval driver knows to delete this view without having to search for it</span>
-            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">attachedView</span> = <span class="kw">this</span>;
+            <span class="co">// attach a flag on the model so that we do not recreate views</span>
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">hasView</span> = <span class="kw">true</span>;
         },
 
         <span class="dt">render</span>: <span class="kw">function</span> () {
@@ -400,6 +408,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
             <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword-remove&quot;</span>).<span class="fu">on</span>(<span class="st">&quot;click&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.destroy</span>.<span class="fu">call</span>(self);
+            });
+
+            <span class="kw">this</span>.<span class="fu">model</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
+            });
+
+            <span class="kw">TM.instance</span>.<span class="fu">on</span>(<span class="st">&quot;update:keywords&quot;</span>, <span class="kw">function</span> () {
+                <span class="kw">self.updateDisplayValues</span>.<span class="fu">call</span>(self);
             });
 
         },
@@ -424,7 +440,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="dt">destroy</span>: <span class="kw">function</span> () {
             <span class="kw">var</span> self = <span class="kw">this</span>;
             <span class="co">//attempt to delete from the server, if successful we proceed with UI removal</span>
-            <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">success</span>: <span class="kw">function</span> () {
+            <span class="kw">self.model</span>.<span class="fu">destroy</span>({<span class="dt">wait</span>:<span class="kw">true</span>, <span class="dt">success</span>: <span class="kw">function</span> () {
                 <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
             }});
         },
@@ -475,7 +491,6 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="dt">initialize</span>: <span class="kw">function</span> () {
             <span class="kw">this</span>.<span class="fu">keywords</span> = <span class="kw">new</span> <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span>(); <span class="co">//instantiate the collection</span>
             <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">bindEvents</span>(); <span class="co">// bind its events!</span>
-            <span class="kw">this</span>.<span class="fu">views</span> = []; <span class="co">// set up an array to track our created views</span>
         },
 
         <span class="dt">render</span>: <span class="kw">function</span> () {
@@ -498,13 +513,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
         });
     }</code></pre>
 <p>Here we trigger the fetch command on the collection; as stated before this will automatically create the necessary models. Convenient! In addition, we pass a success parameter which triggers a ‘populateKeywords’ function, which we’ll get to next. The ‘add’ option is of note as well: by default, a Collection fetch will recreate the entire collection, wiping out models and starting over, which is a bit overkill for our purposes. Instead, one can use the ‘add’ option, which if true will add new items to the collection without resetting the whole thing. The disadvantage of course is that we do not ‘prune’ deleted keywords.</p>
+<p>Note that here we call ‘fetch’ during the creation of the page. A more user-friendly pattern is to bootstrap your initial data in the initial page request, rather than rendering the application before fetching initial data.</p>
 <ul>
 <li>Add the ‘populateKeywords’ function:</li>
 </ul>
 <pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">populateKeywords</span>: <span class="kw">function</span> (collection, data) {
         <span class="kw">var</span> self = <span class="kw">this</span>;
 
-        <span class="kw">if</span>(<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+        <span class="kw">if</span>(<span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword&quot;</span>).<span class="fu">length</span> === <span class="dv">0</span>) {
             <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
         }
         <span class="co">//underscore.js&#39;s &#39;each&#39; iterator function</span>
@@ -528,7 +544,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="dt">createView</span>: <span class="kw">function</span>(model) {
         <span class="co">//first, ensure the view hasn&#39;t already been created</span>
 
-        <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {  <span class="co">// attachedView is set on the model&#39;s initialize</span>
+        <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">hasView</span>) {  <span class="co">// hasView is set on the model&#39;s initialize</span>
             <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
             <span class="co">//render it initially</span>
             <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().$<span class="fu">el</span>);
@@ -536,43 +552,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
             <span class="co">//and bind!</span>
             <span class="kw">view</span>.<span class="fu">bindEvents</span>();
-            <span class="co">//and store. We&#39;ll need to access the view object&#39;s reference later for destruction</span>
-            <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
+            
         }
         <span class="co">// else, view already exists</span>
-    }</code></pre>
-<ul>
-<li>We’ll need a way to remove a view from the tracking array when the user has deleted the underlying Model. Add the following:</li>
-</ul>
-<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="dt">removeKeyWordView</span>: <span class="kw">function</span> (view) {
-        <span class="kw">var</span> self = <span class="kw">this</span>,
-            pos = -<span class="dv">1</span>,
-            i = <span class="kw">self.views</span>.<span class="fu">length</span>;
-
-        <span class="kw">while</span> (i--) {
-            <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">views</span>[i].<span class="fu">cid</span> === <span class="kw">view</span>.<span class="fu">cid</span>) {
-                pos = i;
-                <span class="kw">break</span>;
-            }
-        }
-
-        <span class="kw">if</span> (pos &gt; -<span class="dv">1</span>) {
-            <span class="co">// remove, if found</span>
-            <span class="kw">self.views</span>.<span class="fu">splice</span>(pos, <span class="dv">1</span>);
-        }
-
-    }</code></pre>
-<ul>
-<li>When the keywords Collection sees a change to one of its members, we’ll need a method that triggers the redrawing of the graphs for each of the views (thus adjusting the bar graphs of the other models as one grows larger). Add the following:</li>
-</ul>
-<pre class="sourceCode javascript"><code class="sourceCode javascript">    <span class="co">// update each view in the list with the new value and bar graph width</span>
-    <span class="dt">updateViews</span>: <span class="kw">function</span> () {
-        <span class="kw">var</span> index = <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>,
-            view;
-        <span class="kw">while</span> (index--) {
-            view = <span class="kw">this</span>.<span class="fu">views</span>[index];
-            <span class="kw">view.updateDisplayValues</span>.<span class="fu">call</span>(view);
-        }
     }</code></pre>
 <p>Now we need to add the bindEvents function, where we’ll set the behavior.</p>
 <ul>
@@ -596,13 +578,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="co">// will update correctly... say, if one keyword is running away with all the hits, the others will adjust their</span>
         <span class="co">// sizes to reflect</span>
         <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
-            <span class="kw">self.updateViews</span>.<span class="fu">call</span>(self);
-        });
-
-        <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> (keyword) {
-
-            <span class="kw">self</span>.<span class="fu">removeKeyWordView</span>(<span class="kw">keyword</span>.<span class="fu">attachedView</span>);
-
+            <span class="kw">TM.instance</span>.<span class="fu">trigger</span>(<span class="st">&quot;update:keywords&quot;</span>);
         });
     }</code></pre>
 <p>During the bindEvents, we listen for notifications from the collection whenever its empty, an item has changed value or an item has been deleted (destroyed) and act accordingly.</p>
@@ -612,7 +588,6 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="dt">initialize</span>: <span class="kw">function</span> () {
             <span class="kw">this</span>.<span class="fu">keywords</span> = <span class="kw">new</span> <span class="kw">TM.Collections</span>.<span class="fu">Keywords</span>();
             <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">bindEvents</span>();
-            <span class="kw">this</span>.<span class="fu">views</span> = [];
         },
 
         <span class="dt">render</span>: <span class="kw">function</span> () {
@@ -627,7 +602,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="co">// first, lets see if any keywords actual exist</span>
             <span class="kw">this</span>.<span class="fu">reloadKeywords</span>(<span class="kw">false</span>);
 
-            <span class="co">// load the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
+            <span class="co">// keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
             <span class="kw">TM.instance.viewManager.views.addContainer</span>.<span class="fu">on</span>(<span class="st">&quot;saved&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.reloadKeywords</span>.<span class="fu">call</span>(self, <span class="kw">true</span>);
             });
@@ -639,25 +614,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="co">// will update correctly... say, if one keyword is running away with all the hits, the others will adjust their</span>
             <span class="co">// sizes to reflect</span>
             <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;change&quot;</span>, <span class="kw">function</span> () {
-                <span class="kw">self.updateViews</span>.<span class="fu">call</span>(self);
+                <span class="kw">TM.instance</span>.<span class="fu">trigger</span>(<span class="st">&quot;update:keywords&quot;</span>);
             });
 
-            <span class="kw">this</span>.<span class="fu">keywords</span>.<span class="fu">on</span>(<span class="st">&quot;destroy&quot;</span>, <span class="kw">function</span> (keyword) {
-
-                <span class="kw">self</span>.<span class="fu">removeKeyWordView</span>(<span class="kw">keyword</span>.<span class="fu">attachedView</span>);
-
-            })
-
-        },
-
-        <span class="co">// update each view in the list with the new value and bar graph width</span>
-        <span class="dt">updateViews</span>: <span class="kw">function</span> () {
-            <span class="kw">var</span> index = <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">length</span>,
-                view;
-            <span class="kw">while</span> (index--) {
-                view = <span class="kw">this</span>.<span class="fu">views</span>[index];
-                <span class="kw">view.updateDisplayValues</span>.<span class="fu">call</span>(view);
-            }
         },
 
         <span class="co">// triggers the collection&#39;s fetch call, then triggers the rendering of views to the screen</span>
@@ -676,10 +635,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="dt">populateKeywords</span>: <span class="kw">function</span> (collection, data) {
             <span class="kw">var</span> self = <span class="kw">this</span>;
 
-            <span class="kw">if</span>(<span class="kw">self.views</span>.<span class="fu">length</span> === <span class="dv">0</span>) {
+            <span class="kw">if</span>(<span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;.keyword&quot;</span>).<span class="fu">length</span> === <span class="dv">0</span>) {
                 <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">html</span>(<span class="st">&quot;&quot;</span>);
             }
-            <span class="co">//underscore.js&#39;s each iterator function</span>
+            <span class="co">//underscore.js&#39;s &#39;each&#39; iterator function</span>
             <span class="kw">_</span>.<span class="fu">each</span>(<span class="kw">collection</span>.<span class="fu">models</span>, <span class="kw">function</span> (model) {
                 <span class="kw">self.createView</span>.<span class="fu">call</span>(self, model);
             });
@@ -696,8 +655,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
         <span class="dt">createView</span>: <span class="kw">function</span>(model) {
             <span class="co">//first, ensure the view hasn&#39;t already been created</span>
-
-            <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">attachedView</span>) {
+            <span class="kw">if</span> (!<span class="kw">model</span>.<span class="fu">hasView</span>) {
                 <span class="kw">var</span> view = <span class="kw">new</span> <span class="kw">TM.Views</span>.<span class="fu">Keyword</span>({<span class="dt">model</span>:model});
                 <span class="co">//render it initially</span>
                 <span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">append</span>(<span class="kw">view</span>.<span class="fu">render</span>().$<span class="fu">el</span>);
@@ -705,29 +663,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
                 <span class="kw">view</span>.<span class="fu">setElement</span>(<span class="kw">this</span>.$<span class="fu">el</span>.<span class="fu">children</span>().<span class="fu">last</span>());
                 <span class="co">//and bind!</span>
                 <span class="kw">view</span>.<span class="fu">bindEvents</span>();
-                <span class="co">//and store. We&#39;ll need to access the view object&#39;s reference later for destruction</span>
-                <span class="kw">this</span>.<span class="fu">views</span>.<span class="fu">push</span>(view);
             }
             <span class="co">// else, view already exists</span>
-        },
-
-        <span class="dt">removeKeyWordView</span>: <span class="kw">function</span> (view) {
-            <span class="kw">var</span> self = <span class="kw">this</span>,
-                pos = -<span class="dv">1</span>,
-                i = <span class="kw">self.views</span>.<span class="fu">length</span>;
-
-            <span class="kw">while</span> (i--) {
-                <span class="kw">if</span> (<span class="kw">self</span>.<span class="fu">views</span>[i].<span class="fu">cid</span> === <span class="kw">view</span>.<span class="fu">cid</span>) {
-                    pos = i;
-                    <span class="kw">break</span>;
-                }
-            }
-
-            <span class="kw">if</span> (pos &gt; -<span class="dv">1</span>) {
-                <span class="co">// remove, if found</span>
-                <span class="kw">self.views</span>.<span class="fu">splice</span>(pos, <span class="dv">1</span>);
-            }
-
         }
 
     });</code></pre>
@@ -823,7 +760,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
                     }
                     <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
                 },
-                <span class="dt">failure</span>: <span class="kw">function</span> (data) {
+                <span class="dt">error</span>: <span class="kw">function</span> (data) {
                     <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
                 }
             });
@@ -1217,7 +1154,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
                         }
                         <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
                     },
-                    <span class="dt">failure</span>: <span class="kw">function</span> (data) {
+                    <span class="dt">error</span>: <span class="kw">function</span> (data) {
                         <span class="kw">self</span>.<span class="fu">fetching</span> = <span class="kw">false</span>;
                     }
                 });
