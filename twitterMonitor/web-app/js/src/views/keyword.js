@@ -2,7 +2,7 @@ TM.Views.Keyword = Backbone.View.extend({
 
     initialize: function (options) {
         //attach a reference on the model so that interval driver knows to delete this view without having to search for it
-        this.model.attachedView = this;
+        this.model.hasView = true;
     },
 
     render: function () {
@@ -21,6 +21,15 @@ TM.Views.Keyword = Backbone.View.extend({
         this.$el.find(".keyword-remove").on("click", function () {
             self.destroy.call(self);
         });
+
+        this.model.on("destroy", function () {
+            self.removeUI.call(self);
+        })
+
+        TM.instance.on("update:keywords", function () {
+            console.log("awesome");
+            self.updateDisplayValues.call(self);
+        })
 
     },
 
@@ -44,7 +53,7 @@ TM.Views.Keyword = Backbone.View.extend({
     destroy: function () {
         var self = this;
         //attempt to delete from the server, if successful we proceed with UI removal
-        self.model.destroy({success: function () {
+        self.model.destroy({wait:true, success: function () {
             self.removeUI.call(self);
         }});
     },
