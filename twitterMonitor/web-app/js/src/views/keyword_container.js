@@ -40,7 +40,6 @@ TM.Views.KeywordContainer = Backbone.View.extend({
     //
     reloadKeywords: function (add) {
         var self = this;
-        console.log("reloading keywords with add = " +add)
         this.keywords.fetch({
             add: add,
             success: function (collection, data) {

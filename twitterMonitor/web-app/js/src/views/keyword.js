@@ -1,7 +1,7 @@
 TM.Views.Keyword = Backbone.View.extend({
 
     initialize: function (options) {
-        //attach a reference on the model so that interval driver knows to delete this view without having to search for it
+        // attach a flag on the model so that we do not recreate views
         this.model.hasView = true;
     },
 
@@ -24,12 +24,11 @@ TM.Views.Keyword = Backbone.View.extend({
 
         this.model.on("destroy", function () {
             self.removeUI.call(self);
-        })
+        });
 
         TM.instance.on("update:keywords", function () {
-            console.log("awesome");
             self.updateDisplayValues.call(self);
-        })
+        });
 
     },
 
