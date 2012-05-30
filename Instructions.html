@@ -75,13 +75,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <hr />
 
 <h2 id="about-this-app">About this App</h2>
-<p>The included Grails application, called ‘twitterMonitor’, is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurances within Tweets. The number of occurences are tallied and displayed to the user, as well as the Tweets.</p>
+<p>The included Grails application, called ‘twitterMonitor’, is intended as an introduction in how to build responsive, API-driven, JavaScript-heavy applications. The overall purpose of this sample application is allow a user to monitor Twitter for a set of keywords, and their occurrences within Tweets. The number of occurrences are tallied and displayed to the user, as well as the Tweets.</p>
 <p>While all code is bundled within one Grails application, it is helpful to think of this as two separate applications, the client-side and the server-side. The server-side component is largely already complete, and this guide instead focuses on how to rebuild the client-side code. Below are high-level descriptions of each.</p>
 <h3 id="server">Server</h3>
 <p>The twitterMonitor server will receive data from the front-end, either a string representing a keyword to add or a number representing the id of a keyword to delete. It will also send data about the keywords and saved tweets to any client in JSON format.</p>
 <p>The server also periodically executes two Quartz jobs: one which deletes tweets older than a specific threshold, and another which searches Twitter for new tweets containing the keywords. When a keyword is first searched, twitterMonitor will grab the previous n tweets (where n is a config option), but subsequent searches will return new tweets in between the last seen tweet. Keywords with matches will have a counter increased, and matching tweets are saved, then subsets of data are sent to the client.</p>
 <h3 id="client">Client</h3>
-<p>The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a ‘control’ area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).</p>
+<p>The twitterMonitor client, once complete, will display information about keywords and tweets. The UI will contain three major visual components: a ‘control’ area (allows a user to input new keywords and start/stop the Client to server communication), the keyword area (displays each keyword with number of occurrences and a bar graph expressing relative counts), and the tweet queue (displays tweets containing the keywords).</p>
 <h3 id="file-locations">File Locations</h3>
 <p>Nearly every file we add or edit today will be within <strong>web-app/js/src/</strong>. Please note that if the reader changes any file names or adds new files, the file must be added to the ApplicationResources.groovy in <strong>grails-app/conf</strong> so that the Resources plugin will bundle it for you.</p>
 <h3 id="server-endpoints">Server Endpoints</h3>
@@ -103,7 +103,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>Be Creative! This document is just a guide; there’s much more that could be done with the information here. For example, the underlying service could be updated to capture much more information about each tweet, which could lead to more in-depth UIs. Also, the Tweet queue intentionally does not use a Collection; one could edit it to make use of the Collection object.</li>
 </ol>
 <h3 id="getting-started">Getting Started</h3>
-<p>I’ll assume that you 1) have the full twitterMonitor project (e.g. downladed the repo from github) and 2) you have grails version 2.0.3 installed. Great. Now:</p>
+<p>I’ll assume that you 1) have the full twitterMonitor project (e.g. you’ve downloaded the repo from Github) and 2) you have grails version 2.0.3 installed. Great. Now:</p>
 <ol style="list-style-type: decimal">
 <li>See if there’s anyone in the room without a computer, who may be looking around nervously. Buddy up with them and offer to pair program!</li>
 <li>Start the application with ‘grails run-app’</li>
@@ -127,7 +127,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="kw">return</span> <span class="st">&quot;/twitterMonitor/keyword/&quot;</span> + <span class="kw">this</span>.<span class="fu">get</span>(<span class="st">&quot;id&quot;</span>); 
         } 
     }); </code></pre>
-<p>We’ve just created our second Model, this time extendeding it’s base functionality by defining a <strong>url</strong> function. Backbone will use an Object’s <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model’s data; it should map to our keyword’s endpoint on the server. We’re not quite finished with the model yet; let’s add a function to help calculate the relative size of the keywords hit count. The function should return a ratio of its ‘numSeen’ variable to that of the other keywords. We can take advantage of this by using the model’s <strong>collection</strong> parameter.</p>
+<p>We’ve just created our second Model, this time extending it’s base functionality by defining a <strong>url</strong> function. Backbone will use an Object’s <strong>url</strong> function or object (you can use either) to know how to uniquely fetch this model’s data; it should map to our keyword’s endpoint on the server. We’re not quite finished with the model yet; let’s add a function to help calculate the relative size of the keywords hit count. The function should return a ratio of its ‘numSeen’ variable to that of the other keywords. We can take advantage of this by using the model’s <strong>collection</strong> parameter.</p>
 <ul>
 <li>Enter the following (or something similar) into the Model’s extend object:</li>
 </ul>
@@ -353,7 +353,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="kw">var</span> self = <span class="kw">this</span>;
         <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">find</span>(<span class="st">&quot;span.num-seen&quot;</span>).<span class="fu">text</span>(<span class="kw">self.model</span>.<span class="fu">get</span>(<span class="st">&quot;numSeen&quot;</span>));
     }</code></pre>
-<p>The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after wev’e alerted the server to our change. This can be accomplished by overriding the default destroy fuction.</p>
+<p>The bindEvents method adds some functionality to destroy the View, which is a default Backbone function. However, we should also destroy the Model, and only do so after we’ve alerted the server to our change. This can be accomplished by overriding the default destroy function.</p>
 <ul>
 <li>Add the following to the extend object:</li>
 </ul>
@@ -627,7 +627,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
             <span class="co">// first, lets see if any keywords actual exist</span>
             <span class="kw">this</span>.<span class="fu">reloadKeywords</span>(<span class="kw">false</span>);
 
-            <span class="co">// keyload the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
+            <span class="co">// load the keywords if we have saved a new one (look at add_keyword_container.js for the origin of the event)</span>
             <span class="kw">TM.instance.viewManager.views.addContainer</span>.<span class="fu">on</span>(<span class="st">&quot;saved&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.reloadKeywords</span>.<span class="fu">call</span>(self, <span class="kw">true</span>);
             });
@@ -932,13 +932,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h4 id="adding-a-little-responsiveness">6. Adding a little Responsiveness</h4>
 <p>Next, the goal is to add a little bit of Responsive Design to this application (note that, ideally, you would plan this from the beginning and incorporate the design during the building of your app). We’ve already added a bit of css to adjust some of the components based on browser window size.</p>
 <ul>
-<li><p>Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now ‘stacked’), the text size adjusts, and the Gr8conf logo disappears (sorry).</p></li>
-<li><p>You can also view this in your mobile phone’s browser, although we apoligize ahead of time for any inconsistancies. This small app was developed in Chrome and we had very little QA time!</p></li>
-<li><p>These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicitve of any particular device, but merely as a tool to demonstrate how to use the queries.</p></li>
+<li><p>Play around with the browser size. Start with a large browser window and drag your browser to be more narrow. As the width of the window decreases, note that the Tweet Container location is placed underneath (the views are now ‘stacked’), the text size adjusts, and the Gr8Conf logo disappears (sorry).</p></li>
+<li><p>You can also view this in your mobile phone’s browser, although we apologize ahead of time for any inconsistencies. This small app was developed in Chrome and we had very little QA time!</p></li>
+<li><p>These adjustments are done via CSS, using @media queries. To examine this functionality, open up <strong>web-app/css/main-responsive.css</strong>. The pixel widths in our queries are not indicative of any particular device, but merely as a tool to demonstrate how to use the queries.</p></li>
 </ul>
-<p>Respnsive Design is more than just adjusting elements in your markup via @media queries, however. Some aspects of it are fairly philisophical, but in our case, let’s assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.</p>
-<p>Thus, the Client asks for only for what it needs rather than having the Server sending everything to the Client.</p>
-<p>To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets.</p>
+<p>Responsive Design is more than just adjusting elements in your markup via @media queries, however. As outlined in <a href="http://www.abookapart.com/products/responsive-web-design">the book</a>, RWD is defined by three elements: Flexible Grid Layout, Flexible Media, and the use of @media queries. We argue that there’s more to this concept: why not also be responsive about the data you send to the client?</p>
+<p>In our case, let’s assume that we consider the display of the actual Tweet text to be secondary to the keyword count display. For our smaller devices, we hide the Tweet container and stop the actual fetching of tweets from the server.</p>
+<p>Thus, the Client asks for only for what it needs rather than having the Server overwhelm the Client with data.</p>
+<p>To accomplish this in our small application, we will add some code to the tweetContainer that monitors device width. When a certain size threshold is crossed, the application will hide the tweetContainer and prevent it from fetching tweets. Once the window size is increased, the client will resume querying the serve for tweet information.</p>
 <ul>
 <li>Reopen <strong>web-app/js/src/views/tweet_container.js</strong></li>
 <li>Add the following to the end of the initialize function:</li>
@@ -1223,7 +1224,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
             }
         }
     });</code></pre>
-<p>Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should dissappear, and no more traffic should be made to the /listBatch endpoint on the server</p>
+<p>Reload the application in your browser, monitor the traffic from your browser to the server. As your resize the window to be narrow, the tweetContainer should disappear, and no more traffic should be made to the /listBatch endpoint on the server.</p>
 <h4 id="final-tasks">7. Final Task(s)</h4>
 <p>Congratulations! We hope you’ve learned a bit about working with JavaScript-based UIs, and possibly enjoyed yourself in the process. If you’re up to it, we have a few more tasks for you:</p>
 <ul>
