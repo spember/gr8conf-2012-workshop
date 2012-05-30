@@ -181,7 +181,7 @@ TM.Views.TweetContainer = Backbone.View.extend({
                     }
                     self.fetching = false;
                 },
-                failure: function (data) {
+                error: function (data) {
                     self.fetching = false;
                 }
             });

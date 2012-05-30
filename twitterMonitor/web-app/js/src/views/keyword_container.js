@@ -92,7 +92,7 @@ TM.Views.KeywordContainer = Backbone.View.extend({
         if (!model.attachedView) {
             var view = new TM.Views.Keyword({model:model});
             //render it initially
-            this.$el.append($(view.render().el));
+            this.$el.append(view.render().$el);
             //set the element on the new keyword
             view.setElement(this.$el.children().last());
             //and bind!
