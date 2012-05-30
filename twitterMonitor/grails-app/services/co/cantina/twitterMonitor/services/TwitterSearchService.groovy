@@ -22,7 +22,6 @@ class TwitterSearchService {
             List keywords = Keyword.list()
             keywords.each {keyword->
                 try {
-                    print "Most recent tweet is ${keyword.mostRecentTweet}"
                     processTweets(executeQuery(keyword.text.encodeAsURL(), keyword.mostRecentTweet).results, keywords)
                 }
                 catch (IOException ioe) {

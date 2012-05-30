@@ -2,10 +2,11 @@ package co.cantina.twitterMonitor
 
 class Tweet {
     //twitter parameters
-    Long id
+
     String text
     String userName
     String profileImageUrl
+    Long twitterId = -1
     boolean processed = false //mark true once the message has been examined
 
     Date dateCreated
@@ -18,7 +19,7 @@ class Tweet {
     }
 
     static mapping = {
-        id generator: "assigned"
+        //id generator: "assigned"
     }
 
     public String toString() {

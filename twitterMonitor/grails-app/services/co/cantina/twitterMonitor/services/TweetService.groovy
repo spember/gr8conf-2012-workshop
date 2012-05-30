@@ -13,7 +13,8 @@ class TweetService {
             tweet.properties["text"] = params
             //map our properties in from json
             tweet.profileImageUrl = params["profile_image_url"]
-            tweet.id = params["id"]
+            // we track the twitterId separately, in order to obtain an easy list of the order we pulled the tweets in
+            tweet.twitterId = params["id"]
             tweet.userName = params["from_user_name"]
             tweet.dateCreated = new Date()
             tweet.save()

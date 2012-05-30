@@ -36,9 +36,9 @@
     </div>
 
     <div id="html5" class="slide">
-        <p class="left cantina-orange animate-build" data-build="1">Does it work in IE?</p>
-        <img class="logo push-left" src="${resource(dir: 'images/slides', file: 'HTML5-logo.png')}" alt="HTML 5"/>
-        <p class="right cantina-orange animate-build" data-build="2">Then it's not HTML 5.</p>
+        <p class="cantina-orange animate-build center-text" data-build="1">Does it work in IE?</p>
+        <img class="center-block logo" src="${resource(dir: 'images/slides', file: 'HTML5-logo.png')}" alt="HTML 5"/>
+        <p class="cantina-orange animate-build center-text" data-build="2">Then it's not HTML 5.</p>
     </div>
 
     <div id="html5_2" class="slide">
@@ -100,7 +100,7 @@
 
 
     <div class="slide">
-        <p class="animate-in" data-animation="fly-in-right"><span class="cantina-orange">RWD</span> requires three features:</p>
+        <p class="animate-in" data-animation="fly-in-right">According to <a href="http://www.abookapart.com/products/responsive-web-design" target="_blank">the book</a>, <span class="cantina-orange">RWD</span> requires three features:</p>
         <br/>
         <ul>
             <li class="animate-build" data-build="1">Flexible Grid</li>
@@ -111,11 +111,11 @@
     </div>
 
     <div id="futureProof_5" class="slide">
-        <p class="animate-build center-outer" data-build="1">However, <span class="cantina-orange">RWD</span> should involve more</p>
-        <p class="animate-build center-outer" data-build="2">For example: Program the <span class="cantina-orange">Client</span> to ask for only what it needs</p>
+        <p class="animate-build center-outer" data-build="1">However, <span class="cantina-orange">RWD</span> should involve more!</p>
+        <p class="animate-build" data-build="2"><span class="cantina-orange">Responsive Architecture</span></p>
+        <p class="animate-build center-outer" data-build="3">E.g. program the <span class="cantina-orange">Client</span> to ask for only what it needs</p>
         <div class="right center-inner animate-build" data-build="4">
             <a href="http://cantina.co/wp-content/uploads/2012/01/ResponsiveDesignGuideFnll0110121.pdf" target="_blank"><img class="guide" src="${resource(dir: 'images/slides', file: 'Cantina-html5-guide.png')}" alt="Cantina's Responsive Design Guide"/></a>
-            <p class="sub">readme</p>
         </div>
     </div>
 
@@ -132,7 +132,7 @@
             <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'mvcmv_crude.png')}" alt="MvCMV - crude"/>
             <ul class="left">
                 <li>Critical Business Logic</li>
-                <li>MVC (not much View)</li>
+                <li>MvC (not much View)</li>
                 <li>Send Data Only</li>
             </ul>
 
@@ -231,7 +231,7 @@
         <h3 class="animate-in center-text" data-animation="fly-in-left">True, but we'd be here all night</h3>
         <h3 class="animate-in center-text title" data-animation="fly-in-right">if we talked about things like:</h3>
         <ul>
-            <li class="animate-build" data-build="1"><p>Plugins! (Spring Security and Cache)</p></li>
+            <li class="animate-build" data-build="1"><p>Plugins! (e.g. Spring Security; Cache)</p></li>
             <li class="animate-build" data-build="2"><p>Ability to write complicated bits in Java for speed</p></li>
             <li class="animate-build" data-build="3"><p>Power and convenience of the JVM</p></li>
             <li class="animate-build" data-build="4"><p>Uses of alternative data stores with Grails 2.0</p></li>

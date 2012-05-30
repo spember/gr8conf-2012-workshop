@@ -33,13 +33,13 @@ class KeywordServiceTests {
         assertEquals 0, keywords[1].numSeen
     }
 
-    void testMatchKeywordToMessage() {
+    void testMatchKeywordToTweet() {
         //this first should succeeed
-        assertTrue service.matchKeywordToMessage(keywords[0], tweet)
+        assertTrue service.matchKeywordToTweet(keywords[0], tweet)
         assertEquals 1, keywords[0].numSeen
-        assertEquals tweet.id, keywords[0].mostRecentTweet
+        assertEquals tweet.twitterId, keywords[0].mostRecentTweet
         // this should fail
-        assertFalse service.matchKeywordToMessage(keywords[1], tweet)
+        assertFalse service.matchKeywordToTweet(keywords[1], tweet)
         assertEquals 0, keywords[1].numSeen
         assertEquals(-1, keywords[1].mostRecentTweet)
     }

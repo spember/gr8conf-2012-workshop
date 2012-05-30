@@ -53,7 +53,6 @@ class KeywordController {
                     }
                 }
             }
-            print result
             render result as JSON
         } else {
             response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
