@@ -19,8 +19,10 @@ TM.Core.IntervalDriver = function () {
                 keywords.models[i].fetch({
                     success: function (model, data) {
                         if (!data.hasOwnProperty("id")) {
-                            model.attachedView.removeUI.call(model.attachedView);
-                            model.collection.remove(model, {silent:true});
+                            //the model is destroyed at this point, but trigger an event for the view's sake
+                            model.trigger("destroy");
+                            model.collection.remove(model);
+
                         }
                     }
                 });

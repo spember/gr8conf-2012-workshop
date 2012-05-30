@@ -132,8 +132,8 @@
             <img class="rounded push-left" src="${resource(dir: 'images/slides', file: 'mvcmv_crude.png')}" alt="MvCMV - crude"/>
             <ul class="left">
                 <li>Critical Business Logic</li>
+                <li>Data Only or<br/>Minimal Markup</li>
                 <li>MvC (not much View)</li>
-                <li>Send Data Only</li>
             </ul>
 
             <ul class="right">
@@ -156,7 +156,7 @@
         <ul>
             <li class="animate-build" data-build="1">Offload CPU Cycles</li>
             <li class="animate-build" data-build="2">Save Bandwidth</li>
-            <li class="animate-build" data-build="3">(May) Enhance Usability</li>
+            <li class="animate-build" data-build="3">(<a href="http://engineering.twitter.com/2012/05/improving-performance-on-twittercom.html" target="_blank">May</a>) Enhance Usability</li>
             <li class="animate-build" data-build="4">Interchangeable Interfaces</li>
             <li class="animate-build" data-build="5">2+ Codebases</li>
         </ul>
@@ -276,6 +276,14 @@
         <div id="main">
             <g:render template="/standAlone/placeholders"/>
         </div>
+    </div>
+
+    <div class="slide">
+        <h2 class="title center-text">Why Backbone?</h2>
+        <p>Structure</p>
+        <p>Self-Containment</p>
+        <p>Your DOM is messy</p>
+
     </div>
 
     <div class="slide">
