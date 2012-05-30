@@ -293,6 +293,34 @@ a:hover, a:active {
 
 }
 
+/*********
+
+    Span widths
+
+    Typically, we would set a set width and update these widths
+    for different sizes via @media
+
+*********/
+.span-1 {
+    width: 10%;
+}
+
+.span-2 {
+    width: 20%;
+}
+
+.span-6 {
+    width: 60%;
+}
+
+.span-7 {
+    width: 70%;
+}
+
+.span-8 {
+    width: 80%;
+}
+
 
 /************
 
@@ -328,17 +356,17 @@ a:hover, a:active {
     opacity: .9;
 }
 
-#appHeader .logo {
-    margin-right: 2em;
+#appHeader .logo.left {
     width: 10em;
+}
+#appHeader .logo.right {
+    margin-right: 2em;
 }
 
 
 #appHeader .nav {
-    position: absolute;
-    top: 50%;
-    margin-top: -0.625rem;
-    margin-left: 2em;
+    position: relative;
+    margin-top: 0.5rem;
 }
 #appHeader .nav a {
     font-size: 1.25rem;
@@ -492,6 +520,12 @@ ul {
     top: 40%;
     right: 5%;
     z-index: 2;
+}
+
+#futureProof_7 .cantina-orange {
+    position: relative;
+    z-index: 2;
+
 }
 
 #apiDesign_3 img.left { margin-left: 2rem; margin-top: 2rem;}

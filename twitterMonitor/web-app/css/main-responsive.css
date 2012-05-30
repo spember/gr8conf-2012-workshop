@@ -86,3 +86,9 @@
     }
 
 }
+
+@media (max-width: 660px) {
+    #appHeader .logo.right {
+        display: none;
+    }
+}
