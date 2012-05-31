@@ -32,7 +32,6 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
                 type:"POST",
                 success: function (data) {
                     if(data.status === false) {
-                        console.log("No good!");
                         self.displayError(data);
                     } else {
                         self.trigger("saved");
@@ -45,8 +44,6 @@ TM.Views.AddKeywordContainer = Backbone.View.extend({
     },
 
     displayError: function(data) {
-        console.log(data.errors);
-
         var error = new TM.Views.ErrorDisplay({text:data.errors});
         $("body").append(error.render().el);
         error.bindEvents();
