@@ -417,9 +417,11 @@ Let's first tackle the Keyword view:
                 self.removeUI.call(self);
             });
 
+            // note the use of 'self' as a third parameter. Because multiple listeners will be set up on TM.instance,
+            // we need to specify this View's particular context so that we remove only this View's listener.
             TM.instance.on("update:keywords", function () {
                 self.updateDisplayValues.call(self);
-            });
+            }, self);
         }
     });
 ```
@@ -465,7 +467,11 @@ The bindEvents method adds some functionality to destroy the View, which is a de
     // fancy removal
     removeUI: function () {
         var self = this;
-        self.$el.unbind(); //clear any bindings
+        //clear any bindings on the element and model
+        self.$el.unbind();
+        self.model.off();
+        //specify our context for the unbind on the TM.instance
+        TM.instance.off(null, null, this);
         self.$el.fadeOut("slow", function () {
             //remove view from the dom
             self.remove();
@@ -508,9 +514,11 @@ At this point, our Keyword View should look like:
                 self.removeUI.call(self);
             });
 
+            // note the use of 'self' as a third parameter. Because multiple listeners will be set up on TM.instance,
+            // we need to specify this View's particular context so that we remove only this View's listener.
             TM.instance.on("update:keywords", function () {
                 self.updateDisplayValues.call(self);
-            });
+            }, self);
 
         },
 
@@ -542,7 +550,11 @@ At this point, our Keyword View should look like:
         // fancy removal
         removeUI: function () {
             var self = this;
-            self.$el.unbind(); //clear any bindings
+            //clear any bindings on the element and model
+            self.$el.unbind();
+            self.model.off();
+            //specify our context for the unbind on the TM.instance
+            TM.instance.off(null, null, this);
             self.$el.fadeOut("slow", function () {
                 //remove view from the dom
                 self.remove();

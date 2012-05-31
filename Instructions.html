@@ -336,9 +336,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
                 <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
             });
 
+            <span class="co">// note the use of &#39;self&#39; as a third parameter. Because multiple listeners will be set up on TM.instance,</span>
+            <span class="co">// we need to specify this View&#39;s particular context so that we remove only this View&#39;s listener.</span>
             <span class="kw">TM.instance</span>.<span class="fu">on</span>(<span class="st">&quot;update:keywords&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.updateDisplayValues</span>.<span class="fu">call</span>(self);
-            });
+            }, self);
         }
     });</code></pre>
 <p>When a View is created, a model is passed to it (as we’ll see later), which is then attached and referenced as ‘this.model’. A view contains a reference to it’s DOM node in the form of ‘this.el’ and ‘this.$el’ (jQuery/Zepto cached version of this.el), which we use here in the ‘render’ function. Note the use of the template, and the fact we pass in an object of values from the model (compare the names of the object with the values in its Template). Finally, note the fact that render returns the view itself. By convention, a View does not insert itself in the DOM, it’s up to the object that creates the View to determine when to do the insertion.</p>
@@ -377,7 +379,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="co">// fancy removal</span>
     <span class="dt">removeUI</span>: <span class="kw">function</span> () {
         <span class="kw">var</span> self = <span class="kw">this</span>;
-        <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>(); <span class="co">//clear any bindings</span>
+        <span class="co">//clear any bindings on the element and model</span>
+        <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>();
+        <span class="kw">self.model</span>.<span class="fu">off</span>();
+        <span class="co">//specify our context for the unbind on the TM.instance</span>
+        <span class="kw">TM.instance</span>.<span class="fu">off</span>(null, null, <span class="kw">this</span>);
         <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
             <span class="co">//remove view from the dom</span>
             <span class="kw">self</span>.<span class="fu">remove</span>();
@@ -414,9 +420,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
                 <span class="kw">self.removeUI</span>.<span class="fu">call</span>(self);
             });
 
+            <span class="co">// note the use of &#39;self&#39; as a third parameter. Because multiple listeners will be set up on TM.instance,</span>
+            <span class="co">// we need to specify this View&#39;s particular context so that we remove only this View&#39;s listener.</span>
             <span class="kw">TM.instance</span>.<span class="fu">on</span>(<span class="st">&quot;update:keywords&quot;</span>, <span class="kw">function</span> () {
                 <span class="kw">self.updateDisplayValues</span>.<span class="fu">call</span>(self);
-            });
+            }, self);
 
         },
 
@@ -448,7 +456,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
         <span class="co">// fancy removal</span>
         <span class="dt">removeUI</span>: <span class="kw">function</span> () {
             <span class="kw">var</span> self = <span class="kw">this</span>;
-            <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>(); <span class="co">//clear any bindings</span>
+            <span class="co">//clear any bindings on the element and model</span>
+            <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">unbind</span>();
+            <span class="kw">self.model</span>.<span class="fu">off</span>();
+            <span class="co">//specify our context for the unbind on the TM.instance</span>
+            <span class="kw">TM.instance</span>.<span class="fu">off</span>(null, null, <span class="kw">this</span>);
             <span class="kw">self</span>.$<span class="fu">el</span>.<span class="fu">fadeOut</span>(<span class="st">&quot;slow&quot;</span>, <span class="kw">function</span> () {
                 <span class="co">//remove view from the dom</span>
                 <span class="kw">self</span>.<span class="fu">remove</span>();
