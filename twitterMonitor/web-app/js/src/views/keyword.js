@@ -25,10 +25,11 @@ TM.Views.Keyword = Backbone.View.extend({
         this.model.on("destroy", function () {
             self.removeUI.call(self);
         });
-
+        // note the use of 'self' as a third parameter. Because multiple listeners will be set up on TM.instance,
+        // we need to specify this View's particular context so that we remove only this View's listener.
         TM.instance.on("update:keywords", function () {
             self.updateDisplayValues.call(self);
-        });
+        }, self);
 
     },
 
@@ -52,7 +53,8 @@ TM.Views.Keyword = Backbone.View.extend({
     destroy: function () {
         var self = this;
         //attempt to delete from the server, if successful we proceed with UI removal
-        self.model.destroy({wait:true, success: function () {
+        self.model.destroy({silent: true, wait:true, success: function () {
+            console.log("model destroyed, calling remove UI");
             self.removeUI.call(self);
         }});
     },
@@ -61,6 +63,9 @@ TM.Views.Keyword = Backbone.View.extend({
     removeUI: function () {
         var self = this;
         self.$el.unbind(); //clear any bindings
+        self.model.off();
+        //specify our context for the unbind
+        TM.instance.off(null, null, this);
         self.$el.fadeOut("slow", function () {
             //remove view from the dom
             self.remove();
