@@ -967,7 +967,7 @@ This bit of code adds an interval which triggers a function (fadeOldestTweet()).
                 self.fetchTweets.call(self);
             }
         });  
-    }; 
+    } 
 ```
 
 There's a bit more yet to add to this View; we'll revisit it later.
